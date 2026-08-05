@@ -70,7 +70,7 @@ export const vocabPacks: VocabItem[] = [
     type: 'İsim', 
     level: 'A1', 
     exampleTarget: 'Gosto de pastel de nata.', 
-    exampleTranslation: 'Kremalı çöreği severim.' 
+    exampleTranslation: 'Günün tatlısını severim.' 
   },
   { 
     id: 'v-en-1', 
@@ -92,3 +92,18 @@ export const LANGUAGES = [
   { id: 'spanish', name: 'İspanyolca', code: 'es-ES' },
   { id: 'portuguese', name: 'Portekizce', code: 'pt-PT' }
 ];
+
+export const CATEGORIES = [
+  { id: 'cafe-travel', name: 'Kafe & Seyahat' },
+  { id: 'daily-life', name: 'Günlük Yaşam' }
+];
+
+// Sayfaların ve API rotasının aradığı eksik enterprise yapıları (build hatasını keser)
+export const RECALLFLOW_ENTERPRISE_DATA = {
+  version: '1.0.0',
+  languages: LANGUAGES,
+  categories: CATEGORIES,
+  vocabPacks: vocabPacks,
+  grammarLessons: [],
+  stories: []
+};
