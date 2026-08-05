@@ -11,6 +11,23 @@ export interface VocabItem {
   exampleTranslation: string;
 }
 
+export interface GrammarLesson {
+  id: string;
+  language: string;
+  level: string;
+  title: string;
+  content: string;
+  examples?: { target: string; translation: string }[];
+}
+
+export interface Story {
+  id: string;
+  language: string;
+  level: string;
+  title: string;
+  text: string;
+}
+
 export const vocabPacks: VocabItem[] = [
   { 
     id: 'v-de-1', 
@@ -103,8 +120,8 @@ export const RECALLFLOW_ENTERPRISE_DATA = {
   languages: LANGUAGES,
   categories: CATEGORIES,
   vocabPacks: vocabPacks,
-  grammarLessons: [],
-  stories: [],
+  grammarLessons: [] as GrammarLesson[],
+  stories: [] as Story[],
   modules: [
     { language: 'german', level: 'A1', title: 'Temel Almanca Modülü' },
     { language: 'spanish', level: 'A1', title: 'Temel İspanyolca Modülü' },
