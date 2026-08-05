@@ -121,6 +121,7 @@ export const RECALLFLOW_ENTERPRISE_DATA = {
   categories: CATEGORIES,
   vocabPacks: vocabPacks,
   grammarLessons: [] as GrammarLesson[],
+  grammarGuides: [] as GrammarLesson[], // Sayfanın aradığı alan eklendi
   stories: [] as Story[],
   modules: [
     { language: 'german', level: 'A1', title: 'Temel Almanca Modülü' },
