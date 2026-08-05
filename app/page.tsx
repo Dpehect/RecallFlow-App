@@ -4,7 +4,6 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import { RECALLFLOW_ENTERPRISE_DATA, LANGUAGES } from '@/lib/data';
-import { sounds } from '@/lib/sound';
 
 export default function Home() {
   const [selectedLang, setSelectedLang] = useState('german');
@@ -22,74 +21,75 @@ export default function Home() {
     <div className="min-h-screen flex flex-col justify-between font-sans bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100">
       <Navbar />
 
-      {/* Main Hero */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-20 flex-1 w-full">
-        <section className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          <div className="lg:col-span-6 space-y-6">
-            <div className="inline-flex items-center space-x-2 bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 px-3 py-1 rounded-full text-xs font-bold">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span>SM-2 SRS Engine & 3D Card FX</span>
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-16 flex-1 w-full">
+        {/* Simple & Focused Hero Section */}
+        <section className="bg-white dark:bg-slate-900 rounded-3xl p-8 sm:p-12 border border-slate-200 dark:border-slate-800 shadow-xl relative overflow-hidden">
+          <div className="max-w-3xl space-y-6">
+            <div className="inline-flex items-center space-x-2 bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800 px-3.5 py-1 rounded-full text-xs font-bold">
+              <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse"></span>
+              <span>Günde Sadece 3 Dakika · Akıllı Öğrenme Yöntemi</span>
             </div>
-            <h1 className="text-5xl sm:text-6xl font-black tracking-tight leading-none uppercase">
-              FLUENCY.<br/><span className="bg-gradient-to-r from-blue-600 to-indigo-500 bg-clip-text text-transparent">ACCELERATED.</span><br/>MINIMAL<br/>EFFORT.
-            </h1>
-            <p className="text-slate-600 dark:text-slate-400 text-lg leading-relaxed max-w-lg">
-              Next-gen language learning with SM-2 Spaced Repetition, 3D card flips, competitive leagues, AI Scenario Tutor, and 14,400+ CEFR A1-C2 vocabulary items.
-            </p>
-            <div className="pt-2 flex flex-wrap gap-4 items-center">
-              <a href="#modules" className="inline-flex items-center bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold px-7 py-4 rounded-2xl text-sm tracking-wider uppercase space-x-3 transition shadow-lg shadow-blue-500/25 hover:scale-105">
-                <span>EXPLORE COURSES ➔</span>
-              </a>
-              <Link href="/leaderboard" className="inline-flex items-center bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 font-bold px-6 py-4 rounded-2xl text-sm tracking-wider uppercase transition hover:scale-105">
-                <span>🏆 Leaderboard</span>
-              </Link>
-            </div>
-          </div>
 
-          {/* Feature Matrix Card */}
-          <div className="lg:col-span-6 bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-200 dark:border-slate-800 shadow-2xl space-y-6 glow-border">
-            <div className="flex justify-between items-center text-xs font-mono text-slate-400">
-              <span className="font-bold text-slate-700 dark:text-slate-300">ENTERPRISE FEATURE MATRIX</span>
-              <span className="bg-emerald-500 text-white text-[10px] px-2.5 py-1 rounded-full font-bold">ACTIVE</span>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <Link href="/srs" className="bg-slate-50 dark:bg-slate-800/60 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 hover:border-blue-500 transition space-y-1 group">
-                <div className="text-blue-600 dark:text-blue-400 font-bold text-sm group-hover:translate-x-1 transition">🧠 SM-2 3D Flashcards</div>
-                <div className="text-xs text-slate-500 dark:text-slate-400">Spaced repetition memory review</div>
+            <h1 className="text-4xl sm:text-6xl font-black tracking-tight leading-none text-slate-900 dark:text-white">
+              Sıfırdan Dil Öğrenmenin <br/>
+              <span className="bg-gradient-to-r from-blue-600 to-indigo-500 bg-clip-text text-transparent">En Kolay ve Hızlı Yolu</span>
+            </h1>
+
+            <p className="text-slate-600 dark:text-slate-400 text-base sm:text-lg leading-relaxed">
+              Ezber yapmak yok. Karmaşık gramer kurallarında kaybolmak yok. Tıklayarak cümle kur, dinle ve hafızada tut.
+            </p>
+
+            {/* Giant 1-Click CTA Button */}
+            <div className="pt-2 flex flex-wrap gap-4 items-center">
+              <Link href="/lesson?module=de-a1" className="inline-flex items-center justify-center bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-black px-8 py-5 rounded-2xl text-base tracking-wider uppercase transition shadow-xl shadow-blue-500/25 hover:scale-105">
+                <span>BUGÜNKÜ DERSİNE BAŞLA ▶</span>
               </Link>
-              <Link href="/leaderboard" className="bg-slate-50 dark:bg-slate-800/60 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 hover:border-blue-500 transition space-y-1 group">
-                <div className="text-amber-500 font-bold text-sm group-hover:translate-x-1 transition">🏆 Diamond League</div>
-                <div className="text-xs text-slate-500 dark:text-slate-400">Global competitive rankings</div>
-              </Link>
-              <Link href="/tutor" className="bg-slate-50 dark:bg-slate-800/60 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 hover:border-blue-500 transition space-y-1 group">
-                <div className="text-emerald-600 dark:text-emerald-400 font-bold text-sm group-hover:translate-x-1 transition">🤖 AI Scenario Tutor</div>
-                <div className="text-xs text-slate-500 dark:text-slate-400">Real-time conversational practice</div>
-              </Link>
-              <Link href="/badges" className="bg-slate-50 dark:bg-slate-800/60 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 hover:border-blue-500 transition space-y-1 group">
-                <div className="text-purple-600 dark:text-purple-400 font-bold text-sm group-hover:translate-x-1 transition">🎖️ Badges & Rewards</div>
-                <div className="text-xs text-slate-500 dark:text-slate-400">Unlockable learner achievements</div>
+              
+              <Link href="/srs" className="inline-flex items-center justify-center bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-800 dark:text-slate-200 font-bold px-6 py-5 rounded-2xl text-sm transition">
+                <span>Kelime Tekrarı Yap</span>
               </Link>
             </div>
           </div>
         </section>
 
-        {/* Modules Grid */}
-        <section id="modules" className="space-y-8">
+        {/* Quick Access Learning Features */}
+        <section className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+          <Link href="/srs" className="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-md hover:border-blue-500 transition space-y-2 group">
+            <div className="text-3xl">🧠</div>
+            <h3 className="font-extrabold text-lg text-slate-900 dark:text-white group-hover:text-blue-600 transition">Aralıklı Tekrar Kartları</h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400">Unutmaya yaklaştığın kelimeleri tam zamanında tekrar et.</p>
+          </Link>
+
+          <Link href="/vocab" className="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-md hover:border-blue-500 transition space-y-2 group">
+            <div className="text-3xl">📚</div>
+            <h3 className="font-extrabold text-lg text-slate-900 dark:text-white group-hover:text-blue-600 transition">Geniş Kelime Sözlüğü</h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400">A1-C2 seviyelerinde 14.000+ sesli kelimeyi incele ve dinle.</p>
+          </Link>
+
+          <Link href="/grammar" className="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-md hover:border-blue-500 transition space-y-2 group">
+            <div className="text-3xl">🧩</div>
+            <h3 className="font-extrabold text-lg text-slate-900 dark:text-white group-hover:text-blue-600 transition">Cümle Yapısı ve Gramer</h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400">Pratik örneklerle dil yapısını ve kuralları kolayca kavra.</p>
+          </Link>
+        </section>
+
+        {/* Simple Course & Level Selector */}
+        <section id="courses" className="space-y-8">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 border-b border-slate-200 dark:border-slate-800 pb-6">
             <div>
-              <span className="text-xs font-mono text-blue-600 dark:text-blue-400 font-bold uppercase tracking-widest">01 / DYNAMIC CURRICULUM</span>
-              <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white mt-1">Select Language & CEFR Level</h2>
+              <span className="text-xs font-mono text-blue-600 dark:text-blue-400 font-bold uppercase tracking-widest">ÖĞRENME MÜFREDATI</span>
+              <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white mt-1">Öğrenmek İstediğin Dili Seç</h2>
             </div>
 
-            {/* Language Tabs */}
+            {/* Language Selector */}
             <div className="flex flex-wrap gap-2 bg-white dark:bg-slate-900 p-1.5 rounded-2xl border border-slate-200 dark:border-slate-800">
               {LANGUAGES.map(lang => (
                 <button
                   key={lang.id}
                   onClick={() => setSelectedLang(lang.id)}
-                  className={`px-4 py-2 rounded-xl text-xs font-bold transition flex items-center space-x-2 ${selectedLang === lang.id ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
+                  className={`px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center space-x-2 ${selectedLang === lang.id ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
                 >
-                  <span>{lang.flag}</span>
+                  <span className="text-base">{lang.flag}</span>
                   <span>{lang.name.split(' ')[0]}</span>
                 </button>
               ))}
@@ -98,14 +98,14 @@ export default function Home() {
 
           {/* Level Filter Chips */}
           <div className="flex flex-wrap gap-2 items-center">
-            <span className="text-xs font-mono font-bold text-slate-400 uppercase mr-2">Level Filter:</span>
+            <span className="text-xs font-mono font-bold text-slate-400 uppercase mr-2">Seviye Filtresi:</span>
             {['ALL', 'A1', 'A2', 'B1', 'B2', 'C1', 'C2'].map(lvl => (
               <button
                 key={lvl}
                 onClick={() => setSelectedLevel(lvl)}
                 className={`px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold border transition ${selectedLevel === lvl ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 border-slate-900 dark:border-white' : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-800 hover:border-slate-400'}`}
               >
-                {lvl}
+                {lvl === 'ALL' ? 'Tüm Seviyeler' : lvl}
               </button>
             ))}
           </div>
@@ -113,20 +113,21 @@ export default function Home() {
           {/* Modules Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {filteredModules.map(mod => (
-              <div key={mod.id} className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-8 flex flex-col justify-between space-y-6 hover:shadow-2xl hover:border-blue-500 transition-all duration-300">
+              <div key={mod.id} className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-8 flex flex-col justify-between space-y-6 hover:shadow-xl hover:border-blue-500 transition-all duration-300">
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
-                    <span className="text-xs font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/60 px-3 py-1 rounded-full border border-blue-100 dark:border-blue-800">{mod.level}</span>
+                    <span className="text-xs font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/60 px-3 py-1 rounded-full border border-blue-100 dark:border-blue-800">{mod.level} SEVİYESİ</span>
                     <span className="text-xs font-mono text-slate-400">{currentLangObj.flag} {currentLangObj.name.split(' ')[0]}</span>
                   </div>
                   <h3 className="text-2xl font-extrabold text-slate-900 dark:text-white">{mod.title}</h3>
                   <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">{mod.tagline}</p>
-                  <div className="pt-2 text-[10px] font-mono font-bold text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-800 p-2.5 rounded-xl border border-slate-100 dark:border-slate-800">
-                    FOCUS: {mod.grammarFocus}
+                  <div className="pt-2 text-[11px] font-mono font-bold text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-800 p-2.5 rounded-xl border border-slate-100 dark:border-slate-800">
+                    ODAK: {mod.grammarFocus}
                   </div>
                 </div>
-                <Link href={`/lesson?module=${mod.id}`} className="w-full inline-flex justify-center items-center bg-slate-900 dark:bg-blue-600 hover:bg-blue-600 dark:hover:bg-blue-500 text-white font-bold py-3.5 rounded-2xl text-xs uppercase tracking-wider transition shadow-md">
-                  Launch Interactive Module ➔
+
+                <Link href={`/lesson?module=${mod.id}`} className="w-full inline-flex justify-center items-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-2xl text-xs uppercase tracking-wider transition shadow-md">
+                  Derse Başla ➔
                 </Link>
               </div>
             ))}
@@ -135,7 +136,7 @@ export default function Home() {
       </main>
 
       <footer className="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 py-8 text-center text-xs text-slate-500 font-mono">
-        RECALLFLOW CREATIVE ENTERPRISE PLATFORM · 2026 EDITION
+        RECALLFLOW AKILLI DİL ÖĞRENME PLATFORMU
       </footer>
     </div>
   );
