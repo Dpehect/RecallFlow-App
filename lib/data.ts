@@ -105,9 +105,9 @@ export const RECALLFLOW_ENTERPRISE_DATA = {
       type: 'short-story',
       vocabHighlighted: ['aufstehen', 'arbeiten', 'wohnen', 'Abend'],
       lines: [
-        { speaker: 'Erzähler', targetText: 'Jeden Morgen stehe ich um 7 Uhr auf.', translation: 'Her sabah saat 7'de kalkarım.', audioText: 'Jeden Morgen stehe ich um 7 Uhr auf.' },
+        { speaker: 'Erzähler', targetText: 'Jeden Morgen stehe ich um 7 Uhr auf.', translation: "Her sabah saat 7'de kalkarım.", audioText: 'Jeden Morgen stehe ich um 7 Uhr auf.' },
         { speaker: 'Erzähler', targetText: 'Ich trinke einen Tee und fahre mit der U-Bahn zur Arbeit.', translation: 'Bir çay içerim ve metroyla işe giderim.', audioText: 'Ich trinke einen Tee und fahre mit der U-Bahn zur Arbeit.' },
-        { speaker: 'Erzähler', targetText: 'Ich wohne in München und arbeite in einem Technologieunternehmen.', translation: 'Münih'te yaşıyorum ve bir teknoloji şirketinde çalışıyorum.', audioText: 'Ich wohne in München und arbeite in einem Technologieunternehmen.' },
+        { speaker: 'Erzähler', targetText: 'Ich wohne in München und arbeite in einem Technologieunternehmen.', translation: "Münih'te yaşıyorum ve bir teknoloji şirketinde çalışıyorum.", audioText: 'Ich wohne in München und arbeite in einem Technologieunternehmen.' },
         { speaker: 'Erzähler', targetText: 'Am Abend koche ich leckeres Essen und lese ein Buch.', translation: 'Akşamları lezzetli yemek pişiririm ve kitap okurum.', audioText: 'Am Abend koche ich leckeres Essen und lese ein Buch.' }
       ]
     },
@@ -178,7 +178,7 @@ export const RECALLFLOW_ENTERPRISE_DATA = {
   vocabPacks: [
     { id: 'v-de-1', language: 'german', langCode: 'de-DE', category: 'cafe-travel', word: 'Kaffee', translation: 'Kahve', type: 'İsim (m)', level: 'A1', exampleTarget: 'Ich trinke morgens gerne Kaffee.', exampleTranslation: 'Sabahları kahve içmeyi severim.' },
     { id: 'v-de-2', language: 'german', langCode: 'de-DE', category: 'cafe-travel', word: 'bestellen', translation: 'Sipariş vermek', type: 'Fiil', level: 'A1', exampleTarget: 'Wir möchten zwei Kaffee bestellen.', exampleTranslation: 'İki kahve sipariş etmek istiyoruz.' },
-    { id: 'v-de-3', language: 'german', langCode: 'de-DE', category: 'daily-life', word: 'aufstehen', translation: 'Kalkmak / Uyanmak', type: 'Fiil', level: 'A1', exampleTarget: 'Ich stehe um 7 Uhr auf.', exampleTranslation: 'Saat 7'de kalkıyorum.' },
+    { id: 'v-de-3', language: 'german', langCode: 'de-DE', category: 'daily-life', word: 'aufstehen', translation: 'Kalkmak / Uyanmak', type: 'Fiil', level: 'A1', exampleTarget: 'Ich stehe um 7 Uhr auf.', exampleTranslation: "Saat 7'de kalkıyorum." },
     { id: 'v-es-1', language: 'spanish', langCode: 'es-ES', category: 'cafe-travel', word: 'café', translation: 'Kahve', type: 'İsim', level: 'A1', exampleTarget: 'Un café con leche, por favor.', exampleTranslation: 'Sütlü bir kahve lütfen.' },
     { id: 'v-pt-1', language: 'portuguese', langCode: 'pt-PT', category: 'cafe-travel', word: 'pastel de nata', translation: 'Kremalı çörek', type: 'İsim', level: 'A1', exampleTarget: 'Gosto de pastel de nata.', exampleTranslation: 'Kremalı çöreği severim.' },
     { id: 'v-en-1', language: 'english', langCode: 'en-US', category: 'daily-life', word: 'coffee', translation: 'Kahve', type: 'İsim', level: 'A1', exampleTarget: 'I drink coffee every morning.', exampleTranslation: 'Her sabah kahve içerim.' }
