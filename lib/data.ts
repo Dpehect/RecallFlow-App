@@ -104,10 +104,10 @@ export const vocabPacks: VocabItem[] = [
 ];
 
 export const LANGUAGES = [
-  { id: 'english', name: 'İngilizce', code: 'en-US' },
-  { id: 'german', name: 'Almanca', code: 'de-DE' },
-  { id: 'spanish', name: 'İspanyolca', code: 'es-ES' },
-  { id: 'portuguese', name: 'Portekizce', code: 'pt-PT' }
+  { id: 'english', name: 'İngilizce', code: 'en-US', flag: '🇬🇧' },
+  { id: 'german', name: 'Almanca', code: 'de-DE', flag: '🇩🇪' },
+  { id: 'spanish', name: 'İspanyolca', code: 'es-ES', flag: '🇪🇸' },
+  { id: 'portuguese', name: 'Portekizce', code: 'pt-PT', flag: '🇵🇹' }
 ];
 
 export const CATEGORIES = [
@@ -121,7 +121,7 @@ export const RECALLFLOW_ENTERPRISE_DATA = {
   categories: CATEGORIES,
   vocabPacks: vocabPacks,
   grammarLessons: [] as GrammarLesson[],
-  grammarGuides: [] as GrammarLesson[], // Sayfanın aradığı alan eklendi
+  grammarGuides: [] as GrammarLesson[],
   stories: [] as Story[],
   modules: [
     { language: 'german', level: 'A1', title: 'Temel Almanca Modülü' },
