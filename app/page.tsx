@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Navbar from '@/components/Navbar';
 import { RECALLFLOW_ENTERPRISE_DATA, LANGUAGES } from '@/lib/data';
 import { sounds } from '@/lib/sound';
 
@@ -18,100 +19,75 @@ export default function Home() {
   });
 
   return (
-    <div className="min-h-screen flex flex-col justify-between font-sans bg-slate-50 text-slate-900">
-      {/* Navbar */}
-      <header className="w-full border-b border-slate-200 bg-white/90 backdrop-blur-md sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <Link href="/" className="font-black text-xl tracking-tight text-slate-900 flex items-center space-x-2">
-              <span className="w-3 h-3 bg-blue-600 rounded-full inline-block"></span>
-              <span>RECALLFLOW</span>
-            </Link>
-            <span className="text-[11px] font-mono bg-blue-50 text-blue-700 px-2.5 py-1 rounded-full border border-blue-200 font-semibold">[ ENTERPRISE 2026 ]</span>
-          </div>
-
-          <nav className="hidden lg:flex items-center space-x-6 text-xs font-bold text-slate-600 uppercase tracking-wider">
-            <a href="#modules" className="hover:text-blue-600 transition">Curriculum</a>
-            <Link href="/srs" className="hover:text-blue-600 transition">SM-2 Review</Link>
-            <Link href="/tutor" className="hover:text-blue-600 transition">AI Tutor</Link>
-            <Link href="/speech" className="hover:text-blue-600 transition">Pronunciation</Link>
-            <Link href="/vocab" className="hover:text-blue-600 transition">Vocab</Link>
-            <Link href="/grammar" className="hover:text-blue-600 transition">Grammar</Link>
-            <Link href="/profile" className="hover:text-blue-600 transition">Analytics</Link>
-          </nav>
-
-          <Link href="/lesson?module=de-a1-coffee" className="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-5 py-2.5 rounded-lg tracking-wider uppercase transition shadow-sm">
-            LAUNCH LESSON
-          </Link>
-        </div>
-      </header>
+    <div className="min-h-screen flex flex-col justify-between font-sans bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100">
+      <Navbar />
 
       {/* Main Hero */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-20 flex-1 w-full">
         <section className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           <div className="lg:col-span-6 space-y-6">
-            <div className="inline-flex items-center space-x-2 bg-emerald-50 text-emerald-700 border border-emerald-200 px-3 py-1 rounded-full text-xs font-bold">
+            <div className="inline-flex items-center space-x-2 bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 px-3 py-1 rounded-full text-xs font-bold">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span>Full-Stack Next.js 14 & SM-2 Spaced Repetition Engine</span>
+              <span>SM-2 SRS Engine & 3D Card FX</span>
             </div>
-            <h1 className="text-5xl sm:text-6xl font-black tracking-tight leading-none text-slate-900 uppercase">
-              FLUENCY.<br/><span className="text-blue-600">ACCELERATED.</span><br/>MINIMAL<br/>EFFORT.
+            <h1 className="text-5xl sm:text-6xl font-black tracking-tight leading-none uppercase">
+              FLUENCY.<br/><span className="bg-gradient-to-r from-blue-600 to-indigo-500 bg-clip-text text-transparent">ACCELERATED.</span><br/>MINIMAL<br/>EFFORT.
             </h1>
-            <p className="text-slate-600 text-lg leading-relaxed max-w-lg">
-              Full-stack language learning platform featuring SM-2 Spaced Repetition, Speech Pronunciation Evaluation, AI Scenario Tutor, and A1-C2 multi-language curriculum.
+            <p className="text-slate-600 dark:text-slate-400 text-lg leading-relaxed max-w-lg">
+              Next-gen language learning with SM-2 Spaced Repetition, 3D card flips, competitive leagues, AI Scenario Tutor, and 14,400+ CEFR A1-C2 vocabulary items.
             </p>
             <div className="pt-2 flex flex-wrap gap-4 items-center">
-              <a href="#modules" className="inline-flex items-center bg-blue-600 hover:bg-blue-700 text-white font-bold px-7 py-4 rounded-xl text-sm tracking-wider uppercase space-x-3 transition shadow-lg shadow-blue-500/20">
-                <span>EXPLORE ALL COURSES ➔</span>
+              <a href="#modules" className="inline-flex items-center bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold px-7 py-4 rounded-2xl text-sm tracking-wider uppercase space-x-3 transition shadow-lg shadow-blue-500/25 hover:scale-105">
+                <span>EXPLORE COURSES ➔</span>
               </a>
-              <Link href="/srs" className="inline-flex items-center bg-white border border-slate-200 hover:bg-slate-100 text-slate-700 font-bold px-6 py-4 rounded-xl text-sm tracking-wider uppercase transition">
-                <span>SM-2 SRS Review</span>
+              <Link href="/leaderboard" className="inline-flex items-center bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 font-bold px-6 py-4 rounded-2xl text-sm tracking-wider uppercase transition hover:scale-105">
+                <span>🏆 Leaderboard</span>
               </Link>
             </div>
           </div>
 
-          {/* Interactive Feature Matrix Card */}
-          <div className="lg:col-span-6 bg-white rounded-3xl p-8 border border-slate-200 shadow-xl space-y-6">
+          {/* Feature Matrix Card */}
+          <div className="lg:col-span-6 bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-200 dark:border-slate-800 shadow-2xl space-y-6 glow-border">
             <div className="flex justify-between items-center text-xs font-mono text-slate-400">
-              <span className="font-bold text-slate-700">FULL-STACK ENTERPRISE FEATURES</span>
-              <span className="bg-blue-50 text-blue-700 px-2.5 py-1 rounded-md font-bold">ACTIVE</span>
+              <span className="font-bold text-slate-700 dark:text-slate-300">ENTERPRISE FEATURE MATRIX</span>
+              <span className="bg-emerald-500 text-white text-[10px] px-2.5 py-1 rounded-full font-bold">ACTIVE</span>
             </div>
             <div className="grid grid-cols-2 gap-4">
-              <Link href="/srs" className="bg-slate-50 p-4 rounded-2xl border border-slate-100 hover:border-blue-300 transition space-y-1">
-                <div className="text-blue-600 font-bold text-sm">🧠 SM-2 SRS Engine</div>
-                <div className="text-xs text-slate-500">Spaced repetition memory retention</div>
+              <Link href="/srs" className="bg-slate-50 dark:bg-slate-800/60 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 hover:border-blue-500 transition space-y-1 group">
+                <div className="text-blue-600 dark:text-blue-400 font-bold text-sm group-hover:translate-x-1 transition">🧠 SM-2 3D Flashcards</div>
+                <div className="text-xs text-slate-500 dark:text-slate-400">Spaced repetition memory review</div>
               </Link>
-              <Link href="/tutor" className="bg-slate-50 p-4 rounded-2xl border border-slate-100 hover:border-blue-300 transition space-y-1">
-                <div className="text-emerald-600 font-bold text-sm">🤖 AI Scenario Tutor</div>
-                <div className="text-xs text-slate-500">Conversational AI language partner</div>
+              <Link href="/leaderboard" className="bg-slate-50 dark:bg-slate-800/60 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 hover:border-blue-500 transition space-y-1 group">
+                <div className="text-amber-500 font-bold text-sm group-hover:translate-x-1 transition">🏆 Diamond League</div>
+                <div className="text-xs text-slate-500 dark:text-slate-400">Global competitive rankings</div>
               </Link>
-              <Link href="/speech" className="bg-slate-50 p-4 rounded-2xl border border-slate-100 hover:border-blue-300 transition space-y-1">
-                <div className="text-purple-600 font-bold text-sm">🎙️ Speech Evaluation</div>
-                <div className="text-xs text-slate-500">Microphone pronunciation scoring</div>
+              <Link href="/tutor" className="bg-slate-50 dark:bg-slate-800/60 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 hover:border-blue-500 transition space-y-1 group">
+                <div className="text-emerald-600 dark:text-emerald-400 font-bold text-sm group-hover:translate-x-1 transition">🤖 AI Scenario Tutor</div>
+                <div className="text-xs text-slate-500 dark:text-slate-400">Real-time conversational practice</div>
               </Link>
-              <Link href="/profile" className="bg-slate-50 p-4 rounded-2xl border border-slate-100 hover:border-blue-300 transition space-y-1">
-                <div className="text-amber-600 font-bold text-sm">📊 Performance Analytics</div>
-                <div className="text-xs text-slate-500">Streaks, XP points & mastery level</div>
+              <Link href="/badges" className="bg-slate-50 dark:bg-slate-800/60 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 hover:border-blue-500 transition space-y-1 group">
+                <div className="text-purple-600 dark:text-purple-400 font-bold text-sm group-hover:translate-x-1 transition">🎖️ Badges & Rewards</div>
+                <div className="text-xs text-slate-500 dark:text-slate-400">Unlockable learner achievements</div>
               </Link>
             </div>
           </div>
         </section>
 
-        {/* Modules & Curriculum Selector */}
+        {/* Modules Grid */}
         <section id="modules" className="space-y-8">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 border-b border-slate-200 pb-6">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 border-b border-slate-200 dark:border-slate-800 pb-6">
             <div>
-              <span className="text-xs font-mono text-blue-600 font-bold uppercase tracking-widest">01 / DYNAMIC CURRICULUM</span>
-              <h2 className="text-3xl font-extrabold text-slate-900 mt-1">Select Language & CEFR Level</h2>
+              <span className="text-xs font-mono text-blue-600 dark:text-blue-400 font-bold uppercase tracking-widest">01 / DYNAMIC CURRICULUM</span>
+              <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white mt-1">Select Language & CEFR Level</h2>
             </div>
 
             {/* Language Tabs */}
-            <div className="flex flex-wrap gap-2 bg-white p-1.5 rounded-2xl border border-slate-200">
+            <div className="flex flex-wrap gap-2 bg-white dark:bg-slate-900 p-1.5 rounded-2xl border border-slate-200 dark:border-slate-800">
               {LANGUAGES.map(lang => (
                 <button
                   key={lang.id}
                   onClick={() => setSelectedLang(lang.id)}
-                  className={`px-4 py-2 rounded-xl text-xs font-bold transition flex items-center space-x-2 ${selectedLang === lang.id ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-600 hover:bg-slate-100'}`}
+                  className={`px-4 py-2 rounded-xl text-xs font-bold transition flex items-center space-x-2 ${selectedLang === lang.id ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
                 >
                   <span>{lang.flag}</span>
                   <span>{lang.name.split(' ')[0]}</span>
@@ -127,7 +103,7 @@ export default function Home() {
               <button
                 key={lvl}
                 onClick={() => setSelectedLevel(lvl)}
-                className={`px-3.5 py-1.5 rounded-lg text-xs font-mono font-bold border transition ${selectedLevel === lvl ? 'bg-slate-900 text-white border-slate-900' : 'bg-white text-slate-600 border-slate-200 hover:border-slate-400'}`}
+                className={`px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold border transition ${selectedLevel === lvl ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 border-slate-900 dark:border-white' : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-800 hover:border-slate-400'}`}
               >
                 {lvl}
               </button>
@@ -136,37 +112,30 @@ export default function Home() {
 
           {/* Modules Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {filteredModules.length === 0 ? (
-              <div className="col-span-full py-16 text-center text-slate-400 font-mono text-sm bg-white rounded-3xl border border-slate-200">
-                Modules for this level in {currentLangObj.name} are being added to the database. Try A1 or A2!
-              </div>
-            ) : (
-              filteredModules.map(mod => (
-                <div key={mod.id} className="bg-white rounded-3xl border border-slate-200 p-8 flex flex-col justify-between space-y-6 hover:shadow-xl transition-all duration-300">
-                  <div className="space-y-4">
-                    <div className="flex justify-between items-center">
-                      <span className="text-xs font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-full border border-blue-100">{mod.level}</span>
-                      <span className="text-xs font-mono text-slate-400">{currentLangObj.flag} {currentLangObj.name.split(' ')[0]}</span>
-                    </div>
-                    <h3 className="text-2xl font-extrabold text-slate-900">{mod.title}</h3>
-                    <p className="text-sm text-slate-600 leading-relaxed">{mod.tagline}</p>
-                    <div className="pt-2 text-[10px] font-mono font-bold text-slate-500 bg-slate-50 p-2.5 rounded-xl border border-slate-100">
-                      FOCUS: {mod.grammarFocus}
-                    </div>
+            {filteredModules.map(mod => (
+              <div key={mod.id} className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-8 flex flex-col justify-between space-y-6 hover:shadow-2xl hover:border-blue-500 transition-all duration-300">
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/60 px-3 py-1 rounded-full border border-blue-100 dark:border-blue-800">{mod.level}</span>
+                    <span className="text-xs font-mono text-slate-400">{currentLangObj.flag} {currentLangObj.name.split(' ')[0]}</span>
                   </div>
-                  <Link href={`/lesson?module=${mod.id}`} className="w-full inline-flex justify-center items-center bg-slate-900 hover:bg-blue-600 text-white font-bold py-3.5 rounded-xl text-xs uppercase tracking-wider transition">
-                    Launch Interactive Module ➔
-                  </Link>
+                  <h3 className="text-2xl font-extrabold text-slate-900 dark:text-white">{mod.title}</h3>
+                  <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">{mod.tagline}</p>
+                  <div className="pt-2 text-[10px] font-mono font-bold text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-800 p-2.5 rounded-xl border border-slate-100 dark:border-slate-800">
+                    FOCUS: {mod.grammarFocus}
+                  </div>
                 </div>
-              ))
-            )}
+                <Link href={`/lesson?module=${mod.id}`} className="w-full inline-flex justify-center items-center bg-slate-900 dark:bg-blue-600 hover:bg-blue-600 dark:hover:bg-blue-500 text-white font-bold py-3.5 rounded-2xl text-xs uppercase tracking-wider transition shadow-md">
+                  Launch Interactive Module ➔
+                </Link>
+              </div>
+            ))}
           </div>
         </section>
       </main>
 
-      {/* Footer */}
-      <footer className="bg-white border-t border-slate-200 py-8 text-center text-xs text-slate-500 font-mono">
-        RECALLFLOW FULL-STACK ENTERPRISE ENGINE · A1-C2 MULTI-LANGUAGE PLATFORM
+      <footer className="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 py-8 text-center text-xs text-slate-500 font-mono">
+        RECALLFLOW CREATIVE ENTERPRISE PLATFORM · 2026 EDITION
       </footer>
     </div>
   );
