@@ -30,10 +30,14 @@ export default function Home() {
             <span className="text-[11px] font-mono bg-blue-50 text-blue-700 px-2.5 py-1 rounded-full border border-blue-200 font-semibold">[ ENTERPRISE 2026 ]</span>
           </div>
 
-          <nav className="hidden md:flex items-center space-x-8 text-sm font-semibold text-slate-600">
-            <a href="#modules" className="hover:text-blue-600 transition">01. Curriculum</a>
-            <Link href="/vocab" className="hover:text-blue-600 transition">02. Vocab Vault</Link>
-            <Link href="/grammar" className="hover:text-blue-600 transition">03. Grammar Hub</Link>
+          <nav className="hidden lg:flex items-center space-x-6 text-xs font-bold text-slate-600 uppercase tracking-wider">
+            <a href="#modules" className="hover:text-blue-600 transition">Curriculum</a>
+            <Link href="/srs" className="hover:text-blue-600 transition">SM-2 Review</Link>
+            <Link href="/tutor" className="hover:text-blue-600 transition">AI Tutor</Link>
+            <Link href="/speech" className="hover:text-blue-600 transition">Pronunciation</Link>
+            <Link href="/vocab" className="hover:text-blue-600 transition">Vocab</Link>
+            <Link href="/grammar" className="hover:text-blue-600 transition">Grammar</Link>
+            <Link href="/profile" className="hover:text-blue-600 transition">Analytics</Link>
           </nav>
 
           <Link href="/lesson?module=de-a1-coffee" className="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-5 py-2.5 rounded-lg tracking-wider uppercase transition shadow-sm">
@@ -48,39 +52,47 @@ export default function Home() {
           <div className="lg:col-span-6 space-y-6">
             <div className="inline-flex items-center space-x-2 bg-emerald-50 text-emerald-700 border border-emerald-200 px-3 py-1 rounded-full text-xs font-bold">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span>A1-C2 Multi-Language Mastery Engine</span>
+              <span>Full-Stack Next.js 14 & SM-2 Spaced Repetition Engine</span>
             </div>
             <h1 className="text-5xl sm:text-6xl font-black tracking-tight leading-none text-slate-900 uppercase">
               FLUENCY.<br/><span className="text-blue-600">ACCELERATED.</span><br/>MINIMAL<br/>EFFORT.
             </h1>
             <p className="text-slate-600 text-lg leading-relaxed max-w-lg">
-              Scientific spaced-repetition micro-cards for German, Spanish, Portuguese & English across A1, A2, B1, B2, C1 & C2 levels.
+              Full-stack language learning platform featuring SM-2 Spaced Repetition, Speech Pronunciation Evaluation, AI Scenario Tutor, and A1-C2 multi-language curriculum.
             </p>
             <div className="pt-2 flex flex-wrap gap-4 items-center">
               <a href="#modules" className="inline-flex items-center bg-blue-600 hover:bg-blue-700 text-white font-bold px-7 py-4 rounded-xl text-sm tracking-wider uppercase space-x-3 transition shadow-lg shadow-blue-500/20">
                 <span>EXPLORE ALL COURSES ➔</span>
               </a>
-              <Link href="/vocab" className="inline-flex items-center bg-white border border-slate-200 hover:bg-slate-100 text-slate-700 font-bold px-6 py-4 rounded-xl text-sm tracking-wider uppercase transition">
-                <span>Vocab Vault</span>
+              <Link href="/srs" className="inline-flex items-center bg-white border border-slate-200 hover:bg-slate-100 text-slate-700 font-bold px-6 py-4 rounded-xl text-sm tracking-wider uppercase transition">
+                <span>SM-2 SRS Review</span>
               </Link>
             </div>
           </div>
 
-          {/* Interactive Preview Card */}
+          {/* Interactive Feature Matrix Card */}
           <div className="lg:col-span-6 bg-white rounded-3xl p-8 border border-slate-200 shadow-xl space-y-6">
             <div className="flex justify-between items-center text-xs font-mono text-slate-400">
-              <span className="font-bold text-slate-700">{currentLangObj.flag} {currentLangObj.name} Demo</span>
-              <span className="bg-blue-50 text-blue-700 px-2.5 py-1 rounded-md font-bold">NATIVE AUDIO</span>
+              <span className="font-bold text-slate-700">FULL-STACK ENTERPRISE FEATURES</span>
+              <span className="bg-blue-50 text-blue-700 px-2.5 py-1 rounded-md font-bold">ACTIVE</span>
             </div>
-            <div className="text-center py-6 bg-slate-50 rounded-2xl border border-slate-100 space-y-4">
-              <div className="text-3xl font-extrabold tracking-wide flex justify-center items-center space-x-3">
-                <span>Ich</span>
-                <button onClick={() => sounds.speak('trinke', 'de-DE')} className="text-blue-600 border-2 border-blue-400 bg-blue-50 px-3.5 py-1.5 rounded-xl transition hover:bg-blue-100">
-                  trinke 🔊
-                </button>
-                <span>Kaffee.</span>
-              </div>
-              <p className="text-xs text-slate-400 font-mono">Tap highlighted words for Web Speech synthesis</p>
+            <div className="grid grid-cols-2 gap-4">
+              <Link href="/srs" className="bg-slate-50 p-4 rounded-2xl border border-slate-100 hover:border-blue-300 transition space-y-1">
+                <div className="text-blue-600 font-bold text-sm">🧠 SM-2 SRS Engine</div>
+                <div className="text-xs text-slate-500">Spaced repetition memory retention</div>
+              </Link>
+              <Link href="/tutor" className="bg-slate-50 p-4 rounded-2xl border border-slate-100 hover:border-blue-300 transition space-y-1">
+                <div className="text-emerald-600 font-bold text-sm">🤖 AI Scenario Tutor</div>
+                <div className="text-xs text-slate-500">Conversational AI language partner</div>
+              </Link>
+              <Link href="/speech" className="bg-slate-50 p-4 rounded-2xl border border-slate-100 hover:border-blue-300 transition space-y-1">
+                <div className="text-purple-600 font-bold text-sm">🎙️ Speech Evaluation</div>
+                <div className="text-xs text-slate-500">Microphone pronunciation scoring</div>
+              </Link>
+              <Link href="/profile" className="bg-slate-50 p-4 rounded-2xl border border-slate-100 hover:border-blue-300 transition space-y-1">
+                <div className="text-amber-600 font-bold text-sm">📊 Performance Analytics</div>
+                <div className="text-xs text-slate-500">Streaks, XP points & mastery level</div>
+              </Link>
             </div>
           </div>
         </section>
@@ -154,7 +166,7 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="bg-white border-t border-slate-200 py-8 text-center text-xs text-slate-500 font-mono">
-        RECALLFLOW ENTERPRISE LANGUAGE ENGINE · A1-C2 MULTI-LANGUAGE PLATFORM
+        RECALLFLOW FULL-STACK ENTERPRISE ENGINE · A1-C2 MULTI-LANGUAGE PLATFORM
       </footer>
     </div>
   );
