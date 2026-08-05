@@ -27,9 +27,9 @@ export default function VocabPage() {
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 border-b border-slate-200 dark:border-slate-800 pb-6">
           <div>
-            <span className="text-xs font-mono text-blue-600 dark:text-blue-400 font-bold uppercase tracking-widest">KATEGORİLERE AYRILMIŞ SÖZLÜK</span>
-            <h1 className="text-3xl font-black text-slate-900 dark:text-white mt-1">Kelime ve Örnek Cümle Haznesi</h1>
-            <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">Her kelimeyi anlamı ve cümle içi kullanımıyla öğrenin.</p>
+            <span className="text-xs font-mono text-blue-600 dark:text-blue-400 font-bold uppercase tracking-widest">BÖLÜM 1</span>
+            <h1 className="text-3xl font-black text-slate-900 dark:text-white mt-1">Kelime Öğrenme</h1>
+            <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">Kelimeleri kategorilerine göre inceleyin, sesli dinleyin ve örnek cümle içi kullanımlarını görün.</p>
           </div>
 
           <div className="flex flex-wrap gap-2 bg-white dark:bg-slate-900 p-1.5 rounded-2xl border border-slate-200 dark:border-slate-800">
@@ -53,7 +53,7 @@ export default function VocabPage() {
               onClick={() => setSelectedCategory('ALL')}
               className={`px-3.5 py-2 rounded-xl text-xs font-bold transition ${selectedCategory === 'ALL' ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900' : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-800'}`}
             >
-              Tüm Kategoriler
+              Tüm Konular
             </button>
             {CATEGORIES.map(cat => (
               <button
@@ -69,7 +69,7 @@ export default function VocabPage() {
 
           <input
             type="text"
-            placeholder={`${currentLangObj.name.split(' ')[0]} kelime veya anlam ara...`}
+            placeholder={`${currentLangObj.name.split(' ')[0]} kelime ara...`}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             className="w-full md:w-72 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:border-blue-600"
@@ -80,11 +80,11 @@ export default function VocabPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {filtered.length === 0 ? (
             <div className="col-span-full py-16 text-center text-slate-400 font-mono text-sm bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800">
-              Arama kriterlerine uygun kelime bulunamadı.
+              Bu kategoride kelime bulunamadı.
             </div>
           ) : (
             filtered.map((item: VocabItem) => (
-              <div key={item.id} className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition space-y-4">
+              <div key={item.id} className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
                 <div className="flex justify-between items-center text-xs font-mono">
                   <span className="bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2.5 py-0.5 rounded font-bold border border-blue-100 dark:border-blue-800">{item.level}</span>
                   <span className="text-slate-400 font-bold">{item.type}</span>
@@ -95,7 +95,7 @@ export default function VocabPage() {
                   <div className="text-sm font-bold text-blue-600 dark:text-blue-400 mt-0.5">{item.translation}</div>
                 </div>
 
-                {/* Example sentence with translation */}
+                {/* Example sentence */}
                 <div className="bg-slate-50 dark:bg-slate-800/60 p-3.5 rounded-2xl border border-slate-100 dark:border-slate-800 text-xs space-y-1">
                   <div className="font-bold text-slate-900 dark:text-slate-100">"{item.exampleTarget}"</div>
                   <div className="text-slate-500 dark:text-slate-400 italic">{item.exampleTranslation}</div>
@@ -114,7 +114,7 @@ export default function VocabPage() {
       </main>
 
       <footer className="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 py-6 text-center text-xs text-slate-500 font-mono">
-        RECALLFLOW ÖRNEK CÜMLELİ KELİME SÖZLÜĞÜ
+        RECALLFLOW KELİME ÖĞRENME MODÜLÜ
       </footer>
     </div>
   );
