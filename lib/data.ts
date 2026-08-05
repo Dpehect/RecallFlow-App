@@ -59,6 +59,15 @@ export interface Story {
   vocabHighlighted: string[];
 }
 
+export interface GrammarLesson {
+  id: string;
+  language: string;
+  level: string;
+  title: string;
+  rule: string;
+  examples: { target: string; translation: string }[];
+}
+
 export const LANGUAGES = [
   { id: 'german', name: 'German (Almanca)', code: 'de-DE', flag: '🇩🇪' },
   { id: 'spanish', name: 'Spanish (İspanyolca)', code: 'es-ES', flag: '🇪🇸' },
