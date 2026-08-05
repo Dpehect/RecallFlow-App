@@ -98,12 +98,17 @@ export const CATEGORIES = [
   { id: 'daily-life', name: 'Günlük Yaşam' }
 ];
 
-// Sayfaların ve API rotasının aradığı eksik enterprise yapıları (build hatasını keser)
 export const RECALLFLOW_ENTERPRISE_DATA = {
   version: '1.0.0',
   languages: LANGUAGES,
   categories: CATEGORIES,
   vocabPacks: vocabPacks,
   grammarLessons: [],
-  stories: []
+  stories: [],
+  modules: [
+    { language: 'german', level: 'A1', title: 'Temel Almanca Modülü' },
+    { language: 'spanish', level: 'A1', title: 'Temel İspanyolca Modülü' },
+    { language: 'portuguese', level: 'A1', title: 'Temel Portekizce Modülü' },
+    { language: 'english', level: 'A1', title: 'Temel İngilizce Modülü' }
+  ]
 };
