@@ -54,7 +54,7 @@ export interface Story {
   title: string;
   summary: string;
   level: string;
-  type: 'dialogue' | 'short-story';
+  type: 'dialogue' | 'short-story' | string;
   lines: DialogueLine[];
   vocabHighlighted: string[];
 }
@@ -73,7 +73,7 @@ export const CATEGORIES = [
   { id: 'city-emergency', name: 'Şehir & Acil Durum', icon: '🏙️' }
 ];
 
-export const RECALLFLOW_ENTERPRISE_DATA = {
+export const RECALLFLOW_ENTERPRISE_DATA: { stories: Story[]; modules: Module[]; grammarGuides: GrammarLesson[]; vocabPacks: VocabItem[] } = {
   stories: [
     {
       id: 'de-s1',

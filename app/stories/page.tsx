@@ -12,7 +12,7 @@ export default function StoriesPage() {
 
   const currentLangObj = LANGUAGES.find(l => l.id === selectedLang) || LANGUAGES[0];
 
-  const stories: Story[] = (RECALLFLOW_ENTERPRISE_DATA.stories || []).filter(s => {
+  const stories: Story[] = RECALLFLOW_ENTERPRISE_DATA.stories.filter(s => {
     const matchLang = s.language === selectedLang;
     const matchCat = selectedCategory === 'ALL' || s.category === selectedCategory;
     return matchLang && matchCat;
