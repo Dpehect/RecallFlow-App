@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Navbar from '@/components/Navbar';
-import { RECALLFLOW_ENTERPRISE_DATA, LANGUAGES, CATEGORIES, Story } from '@/lib/data';
+import { RECALLFLOW_ENTERPRISE_DATA, LANGUAGES, CATEGORIES, Story, DialogueLine } from '@/lib/data';
 import { sounds } from '@/lib/sound';
 
 export default function StoriesPage() {
@@ -12,7 +12,7 @@ export default function StoriesPage() {
 
   const currentLangObj = LANGUAGES.find(l => l.id === selectedLang) || LANGUAGES[0];
 
-  const stories: Story[] = RECALLFLOW_ENTERPRISE_DATA.stories.filter(s => {
+  const stories: Story[] = (RECALLFLOW_ENTERPRISE_DATA.stories || []).filter((s: Story) => {
     const matchLang = s.language === selectedLang;
     const matchCat = selectedCategory === 'ALL' || s.category === selectedCategory;
     return matchLang && matchCat;
@@ -78,7 +78,7 @@ export default function StoriesPage() {
               Bu kategoride {currentLangObj.name} için henüz hikaye eklenmedi. "Kafe & Seyahat" kategorisini inceleyebilirsiniz!
             </div>
           ) : (
-            stories.map(story => (
+            stories.map((story: Story) => (
               <div key={story.id} className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-xl space-y-6">
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b border-slate-100 dark:border-slate-800 pb-4">
                   <div>
@@ -92,7 +92,7 @@ export default function StoriesPage() {
 
                 {/* Story / Dialogue Sentences */}
                 <div className="space-y-4">
-                  {story.lines.map((line, idx) => {
+                  {story.lines.map((line: DialogueLine, idx: number) => {
                     const lineKey = `${story.id}-${idx}`;
                     const isTranslationVisible = showTranslations[lineKey];
 

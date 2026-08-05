@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Navbar from '@/components/Navbar';
-import { RECALLFLOW_ENTERPRISE_DATA, LANGUAGES, CATEGORIES } from '@/lib/data';
+import { RECALLFLOW_ENTERPRISE_DATA, LANGUAGES, CATEGORIES, VocabItem } from '@/lib/data';
 import { sounds } from '@/lib/sound';
 
 export default function VocabPage() {
@@ -12,7 +12,7 @@ export default function VocabPage() {
 
   const currentLangObj = LANGUAGES.find(l => l.id === selectedLang) || LANGUAGES[0];
 
-  const filtered = RECALLFLOW_ENTERPRISE_DATA.vocabPacks.filter(v => {
+  const filtered: VocabItem[] = (RECALLFLOW_ENTERPRISE_DATA.vocabPacks || []).filter((v: VocabItem) => {
     const matchLang = v.language === selectedLang;
     const matchCat = selectedCategory === 'ALL' || v.category === selectedCategory;
     const matchQuery = v.word.toLowerCase().includes(query.toLowerCase()) || v.translation.toLowerCase().includes(query.toLowerCase());
@@ -83,7 +83,7 @@ export default function VocabPage() {
               Arama kriterlerine uygun kelime bulunamadı.
             </div>
           ) : (
-            filtered.map(item => (
+            filtered.map((item: VocabItem) => (
               <div key={item.id} className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition space-y-4">
                 <div className="flex justify-between items-center text-xs font-mono">
                   <span className="bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2.5 py-0.5 rounded font-bold border border-blue-100 dark:border-blue-800">{item.level}</span>

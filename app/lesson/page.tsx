@@ -3,7 +3,7 @@
 import { useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { RECALLFLOW_ENTERPRISE_DATA, Card, LANGUAGES } from '@/lib/data';
+import { RECALLFLOW_ENTERPRISE_DATA, Card, LANGUAGES, WordBreakdown } from '@/lib/data';
 import { sounds } from '@/lib/sound';
 
 function LessonContent() {
@@ -102,7 +102,7 @@ function LessonContent() {
           {selectedWords.length === 0 ? (
             <span className="text-xs text-slate-400 font-mono">Kelime çiplerine dokunarak buraya dizin</span>
           ) : (
-            selectedWords.map((word, i) => (
+            selectedWords.map((word: string, i: number) => (
               <span key={i} onClick={() => handleRemoveWord(i)} className="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 font-bold px-4 py-2 rounded-xl text-sm cursor-pointer hover:bg-rose-50 hover:text-rose-600 transition">
                 {word} ×
               </span>
@@ -112,7 +112,7 @@ function LessonContent() {
 
         {/* Option Chips Pool */}
         <div className="flex flex-wrap justify-center gap-3">
-          {currentCard.options.map((word, i) => (
+          {currentCard.options.map((word: string, i: number) => (
             <button key={i} onClick={() => handleWordClick(word)} disabled={selectedWords.includes(word)} className={`bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white px-4 py-3 rounded-2xl text-sm font-semibold transition ${selectedWords.includes(word) ? 'opacity-30 cursor-not-allowed' : 'hover:border-blue-500 hover:scale-105'}`}>
               {word}
             </button>
@@ -124,7 +124,7 @@ function LessonContent() {
           <div className="bg-blue-50/60 dark:bg-blue-950/40 p-4 rounded-2xl border border-blue-100 dark:border-blue-900 text-xs space-y-2">
             <span className="font-bold text-blue-700 dark:text-blue-300 font-mono uppercase">Kelime Yapısı ve Anlam Notu:</span>
             <div className="flex flex-wrap gap-2">
-              {currentCard.breakdown.map((item, idx) => (
+              {currentCard.breakdown.map((item: WordBreakdown, idx: number) => (
                 <div key={idx} className="bg-white dark:bg-slate-900 p-2 rounded-lg border border-blue-100 dark:border-blue-900 text-slate-900 dark:text-slate-100">
                   <span className="font-bold">{item.word}</span> = <span className="text-slate-600 dark:text-slate-400">{item.mean}</span>
                 </div>

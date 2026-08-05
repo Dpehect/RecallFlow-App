@@ -7,7 +7,7 @@ import { sounds } from '@/lib/sound';
 
 export default function TutorPage() {
   const [selectedLang, setSelectedLang] = useState('german');
-  const [messages, setMessages] = useState([
+  const [messages, setMessages] = useState<Array<{ sender: string; text: string }>>([
     { sender: 'ai', text: 'Hallo! Ich bin dein AI Tutor. Worüber möchtest du heute sprechen?' }
   ]);
   const [input, setInput] = useState('');
@@ -72,7 +72,7 @@ export default function TutorPage() {
             <h1 className="text-2xl font-black text-slate-900 dark:text-white mt-0.5">Conversational Partner</h1>
           </div>
           <div className="flex space-x-2 bg-white dark:bg-slate-900 p-1 rounded-xl border border-slate-200 dark:border-slate-800">
-            {LANGUAGES.map(lang => (
+            {LANGUAGES.map((lang: { id: string; name: string; flag: string }) => (
               <button
                 key={lang.id}
                 onClick={() => { setSelectedLang(lang.id); setMessages([{ sender: 'ai', text: `Welcome to ${lang.name} practice!` }]); }}
@@ -86,7 +86,7 @@ export default function TutorPage() {
 
         {/* Chat History Box */}
         <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200 dark:border-slate-800 shadow-md flex-1 min-h-[350px] max-h-[450px] overflow-y-auto space-y-4">
-          {messages.map((m, i) => (
+          {messages.map((m: { sender: string; text: string }, i: number) => (
             <div key={i} className={`flex ${m.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
               <div className={`max-w-md p-4 rounded-2xl text-sm ${m.sender === 'user' ? 'bg-blue-600 text-white font-medium' : 'bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-200 dark:border-slate-700'}`}>
                 {m.text}
@@ -101,11 +101,11 @@ export default function TutorPage() {
           {loading && <div className="text-xs font-mono text-slate-400">AI Partner is typing response...</div>}
         </div>
 
-        {/* Quick Suggestion Chips (Zero Typing for Lazy Learners) */}
+        {/* Quick Suggestion Chips */}
         <div className="space-y-2">
           <span className="text-[10px] font-mono font-bold text-slate-400 uppercase">⚡ 1-Click Quick Replies (Zero Typing):</span>
           <div className="flex flex-wrap gap-2">
-            {(quickPrompts[selectedLang] || quickPrompts.german).map((prompt, idx) => (
+            {(quickPrompts[selectedLang] || quickPrompts.german).map((prompt: string, idx: number) => (
               <button
                 key={idx}
                 onClick={() => handleSend(prompt)}
