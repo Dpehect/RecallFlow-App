@@ -1,27 +1,9 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
 export const metadata: Metadata = {
-  title: "RecallFlow — Almanca A1",
-  description: "Almanca A1 için akıllı kelime, dinleme ve dil bilgisi çalışma alanı.",
-  other: {
-    "codex-preview": "development",
-  },
-  icons: {
-    icon: "/favicon.svg",
-    shortcut: "/favicon.svg",
-  },
+  title: "RecallFlow - German Fluency. Minimal Effort.",
+  description: "Interactive German language learning platform built with Next.js",
 };
 
 export default function RootLayout({
@@ -30,10 +12,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="tr">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+    <html lang="en" className="scroll-smooth">
+      <body class="min-h-screen flex flex-col justify-between bg-slate-50 text-slate-900 font-sans">
         {children}
       </body>
     </html>
