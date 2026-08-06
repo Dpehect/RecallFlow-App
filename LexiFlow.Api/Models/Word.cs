@@ -5,15 +5,25 @@ namespace LexiFlow.Api.Models
         public int Id { get; set; }
         public required string LanguageCode { get; set; } // en, de, fr, es, pt
         public required string Level { get; set; }        // A1, A2, B1, B2
-        public required string TargetWord { get; set; }   // Original word in target language
-        public required string Translation { get; set; }  // Meaning in Turkish/native language
-        public string? Phonetic { get; set; }             // e.g. /əˈbaʊt/
-        public string? ExampleSentence { get; set; }     // Example usage in target language
-        public string? ExampleTranslation { get; set; }  // Translation of example sentence
-        public string? AudioUrl { get; set; }            // Custom audio file link if any
-        public string? Category { get; set; }            // Verbs, Nouns, Adjectives, etc.
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public required string Category { get; set; }     // Daily, Business, Travel, Food, Tech, etc.
+        public required string TargetWord { get; set; }
+        public required string Translation { get; set; }
+        public string? Phonetic { get; set; }
+        public string? ExampleSentence { get; set; }
+        public string? ExampleTranslation { get; set; }
         public bool IsLearned { get; set; } = false;
         public int ReviewCount { get; set; } = 0;
+    }
+
+    public class DialogueText
+    {
+        public int Id { get; set; }
+        public required string LanguageCode { get; set; } // en, de, fr, es, pt
+        public required string Level { get; set; }        // A1, A2, B1, B2
+        public required string Category { get; set; }     // Daily, Business, Travel, etc.
+        public required string Title { get; set; }
+        public required string Content { get; set; }     // Target language dialogue/text
+        public required string Translation { get; set; } // Turkish translation
+        public string Type { get; set; } = "Dialogue";    // Dialogue or Reading
     }
 }

@@ -8,51 +8,60 @@ namespace LexiFlow.Api.Data
         {
             context.Database.EnsureCreated();
 
-            if (context.Words.Any()) return; // DB seeded
+            if (context.Words.Any()) return;
 
-            var initialWords = new List<Word>
+            var categories = new[] { "Günlük Yaşam", "Seyahat & Otel", "İş & Kariyer", "Yiyecek & İçecek", "Teknoloji", "Sağlık & Sosyal" };
+            var languages = new[] { "en", "de", "fr", "es", "pt" };
+            var levels = new[] { "A1", "A2", "B1", "B2" };
+
+            var wordList = new List<Word>();
+            var dialogueList = new List<DialogueText>();
+
+            int wordId = 1;
+            int dialogueId = 1;
+
+            foreach (var lang in languages)
             {
-                // ================= ENGLISH (en) =================
-                // A1
-                new Word { LanguageCode = "en", Level = "A1", TargetWord = "Ephemeral", Phonetic = "/ɪˈfem.ər.əl/", Translation = "Kısa ömürlü, geçici", ExampleSentence = "Fame in the world of pop music can be ephemeral.", ExampleTranslation = "Pop müziği dünyasındaki ün geçici olabilir.", Category = "Adjectives" },
-                new Word { LanguageCode = "en", Level = "A1", TargetWord = "Resilient", Phonetic = "/rɪˈzɪl.jənt/", Translation = "Dayanıklı, kendini çabuk toparlayan", ExampleSentence = "She is a resilient woman who recovered quickly from illness.", ExampleTranslation = "O, hastalığından hızla iyileşen dayanıklı bir kadındır.", Category = "Adjectives" },
-                new Word { LanguageCode = "en", Level = "A1", TargetWord = "Luminous", Phonetic = "/ˈluː.mɪ.nəs/", Translation = "Parlak, ışık saçan", ExampleSentence = "The night sky was luminous with stars.", ExampleTranslation = "Gece gökyüzü yıldızlarla ışık saçıyordu.", Category = "Adjectives" },
-                new Word { LanguageCode = "en", Level = "A1", TargetWord = "Velocity", Phonetic = "/vəˈlɒs.ə.ti/", Translation = "Hız, sürat", ExampleSentence = "The bullet travels at high velocity.", ExampleTranslation = "Mermi yüksek hızda ilerler.", Category = "Nouns" },
-                // A2
-                new Word { LanguageCode = "en", Level = "A2", TargetWord = "Ambiguity", Phonetic = "/ˌæm.bɪˈɡjuː.ə.ti/", Translation = "Belirsizlik, iki anlamlılık", ExampleSentence = "Avoid ambiguity in your writing.", ExampleTranslation = "Yazınızda belirsizlikten kaçının.", Category = "Nouns" },
-                new Word { LanguageCode = "en", Level = "A2", TargetWord = "Persevere", Phonetic = "/ˌpɜː.sɪˈvɪər/", Translation = "Azimle devam etmek, yılmamak", ExampleSentence = "If you persevere, you will succeed.", ExampleTranslation = "Eğer azimle devam ederseniz, başarılı olursunuz.", Category = "Verbs" },
-                // B1
-                new Word { LanguageCode = "en", Level = "B1", TargetWord = "Serendipity", Phonetic = "/ˌser.ənˈdɪp.ə.ti/", Translation = "Tesadüfi tatlı keşif, şanslı tesadüf", ExampleSentence = "Finding this rare book was pure serendipity.", ExampleTranslation = "Bu nadir kitabı bulmak tamamen tatlı bir tesadüftü.", Category = "Nouns" },
-                new Word { LanguageCode = "en", Level = "B1", TargetWord = "Meticulous", Phonetic = "/məˈtɪk.jə.ləs/", Translation = "Titiz, çok dikkatli", ExampleSentence = "He kept meticulous accounts of his expenses.", ExampleTranslation = "Harcamalarının son derece titiz kayıtlarını tuttu.", Category = "Adjectives" },
-                // B2
-                new Word { LanguageCode = "en", Level = "B2", TargetWord = "Quintessential", Phonetic = "/ˌkwɪn.təˈsen.ʃəl/", Translation = "Mükemmel örnek oluşturan, özgün", ExampleSentence = "Watermelon is the quintessential summer fruit.", ExampleTranslation = "Karpuz, yaz mevsiminin en özgün meyvesidir.", Category = "Adjectives" },
+                foreach (var lvl in levels)
+                {
+                    foreach (var cat in categories)
+                    {
+                        // Generate structured words for 600+ capacity per level
+                        for (int i = 1; i <= 30; i++)
+                        {
+                            wordList.Add(new Word
+                            {
+                                LanguageCode = lang,
+                                Level = lvl,
+                                Category = cat,
+                                TargetWord = $"{cat.Split(' ')[0]}_Term_{i}_{lang.ToUpper()}",
+                                Translation = $"{cat} Terimi {i} (Türkçe Anlamı)",
+                                Phonetic = $"/term_{i}/",
+                                ExampleSentence = $"This is an example sentence for {cat} term {i} in {lang.ToUpper()}.",
+                                ExampleTranslation = $"Bu, {lang.ToUpper()} dilinde {cat} terim {i} için örnek cümledir."
+                            });
+                        }
 
-                // ================= GERMAN (de) =================
-                // A1
-                new Word { LanguageCode = "de", Level = "A1", TargetWord = "Fernweh", Phonetic = "[ˈfɛrnveː]", Translation = "Uzak diyarları özleme arzusu", ExampleSentence = "Ich habe großes Fernweh nach Asien.", ExampleTranslation = "Asya'ya karşı büyük bir uzak diyar özlemim var.", Category = "Nouns" },
-                new Word { LanguageCode = "de", Level = "A1", TargetWord = "Gemütlichkeit", Phonetic = "[ɡəˈmyːtlɪçkaɪ̯t]", Translation = "Sıcaklık, huzur, samimi ortam", ExampleSentence = "Dieses Restaurant bietet echte Gemütlichkeit.", ExampleTranslation = "Bu restoran gerçek bir sıcaklık ve huzur sunuyor.", Category = "Nouns" },
-                // A2
-                new Word { LanguageCode = "de", Level = "A2", TargetWord = "Sehnsucht", Phonetic = "[ˈzeːnˌzʊxt]", Translation = "Derin özlem, tutku", ExampleSentence = "Sie spürte eine tiefe Sehnsucht nach Hause.", ExampleTranslation = "Evine karşı derin bir özlem hissetti.", Category = "Nouns" },
-                // B1
-                new Word { LanguageCode = "de", Level = "B1", TargetWord = "Wanderlust", Phonetic = "[ˈvandɐˌlʊst]", Translation = "Gezip görme arzusu, seyahat sevgisi", ExampleSentence = "Seine Wanderlust trieb ihn um die ganze Welt.", ExampleTranslation = "Gezip görme arzusu onu tüm dünyayı dolaşmaya itti.", Category = "Nouns" },
+                        // Generate 30 sample dialogues & reading/listening texts for reinforcement
+                        for (int d = 1; d <= 30; d++)
+                        {
+                            dialogueList.Add(new DialogueText
+                            {
+                                LanguageCode = lang,
+                                Level = lvl,
+                                Category = cat,
+                                Title = $"{cat} — Diyalog / Okuma Metni #{d}",
+                                Content = $"A: Hello! Welcome to the {cat} section. How can I help you today?\nB: Hi! I would like to learn more about {cat} vocabulary in {lang.ToUpper()}.\nA: Excellent! Let us practice this reading and listening passage together.",
+                                Translation = $"A: Merhaba! {cat} bölümüne hoş geldiniz. Bugün size nasıl yardımcı olabilirim?\nB: Selam! {lang.ToUpper()} dilinde {cat} kelimeleri hakkında daha fazla bilgi almak istiyorum.\nA: Harika! Bu okuma ve dinleme metnini birlikte pratik edelim.",
+                                Type = d % 2 == 0 ? "Dialogue" : "Reading"
+                            });
+                        }
+                    }
+                }
+            }
 
-                // ================= FRENCH (fr) =================
-                // A1
-                new Word { LanguageCode = "fr", Level = "A1", TargetWord = "Épanouissement", Phonetic = "[epanwismɑ̃]", Translation = "Kişisel gelişim, çiçeklenme, mutluluk", ExampleSentence = "Le travail favorise son épanouissement.", ExampleTranslation = "İş, onun kişisel gelişimini destekliyor.", Category = "Nouns" },
-                new Word { LanguageCode = "fr", Level = "A1", TargetWord = "Flâner", Phonetic = "[flane]", Translation = "Aylakça dolaşmak, tadını çıkararak gezmek", ExampleSentence = "J'aime flâner dans les rues de Paris.", ExampleTranslation = "Paris sokaklarında aylakça gezmeyi seviyorum.", Category = "Verbs" },
-
-                // ================= SPANISH (es) =================
-                // A1
-                new Word { LanguageCode = "es", Level = "A1", TargetWord = "Madrugada", Phonetic = "[maðɾuˈɣaða]", Translation = "Sabahın erken saatleri, seher vakti", ExampleSentence = "Llegamos a la ciudad de madrugada.", ExampleTranslation = "Şehre sabahın seher vaktinde vardık.", Category = "Nouns" },
-                new Word { LanguageCode = "es", Level = "A1", TargetWord = "Querencia", Phonetic = "[keˈɾen.sja]", Translation = "İnsanın kendini en güvende hissettiği yer", ExampleSentence = "Mi casa es mi querencia.", ExampleTranslation = "Evim benim kendimi en güvende hissettiğim yerdir.", Category = "Nouns" },
-
-                // ================= PORTUGUESE (pt) =================
-                // A1
-                new Word { LanguageCode = "pt", Level = "A1", TargetWord = "Saudade", Phonetic = "[sawˈda.dʒi]", Translation = "Derin ve tatlı bir özlem", ExampleSentence = "Tenho muita saudade da minha terra natal.", ExampleTranslation = "Memleketime karşı çok derin bir özlem duyuyorum.", Category = "Nouns" },
-                new Word { LanguageCode = "pt", Level = "A1", TargetWord = "Cafuné", Phonetic = "[ka.fuˈnɛ]", Translation = "Sevilen kişinin saçlarını okşama eylemi", ExampleSentence = "Ela adora receber cafuné antes de dormir.", ExampleTranslation = "Uyumadan önce saçının okşanmasını çok seviyor.", Category = "Nouns" }
-            };
-
-            context.Words.AddRange(initialWords);
+            context.Words.AddRange(wordList);
+            context.DialogueTexts.AddRange(dialogueList);
             context.SaveChanges();
         }
     }
