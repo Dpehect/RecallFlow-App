@@ -9,6 +9,7 @@ import { getStoredItems, saveStoredItem, getStoredStats, recordReview, UserStats
 import { Volume2, RotateCw, CheckCircle2, Brain, Folder, Filter, Sparkles, ChevronLeft, ChevronRight, Search, LayoutGrid, List, Check, RefreshCw } from 'lucide-react';
 
 const PAGE_SIZE = 20;
+const STORAGE_KEY_VIEW_MODE = 'lexiflow_vocab_view_mode_v2';
 
 export default function VocabPage() {
   const [selectedLang, setSelectedLang] = useState('english');
@@ -23,15 +24,30 @@ export default function VocabPage() {
   const [stats, setStats] = useState<UserStats>({ streak: 1, lastActiveDate: '', totalReviewed: 0, totalMastered: 0, dailyGoal: 20, todayCount: 0 });
   const [speaking, setSpeaking] = useState(false);
 
+  // Initialize DB, Storage, and View Mode Persistence
   useEffect(() => {
     async function loadData() {
       const loadedStats = await getStoredStats();
       setStats(loadedStats);
       const storedSrs = await getStoredItems();
       setSrsItems(storedSrs);
+
+      if (typeof window !== 'undefined') {
+        const savedMode = localStorage.getItem(STORAGE_KEY_VIEW_MODE) as 'card' | 'table';
+        if (savedMode === 'card' || savedMode === 'table') {
+          setViewMode(savedMode);
+        }
+      }
     }
     loadData();
   }, []);
+
+  const changeViewMode = (mode: 'card' | 'table') => {
+    setViewMode(mode);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(STORAGE_KEY_VIEW_MODE, mode);
+    }
+  };
 
   // Filter raw vocabulary
   const filteredRawPacks = RECALLFLOW_ENTERPRISE_DATA.vocabPacks.filter(item => {
@@ -200,7 +216,7 @@ export default function VocabPage() {
             <span className="text-xs font-black uppercase text-black">GÖRÜNÜM MODU:</span>
             <div className="flex border-2 border-black bg-white">
               <button
-                onClick={() => setViewMode('card')}
+                onClick={() => changeViewMode('card')}
                 className={`px-3 py-1.5 font-black text-xs uppercase flex items-center gap-1.5 transition ${
                   viewMode === 'card'
                     ? 'bg-[#EA580C] text-white'
@@ -211,7 +227,7 @@ export default function VocabPage() {
                 <span>3D Kart Modu</span>
               </button>
               <button
-                onClick={() => setViewMode('table')}
+                onClick={() => changeViewMode('table')}
                 className={`px-3 py-1.5 font-black text-xs uppercase flex items-center gap-1.5 transition border-l-2 border-black ${
                   viewMode === 'table'
                     ? 'bg-[#EA580C] text-white'

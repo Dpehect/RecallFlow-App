@@ -11,7 +11,7 @@ export default function Navbar() {
     { href: '/grammar', label: '2. Dil Bilgisi' },
     { href: '/reading', label: '3. Reading' },
     { href: '/listening', label: '4. Listening' },
-    { href: '/practice', label: '5. AI Almanca Pratik' },
+    { href: '/practice', label: '5. AI Pratik Robotu' },
   ];
 
   return (
@@ -25,7 +25,7 @@ export default function Navbar() {
           </span>
         </Link>
 
-        {/* Editorial Navigation Links */}
+        {/* Navigation Links */}
         <nav className="hidden lg:flex items-center space-x-2.5 font-mono text-xs font-bold uppercase tracking-wider">
           {navLinks.map(link => {
             const isActive = pathname === link.href;
