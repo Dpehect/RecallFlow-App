@@ -1,7 +1,7 @@
 import React from 'react';
-import { Flame, Zap, Award, Sparkles } from 'lucide-react';
+import { Flame, Zap, Award, Trophy } from 'lucide-react';
 
-export default function Header({ streak = 7, learnedCount = 0, xpPoints = 140 }) {
+export default function Header({ streak = 7, learnedCount = 0, xpPoints = 140, onOpenAchievements }) {
   return (
     <header className="w-full max-w-5xl mx-auto px-4 py-5 flex items-center justify-between border-b border-white/10 bg-slate-950/80 backdrop-blur-xl sticky top-0 z-50">
       {/* Brand Logo */}
@@ -16,12 +16,12 @@ export default function Header({ streak = 7, learnedCount = 0, xpPoints = 140 })
             Lexi<span className="text-cyan-400">Flow</span>
           </h1>
           <p className="text-[10px] uppercase tracking-widest text-slate-400 font-bold flex items-center gap-1">
-            <span>🚀 Interactive Master</span>
+            <span>🚀 Awwwards Edition • Jury & Student Ready</span>
           </p>
         </div>
       </div>
 
-      {/* Playful Gamification Badges */}
+      {/* Gamification Badges */}
       <div className="flex items-center gap-2.5">
         <div className="glass-pill px-3.5 py-1.5 rounded-full flex items-center gap-1.5 border border-amber-500/30 bg-amber-500/10 text-amber-300 text-xs font-bold shadow-lg">
           <Flame className="w-4 h-4 fill-amber-400 text-amber-400 animate-bounce" />
@@ -33,10 +33,13 @@ export default function Header({ streak = 7, learnedCount = 0, xpPoints = 140 })
           <span>{xpPoints} XP</span>
         </div>
 
-        <div className="glass-pill px-3.5 py-1.5 rounded-full flex items-center gap-1.5 border border-emerald-500/30 bg-emerald-500/10 text-emerald-300 text-xs font-bold shadow-lg">
-          <Award className="w-4 h-4 text-emerald-400" />
-          <span>{learnedCount} Kelime</span>
-        </div>
+        <button
+          onClick={onOpenAchievements}
+          className="glass-pill px-3.5 py-1.5 rounded-full flex items-center gap-1.5 border border-cyan-500/40 bg-cyan-500/10 text-cyan-300 text-xs font-bold shadow-lg hover:bg-cyan-500/20 active:scale-95 transition-all cursor-pointer"
+        >
+          <Trophy className="w-4 h-4 text-cyan-400" />
+          <span>Başarılar & Rozetler</span>
+        </button>
       </div>
     </header>
   );

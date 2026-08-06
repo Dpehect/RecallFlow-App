@@ -6,6 +6,8 @@ import CategorySelector from './components/CategorySelector';
 import ModeSwitcher from './components/ModeSwitcher';
 import Flashcard from './components/Flashcard';
 import DialogueList from './components/DialogueList';
+import QuizMode from './components/QuizMode';
+import AchievementsModal from './components/AchievementsModal';
 import ProgressBar from './components/ProgressBar';
 import { getWords, getDialogues, updateWordStatus } from './services/api';
 
@@ -20,13 +22,14 @@ export default function App() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [learnedCount, setLearnedCount] = useState(0);
   const [xpPoints, setXpPoints] = useState(140);
+  const [isAchievementsOpen, setIsAchievementsOpen] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let isMounted = true;
     setLoading(true);
 
-    if (mode === 'flashcards') {
+    if (mode === 'flashcards' || mode === 'quiz') {
       getWords(language, level, category).then((data) => {
         if (isMounted) {
           setWords(data);
@@ -77,8 +80,13 @@ export default function App() {
       <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[140px] pointer-events-none" />
       <div className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-purple-600/10 rounded-full blur-[160px] pointer-events-none" />
 
-      {/* Header with Gamification Stats */}
-      <Header streak={7} learnedCount={learnedCount} xpPoints={xpPoints} />
+      {/* Header with Achievements Modal Trigger */}
+      <Header
+        streak={7}
+        learnedCount={learnedCount}
+        xpPoints={xpPoints}
+        onOpenAchievements={() => setIsAchievementsOpen(true)}
+      />
 
       {/* Main Container */}
       <main className="flex-1 max-w-5xl w-full mx-auto px-4 py-4 flex flex-col justify-center space-y-4">
@@ -104,11 +112,11 @@ export default function App() {
         <CategorySelector selectedCategory={category} onSelectCategory={setCategory} />
 
         {/* Content Arena */}
-        {mode === 'flashcards' ? (
+        {mode === 'flashcards' && (
           <>
             <ProgressBar current={learnedCount} total={words.length} />
             {loading ? (
-              <div className="w-full max-w-md h-[380px] mx-auto rounded-3xl glass-card flex items-center justify-center my-6">
+              <div className="w-full max-w-md h-[370px] mx-auto rounded-3xl glass-card flex items-center justify-center my-4">
                 <div className="w-10 h-10 border-4 border-cyan-400 border-t-transparent rounded-full animate-spin" />
               </div>
             ) : (
@@ -120,10 +128,24 @@ export default function App() {
               />
             )}
           </>
-        ) : (
+        )}
+
+        {mode === 'reading_listening' && (
           <DialogueList dialogues={dialogues} language={language} category={category} />
         )}
+
+        {mode === 'quiz' && (
+          <QuizMode words={words} language={language} onAddXp={(amount) => setXpPoints((prev) => prev + amount)} />
+        )}
       </main>
+
+      {/* Achievements Modal */}
+      <AchievementsModal
+        isOpen={isAchievementsOpen}
+        onClose={() => setIsAchievementsOpen(false)}
+        xpPoints={xpPoints}
+        learnedCount={learnedCount}
+      />
 
       {/* Footer */}
       <footer className="w-full py-4 text-center border-t border-white/5 text-[11px] text-slate-500">

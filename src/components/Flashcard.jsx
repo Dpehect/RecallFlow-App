@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Volume2, CheckCircle2, RefreshCw, Sparkles, PartyPopper } from 'lucide-react';
+import { Volume2, CheckCircle2, RefreshCw, Sparkles, PartyPopper, Gauge } from 'lucide-react';
 
 export default function Flashcard({ word, language, onNext, onReview }) {
   const [isFlipped, setIsFlipped] = useState(false);
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
+  const [speechRate, setSpeechRate] = useState(0.85); // Normal or Slow
   const [showCelebration, setShowCelebration] = useState(false);
 
   useEffect(() => {
@@ -13,7 +14,7 @@ export default function Flashcard({ word, language, onNext, onReview }) {
 
   if (!word) {
     return (
-      <div className="w-full max-w-md h-[400px] mx-auto rounded-3xl glass-card flex flex-col items-center justify-center p-8 text-center border border-emerald-500/30 bg-emerald-500/5">
+      <div className="w-full max-w-md h-[380px] mx-auto rounded-3xl glass-card flex flex-col items-center justify-center p-8 text-center border border-emerald-500/30 bg-emerald-500/5">
         <PartyPopper className="w-16 h-16 text-emerald-400 mb-4 animate-bounce" />
         <h3 className="text-2xl font-black text-white">Harika İş! Deste Tamamlandı 🎉</h3>
         <p className="text-xs text-slate-300 mt-2 max-w-xs">
@@ -31,7 +32,7 @@ export default function Flashcard({ word, language, onNext, onReview }) {
     const utterance = new SpeechSynthesisUtterance(text);
     const localeMap = { en: 'en-US', de: 'de-DE', fr: 'fr-FR', es: 'es-ES', pt: 'pt-PT' };
     utterance.lang = localeMap[language] || 'en-US';
-    utterance.rate = 0.85;
+    utterance.rate = speechRate;
 
     setIsPlayingAudio(true);
     utterance.onend = () => setIsPlayingAudio(false);
@@ -48,8 +49,8 @@ export default function Flashcard({ word, language, onNext, onReview }) {
   };
 
   return (
-    <div className="w-full max-w-md mx-auto my-4 px-2 relative">
-      {/* XP Pop-up Animation */}
+    <div className="w-full max-w-md mx-auto my-3 px-2 relative">
+      {/* XP Pop-up */}
       {showCelebration && (
         <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-gradient-to-r from-emerald-400 to-teal-400 text-slate-950 font-black px-4 py-1.5 rounded-full text-xs shadow-2xl animate-bounce z-50 flex items-center gap-1">
           <Sparkles className="w-4 h-4 fill-slate-950" />
@@ -60,22 +61,32 @@ export default function Flashcard({ word, language, onNext, onReview }) {
       {/* 3D Flip Card */}
       <div
         onClick={() => setIsFlipped(!isFlipped)}
-        className="w-full h-[380px] perspective-1000 cursor-pointer group select-none"
+        className="w-full h-[370px] perspective-1000 cursor-pointer group select-none"
       >
         <div
           className={`relative w-full h-full duration-700 transform-style-3d transition-transform ${
             isFlipped ? 'rotate-y-180' : ''
           }`}
         >
-          {/* FRONT SIDE */}
+          {/* FRONT */}
           <div className="absolute inset-0 w-full h-full rounded-3xl glass-card p-8 flex flex-col justify-between backface-hidden border border-white/10 group-hover:border-cyan-400/40 transition-all duration-300 shadow-2xl bg-gradient-to-b from-slate-900/90 to-slate-950/90">
             <div className="flex justify-between items-center text-xs">
               <span className="px-3.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 font-extrabold flex items-center gap-1">
                 <span>✨ {word.category}</span>
               </span>
-              <span className="text-[11px] font-mono text-slate-400 font-bold">
-                Kartı Çevir ↺
-              </span>
+
+              {/* Speed Controller Toggle for Students */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setSpeechRate(speechRate === 0.85 ? 0.6 : 0.85);
+                }}
+                className="px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-slate-300 hover:text-cyan-300 text-[11px] font-bold flex items-center gap-1"
+                title="Ses Hızı"
+              >
+                <Gauge className="w-3 h-3 text-cyan-400" />
+                <span>{speechRate === 0.85 ? '1.0x Normal' : '0.6x Yavaş'}</span>
+              </button>
             </div>
 
             <div className="text-center my-auto">
@@ -106,7 +117,7 @@ export default function Flashcard({ word, language, onNext, onReview }) {
             </div>
           </div>
 
-          {/* BACK SIDE */}
+          {/* BACK */}
           <div className="absolute inset-0 w-full h-full rounded-3xl glass-card p-8 flex flex-col justify-between backface-hidden rotate-y-180 border border-purple-500/40 shadow-2xl bg-gradient-to-br from-[#0B0D1B] via-[#0E122B] to-[#160E30]">
             <div className="flex justify-between items-center text-xs">
               <span className="px-3.5 py-1 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-300 font-extrabold">
@@ -149,7 +160,7 @@ export default function Flashcard({ word, language, onNext, onReview }) {
       </div>
 
       {/* Action Buttons */}
-      <div className="flex items-center gap-4 mt-6">
+      <div className="flex items-center gap-4 mt-5">
         <button
           onClick={() => onReview(word.id)}
           className="flex-1 py-3.5 px-6 rounded-2xl glass-pill border border-rose-500/40 text-rose-300 font-bold text-sm flex items-center justify-center gap-2 hover:bg-rose-500/15 active:scale-95 transition-all shadow-lg"

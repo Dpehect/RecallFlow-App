@@ -12,7 +12,7 @@ const CATEGORIES = [
 
 export default function CategorySelector({ selectedCategory, onSelectCategory }) {
   return (
-    <section className="w-full max-w-4xl mx-auto my-6 p-4 rounded-3xl bg-slate-900/60 border border-white/10 backdrop-blur-md shadow-2xl">
+    <section className="w-full max-w-4xl mx-auto my-4 p-4 rounded-3xl bg-slate-900/60 border border-white/10 backdrop-blur-md shadow-2xl">
       <div className="flex items-center justify-between mb-3 px-2">
         <h3 className="text-xs font-extrabold uppercase tracking-wider text-slate-400 flex items-center gap-2">
           <span>🎯 Kategori Seçimi</span>
