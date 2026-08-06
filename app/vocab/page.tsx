@@ -6,19 +6,21 @@ import GamificationBanner from '@/components/GamificationBanner';
 import { LANGUAGES, VOCAB_CATEGORIES, RECALLFLOW_ENTERPRISE_DATA } from '@/lib/data';
 import { SRSItem, calculateSM2, ReviewGrade } from '@/lib/srs';
 import { getStoredItems, saveStoredItem, getStoredStats, recordReview, UserStats } from '@/lib/storage';
-import { Volume2, RotateCw, CheckCircle2, Brain, Folder, Filter, Sparkles } from 'lucide-react';
+import { Volume2, RotateCw, CheckCircle2, Brain, Folder, Filter, Sparkles, ChevronLeft, ChevronRight } from 'lucide-react';
+
+const PAGE_SIZE = 20;
 
 export default function VocabPage() {
   const [selectedLang, setSelectedLang] = useState('english');
   const [selectedCategory, setSelectedCategory] = useState('ALL');
-  const [selectedLevel, setSelectedLevel] = useState('ALL');
+  const [selectedLevel, setSelectedLevel] = useState('A1');
+  const [currentPage, setCurrentPage] = useState(1);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
   const [srsItems, setSrsItems] = useState<Record<string, SRSItem>>({});
   const [stats, setStats] = useState<UserStats>({ streak: 1, lastActiveDate: '', totalReviewed: 0, totalMastered: 0, dailyGoal: 20, todayCount: 0 });
   const [speaking, setSpeaking] = useState(false);
 
-  // Initialize DB and Storage
   useEffect(() => {
     async function loadData() {
       const loadedStats = await getStoredStats();
@@ -29,6 +31,7 @@ export default function VocabPage() {
     loadData();
   }, []);
 
+  // Filter raw vocabulary
   const filteredRawPacks = RECALLFLOW_ENTERPRISE_DATA.vocabPacks.filter(item => {
     const langMatch = item.language === selectedLang;
     const catMatch = selectedCategory === 'ALL' || item.category === selectedCategory;
@@ -36,7 +39,13 @@ export default function VocabPage() {
     return langMatch && catMatch && levelMatch;
   });
 
-  const currentDeck: SRSItem[] = filteredRawPacks.map(raw => {
+  const totalFilteredCount = filteredRawPacks.length;
+  const totalPages = Math.max(1, Math.ceil(totalFilteredCount / PAGE_SIZE));
+
+  // Current Page Slice
+  const pagePacks = filteredRawPacks.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+
+  const currentDeck: SRSItem[] = pagePacks.map(raw => {
     if (srsItems[raw.id]) {
       return {
         ...srsItems[raw.id],
@@ -97,10 +106,13 @@ export default function VocabPage() {
     setIsFlipped(false);
     if (currentIndex < currentDeck.length - 1) {
       setCurrentIndex(prev => prev + 1);
+    } else if (currentPage < totalPages) {
+      setCurrentPage(prev => prev + 1);
+      setCurrentIndex(0);
     } else {
       setCurrentIndex(0);
     }
-  }, [activeItem, srsItems, currentIndex, currentDeck.length]);
+  }, [activeItem, srsItems, currentIndex, currentDeck.length, currentPage, totalPages]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -127,13 +139,13 @@ export default function VocabPage() {
         <div className="border-b-2 border-black pb-6 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
           <div>
             <span className="text-xs font-mono font-black bg-[#EA580C] text-white px-3 py-1 border border-black inline-block uppercase">
-              EDITORIAL KELİME & VERİTABANI
+              EDITORIAL KELİME & 600+ HAVUZ
             </span>
             <h1 className="font-editorial text-4xl sm:text-5xl font-black text-black mt-2 tracking-tight italic">
               Kelime & Akıllı Kartlar
             </h1>
             <p className="text-xs font-mono text-slate-800 mt-1 font-bold">
-              Kategorilere ayrılmış kart havuzu ve IndexedDB + SuperMemo SM-2 algoritması.
+              Seviye başına 600+ kelimelik tam veri havuzu ve SuperMemo SM-2 algoritması.
             </p>
           </div>
 
@@ -142,7 +154,7 @@ export default function VocabPage() {
             {LANGUAGES.map(lang => (
               <button
                 key={lang.id}
-                onClick={() => { setSelectedLang(lang.id); setCurrentIndex(0); setIsFlipped(false); }}
+                onClick={() => { setSelectedLang(lang.id); setCurrentPage(1); setCurrentIndex(0); setIsFlipped(false); }}
                 className={`px-3 py-1.5 font-mono text-xs font-black uppercase transition border-2 border-black ${
                   selectedLang === lang.id
                     ? 'bg-[#EAB308] text-black shadow-[2px_2px_0px_0px_#121212]'
@@ -164,12 +176,12 @@ export default function VocabPage() {
             <span className="flex items-center gap-1.5 text-black">
               <Folder className="w-4 h-4 text-[#65A30D]" /> KATEGORİ SEÇİMİ
             </span>
-            <span className="text-slate-600">600+ Kelime Havuzu</span>
+            <span className="text-slate-600">Toplam {totalFilteredCount} Kelime Bulundu</span>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-2">
             <button
-              onClick={() => { setSelectedCategory('ALL'); setCurrentIndex(0); setIsFlipped(false); }}
+              onClick={() => { setSelectedCategory('ALL'); setCurrentPage(1); setCurrentIndex(0); setIsFlipped(false); }}
               className={`p-3 border-2 border-black text-left transition space-y-1 ${
                 selectedCategory === 'ALL'
                   ? 'bg-[#EAB308] text-black shadow-[4px_4px_0px_0px_#121212] font-black'
@@ -186,7 +198,7 @@ export default function VocabPage() {
               return (
                 <button
                   key={cat.id}
-                  onClick={() => { setSelectedCategory(cat.id); setCurrentIndex(0); setIsFlipped(false); }}
+                  onClick={() => { setSelectedCategory(cat.id); setCurrentPage(1); setCurrentIndex(0); setIsFlipped(false); }}
                   className={`p-3 border-2 border-black text-left transition space-y-1 ${
                     isSelected
                       ? 'bg-[#EAB308] text-black shadow-[4px_4px_0px_0px_#121212] font-black'
@@ -201,17 +213,17 @@ export default function VocabPage() {
           </div>
         </div>
 
-        {/* LEVEL FILTER */}
+        {/* LEVEL FILTER & CAPACITY BADGE */}
         <div className="flex flex-wrap items-center justify-between gap-4 bg-[#FAF8F5] p-4 border-2 border-black shadow-[4px_4px_0px_0px_#121212] font-mono">
           <div className="flex items-center space-x-3">
             <span className="text-xs font-bold uppercase flex items-center gap-1">
               <Filter className="w-3.5 h-3.5 text-[#65A30D]" /> SEVİYE:
             </span>
             <div className="flex gap-1.5">
-              {['ALL', 'A1', 'A2', 'B1', 'B2'].map(lvl => (
+              {['A1', 'A2', 'B1', 'B2', 'ALL'].map(lvl => (
                 <button
                   key={lvl}
-                  onClick={() => { setSelectedLevel(lvl); setCurrentIndex(0); setIsFlipped(false); }}
+                  onClick={() => { setSelectedLevel(lvl); setCurrentPage(1); setCurrentIndex(0); setIsFlipped(false); }}
                   className={`px-3 py-1 font-black text-xs border-2 border-black transition ${
                     selectedLevel === lvl
                       ? 'bg-[#65A30D] text-white shadow-[2px_2px_0px_0px_#121212]'
@@ -224,8 +236,29 @@ export default function VocabPage() {
             </div>
           </div>
 
-          <div className="text-xs font-black text-white bg-[#EA580C] px-3 py-1 border border-black flex items-center gap-1.5 uppercase">
-            <Sparkles className="w-3.5 h-3.5" /> MİNİMUM 600 KELİME KAPASİTESİ
+          {/* PAGE SWITCHER & CAPACITY COUNTER */}
+          <div className="flex items-center space-x-4">
+            <div className="text-xs font-black text-white bg-[#EA580C] px-3 py-1 border border-black flex items-center gap-1.5 uppercase">
+              <Sparkles className="w-3.5 h-3.5" /> SEVİYE BAŞINA {totalFilteredCount} KELİME AKTİF
+            </div>
+
+            <div className="flex items-center space-x-1.5">
+              <button
+                disabled={currentPage === 1}
+                onClick={() => { setCurrentPage(prev => Math.max(1, prev - 1)); setCurrentIndex(0); setIsFlipped(false); }}
+                className="p-1.5 bg-white border-2 border-black disabled:opacity-40 font-black"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+              <span className="text-xs font-black px-2">Sayfa {currentPage} / {totalPages}</span>
+              <button
+                disabled={currentPage === totalPages}
+                onClick={() => { setCurrentPage(prev => Math.min(totalPages, prev + 1)); setCurrentIndex(0); setIsFlipped(false); }}
+                className="p-1.5 bg-white border-2 border-black disabled:opacity-40 font-black"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
           </div>
         </div>
 
@@ -234,9 +267,9 @@ export default function VocabPage() {
           <div className="space-y-6 font-mono">
             <div className="flex justify-between items-center text-xs font-bold text-black border-b-2 border-black pb-2">
               <span className="flex items-center gap-1 text-[#65A30D]">
-                <Brain className="w-4 h-4" /> SM-2 SRS ALGORİTMASI & INDEXEDDB VERİTABANI
+                <Brain className="w-4 h-4" /> SM-2 SRS ALGORİTMASI (DÜZEN: SAYFA {currentPage}, KART {currentIndex + 1})
               </span>
-              <span>KART {currentIndex + 1} / {currentDeck.length}</span>
+              <span>TOPLAM HAVUZ: {totalFilteredCount} KELİME</span>
             </div>
 
             {/* BRUTALIST 3D CARD */}
@@ -380,7 +413,7 @@ export default function VocabPage() {
       </main>
 
       <footer className="bg-[#FAF8F5] border-t-2 border-black py-6 text-center text-xs font-mono font-bold text-slate-800">
-        RECALLFLOW EDITORIAL BRUTALIST VOCABULARY & INDEXEDDB SYSTEM
+        RECALLFLOW EDITORIAL BRUTALIST VOCABULARY & 600+ WORDS ENGINE
       </footer>
     </div>
   );
