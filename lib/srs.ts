@@ -2,7 +2,6 @@ export interface SRSItem {
   id: string;
   word: string;
   phonetic?: string;
-  type?: string;
   translation: string;
   example: string;
   exampleTranslation: string;
@@ -16,16 +15,21 @@ export interface SRSItem {
   state: 'new' | 'learning' | 'review' | 'mastered';
 }
 
-export type ReviewGrade = 1 | 2 | 3 | 4; // 1: Tekrar, 2: Zor, 3: İyi, 4: Kolay
+export type ReviewGrade = 1 | 2 | 3 | 4; // 1: Again (Tekrar), 2: Hard (Zor), 3: Good (İyi), 4: Easy (Kolay)
 
 export function calculateSM2(item: SRSItem, grade: ReviewGrade): SRSItem {
   let { repetition, interval, easeFactor } = item;
+  
   const sm2Grade = grade === 1 ? 0 : grade === 2 ? 3 : grade === 3 ? 4 : 5;
 
   if (sm2Grade >= 3) {
-    if (repetition === 0) interval = 1;
-    else if (repetition === 1) interval = 6;
-    else interval = Math.round(interval * easeFactor);
+    if (repetition === 0) {
+      interval = 1;
+    } else if (repetition === 1) {
+      interval = 6;
+    } else {
+      interval = Math.round(interval * easeFactor);
+    }
     repetition += 1;
   } else {
     repetition = 0;
@@ -38,6 +42,13 @@ export function calculateSM2(item: SRSItem, grade: ReviewGrade): SRSItem {
   const nextDate = new Date();
   nextDate.setDate(nextDate.getDate() + interval);
 
+  let state: SRSItem['state'] = 'learning';
+  if (repetition >= 5) {
+    state = 'mastered';
+  } else if (repetition > 0) {
+    state = 'review';
+  }
+
   return {
     ...item,
     repetition,
@@ -45,6 +56,6 @@ export function calculateSM2(item: SRSItem, grade: ReviewGrade): SRSItem {
     easeFactor,
     nextReview: nextDate.toISOString(),
     lastReviewed: new Date().toISOString(),
-    state: repetition >= 5 ? 'mastered' : repetition > 0 ? 'review' : 'learning'
+    state
   };
 }
