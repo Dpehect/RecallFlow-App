@@ -28,59 +28,61 @@ export default function ReadingPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-between font-sans bg-slate-950 text-slate-100">
+    <div className="min-h-screen flex flex-col justify-between bg-[#F4F1EA] text-[#141413]">
       <Navbar />
 
       <main className="max-w-6xl mx-auto px-4 py-8 space-y-8 flex-1 w-full">
-        {/* Header */}
-        <div className="border-b border-slate-800 pb-6 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+        {/* Editorial Header */}
+        <div className="border-b-2 border-black pb-6 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
           <div>
-            <span className="text-xs font-mono text-emerald-400 font-bold uppercase tracking-widest flex items-center gap-1.5">
-              <BookOpenText className="w-4 h-4" /> BÖLÜM 3 — KATEGORİLİ READING (OKUMA)
+            <span className="text-xs font-mono font-bold bg-[#EAB308] text-black px-3 py-1 border border-black inline-block uppercase">
+              EDITORIAL READING
             </span>
-            <h1 className="text-3xl font-black text-white mt-1">Reading & Diyalog Metinleri</h1>
-            <p className="text-sm text-slate-400 mt-1">Konulara ayrılmış metinleri ve günlük konuşmaları okuyup dinamik çeviri kontrolü sağlayın.</p>
+            <h1 className="font-editorial text-4xl sm:text-5xl font-black text-black mt-2 tracking-tight italic">
+              Okuma & Gazete Metinleri
+            </h1>
+            <p className="text-xs font-mono text-slate-800 mt-1 font-bold">
+              Konularına göre ayrılmış gazete tarzı okuma metinleri.
+            </p>
           </div>
 
-          <div className="flex flex-wrap gap-2 bg-slate-900 p-2 rounded-2xl border border-slate-800">
+          <div className="flex flex-wrap gap-2 bg-[#FAF8F5] p-2 border-2 border-black shadow-brutal-sm font-mono">
             {LANGUAGES.map(lang => (
               <button
                 key={lang.id}
                 onClick={() => setSelectedLang(lang.id)}
-                className={`px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center space-x-2 border ${
+                className={`px-3 py-1.5 font-black text-xs uppercase transition border-2 border-black ${
                   selectedLang === lang.id
-                    ? 'bg-emerald-600 border-emerald-500 text-white shadow-lg shadow-emerald-500/20'
-                    : 'bg-slate-800 border-slate-700 text-slate-300 hover:border-slate-600'
+                    ? 'bg-[#EAB308] text-black shadow-brutal-sm'
+                    : 'bg-white text-black hover:bg-[#F2EFE9]'
                 }`}
               >
-                <span>{lang.flag}</span>
-                <span>{lang.name.split(' ')[0]}</span>
+                <span>{lang.flag}</span> <span className="ml-1">{lang.name.split(' ')[0]}</span>
               </button>
             ))}
           </div>
         </div>
 
         {/* READING CATEGORIES */}
-        <div className="space-y-3">
-          <div className="flex justify-between items-center text-xs font-mono text-slate-400 uppercase font-bold">
-            <span className="flex items-center gap-1.5 text-emerald-400">
-              <Folder className="w-4 h-4" /> METİN KATEGORİSİ
+        <div className="space-y-3 font-mono">
+          <div className="flex justify-between items-center text-xs font-bold uppercase">
+            <span className="flex items-center gap-1.5 text-black">
+              <Folder className="w-4 h-4 text-[#65A30D]" /> METİN KATEGORİSİ
             </span>
-            <span className="text-slate-500">Konusal Okuma Paketleri</span>
+            <span className="text-slate-600">Okuma Paketleri</span>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
             <button
               onClick={() => setSelectedCategory('ALL')}
-              className={`p-3.5 rounded-2xl border text-left transition space-y-1 ${
+              className={`p-3.5 border-2 border-black text-left transition space-y-1 ${
                 selectedCategory === 'ALL'
-                  ? 'bg-emerald-600 border-emerald-500 text-white shadow-lg shadow-emerald-500/20'
-                  : 'bg-slate-900 border-slate-800 text-slate-400 hover:border-slate-700'
+                  ? 'bg-[#EAB308] text-black shadow-brutal font-black'
+                  : 'bg-[#FAF8F5] text-black hover:bg-white shadow-brutal-sm'
               }`}
             >
               <div className="text-lg">✨</div>
-              <div className="text-xs font-bold">Tüm Metinler</div>
-              <div className="text-[10px] opacity-75 font-mono">Tüm Kurgular</div>
+              <div className="text-xs font-black">Tüm Metinler</div>
             </button>
 
             {READING_CATEGORIES.map(cat => {
@@ -90,15 +92,14 @@ export default function ReadingPage() {
                 <button
                   key={cat.id}
                   onClick={() => setSelectedCategory(cat.id)}
-                  className={`p-3.5 rounded-2xl border text-left transition space-y-1 ${
+                  className={`p-3.5 border-2 border-black text-left transition space-y-1 ${
                     isSelected
-                      ? 'bg-emerald-600 border-emerald-500 text-white shadow-lg shadow-emerald-500/20'
-                      : 'bg-slate-900 border-slate-800 text-slate-400 hover:border-slate-700'
+                      ? 'bg-[#EAB308] text-black shadow-brutal font-black'
+                      : 'bg-[#FAF8F5] text-black hover:bg-white shadow-brutal-sm'
                   }`}
                 >
                   <div className="text-lg">{cat.icon}</div>
-                  <div className="text-xs font-bold truncate">{cat.name}</div>
-                  <div className="text-[10px] font-mono text-slate-500 truncate">{cat.description}</div>
+                  <div className="text-xs font-black truncate">{cat.name}</div>
                 </button>
               );
             })}
@@ -106,20 +107,20 @@ export default function ReadingPage() {
         </div>
 
         {/* LEVEL FILTER */}
-        <div className="flex items-center justify-between bg-slate-900 p-4 rounded-2xl border border-slate-800 shadow-md">
+        <div className="flex items-center justify-between bg-[#FAF8F5] p-4 border-2 border-black shadow-brutal font-mono">
           <div className="flex items-center space-x-3">
-            <span className="text-xs font-mono text-slate-400 uppercase font-bold flex items-center gap-1">
-              <Filter className="w-3.5 h-3.5 text-emerald-400" /> SEVİYE:
+            <span className="text-xs font-bold uppercase flex items-center gap-1">
+              <Filter className="w-3.5 h-3.5 text-[#65A30D]" /> SEVİYE:
             </span>
             <div className="flex gap-1.5">
               {['ALL', 'A1', 'A2', 'B1', 'B2'].map(lvl => (
                 <button
                   key={lvl}
                   onClick={() => setSelectedLevel(lvl)}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition border ${
+                  className={`px-3 py-1 font-black text-xs border-2 border-black transition ${
                     selectedLevel === lvl
-                      ? 'bg-emerald-600 border-emerald-500 text-white'
-                      : 'bg-slate-800 border-slate-700 text-slate-400 hover:text-white'
+                      ? 'bg-[#65A30D] text-white shadow-brutal-sm'
+                      : 'bg-white text-black hover:bg-[#F2EFE9]'
                   }`}
                 >
                   {lvl}
@@ -132,37 +133,35 @@ export default function ReadingPage() {
         {/* STORIES LIST */}
         <div className="space-y-8">
           {stories.length === 0 ? (
-            <div className="text-center py-16 bg-slate-900 rounded-3xl border border-slate-800 text-slate-400 font-mono text-sm">
+            <div className="text-center py-16 bg-[#FAF8F5] border-2 border-black shadow-brutal text-black font-mono font-bold text-sm">
               Seçilen kategori veya seviye için okuma metni hazırlanıyor.
             </div>
           ) : (
             stories.map((story: ReadingStory) => (
-              <div key={story.id} className="bg-slate-900 rounded-3xl border border-slate-800 p-6 sm:p-8 shadow-xl space-y-6">
-                <div className="border-b border-slate-800 pb-4 flex justify-between items-start">
-                  <div>
-                    <span className="text-xs font-bold text-emerald-400 bg-emerald-950/60 px-3 py-1 rounded-full border border-emerald-800/60 font-mono">
-                      {story.level} SEVİYESİ
-                    </span>
-                    <h2 className="text-2xl font-black text-white mt-2">{story.title}</h2>
-                    <p className="text-xs text-slate-400 mt-1">{story.summary}</p>
-                  </div>
+              <div key={story.id} className="bg-[#FAF8F5] border-2 border-black p-6 sm:p-8 shadow-brutal space-y-6">
+                <div className="border-b-2 border-black pb-4">
+                  <span className="text-xs font-black text-black bg-[#EAB308] px-3 py-1 border border-black font-mono uppercase">
+                    {story.level} SEVİYESİ
+                  </span>
+                  <h2 className="font-editorial text-3xl font-black text-black mt-2 italic">{story.title}</h2>
+                  <p className="text-xs font-mono font-bold text-slate-700 mt-1">{story.summary}</p>
                 </div>
 
-                <div className="space-y-4">
+                <div className="space-y-4 font-mono">
                   {story.sentences.map((line: ReadingSentence, idx: number) => {
                     const lineKey = `${story.id}-${idx}`;
                     const isTranslationVisible = showTranslations[lineKey];
 
                     return (
-                      <div key={idx} className="bg-slate-950/60 rounded-2xl p-4 border border-slate-800/80 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 transition hover:border-emerald-500/40">
+                      <div key={idx} className="bg-white p-4 border-2 border-black flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 shadow-brutal-sm">
                         <div className="space-y-1 flex-1">
                           <div className="flex items-center space-x-2">
-                            <span className="text-xs font-mono font-bold text-emerald-400">{line.speaker}:</span>
-                            <span className="font-bold text-slate-100 text-base">{line.targetText}</span>
+                            <span className="text-xs font-black text-[#65A30D]">{line.speaker}:</span>
+                            <span className="font-bold text-black text-base">{line.targetText}</span>
                           </div>
 
                           {isTranslationVisible && (
-                            <p className="text-xs font-semibold text-slate-400 pl-4 border-l-2 border-emerald-500 font-mono mt-1">
+                            <p className="text-xs font-bold text-slate-700 pl-3 border-l-2 border-black mt-1">
                               → {line.translation}
                             </p>
                           )}
@@ -171,17 +170,17 @@ export default function ReadingPage() {
                         <div className="flex items-center space-x-2">
                           <button
                             onClick={() => toggleTranslation(lineKey)}
-                            className="bg-slate-800 border border-slate-700 text-slate-300 text-xs font-bold px-3 py-1.5 rounded-xl hover:bg-slate-700 transition flex items-center gap-1"
+                            className="bg-white border-2 border-black text-black text-xs font-black px-3 py-1.5 shadow-brutal-sm hover-brutal flex items-center gap-1"
                           >
                             {isTranslationVisible ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
-                            <span>{isTranslationVisible ? 'Gizle' : 'Çeviri'}</span>
+                            <span>{isTranslationVisible ? 'GİZLE' : 'ÇEVİRİ'}</span>
                           </button>
 
                           <button
                             onClick={() => sounds.speak(line.audioText, story.langCode)}
-                            className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-3.5 py-1.5 rounded-xl transition shadow-sm flex items-center gap-1"
+                            className="bg-[#65A30D] text-white border-2 border-black text-xs font-black px-3.5 py-1.5 shadow-brutal-sm hover-brutal flex items-center gap-1"
                           >
-                            <Volume2 className="w-3.5 h-3.5" /> Dinle
+                            <Volume2 className="w-3.5 h-3.5" /> DİNLE
                           </button>
                         </div>
                       </div>
@@ -194,8 +193,8 @@ export default function ReadingPage() {
         </div>
       </main>
 
-      <footer className="bg-slate-900 border-t border-slate-800 py-6 text-center text-xs text-slate-500 font-mono">
-        RECALLFLOW CATEGORIZED READING MODULE
+      <footer className="bg-[#FAF8F5] border-t-2 border-black py-6 text-center text-xs font-mono font-bold text-slate-800">
+        RECALLFLOW EDITORIAL READING SYSTEM
       </footer>
     </div>
   );

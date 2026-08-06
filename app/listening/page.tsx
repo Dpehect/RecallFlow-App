@@ -24,59 +24,61 @@ export default function ListeningPage() {
   });
 
   return (
-    <div className="min-h-screen flex flex-col justify-between font-sans bg-slate-950 text-slate-100">
+    <div className="min-h-screen flex flex-col justify-between bg-[#F4F1EA] text-[#141413]">
       <Navbar />
 
       <main className="max-w-5xl mx-auto px-4 py-8 space-y-8 flex-1 w-full">
-        {/* Header */}
-        <div className="border-b border-slate-800 pb-6 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+        {/* Editorial Header */}
+        <div className="border-b-2 border-black pb-6 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
           <div>
-            <span className="text-xs font-mono text-purple-400 font-bold uppercase tracking-widest flex items-center gap-1.5">
-              <Headphones className="w-4 h-4" /> BÖLÜM 4 — KATEGORİLİ LISTENING (DİNLEME)
+            <span className="text-xs font-mono font-bold bg-[#EAB308] text-black px-3 py-1 border border-black inline-block uppercase">
+              EDITORIAL LISTENING
             </span>
-            <h1 className="text-3xl font-black text-white mt-1">Listening & İşitsel Alıştırma</h1>
-            <p className="text-sm text-slate-400 mt-1">Ses kayıtlarını dinleyin ve kategorize edilmiş testlerde doğru seçeneği bulun.</p>
+            <h1 className="font-editorial text-4xl sm:text-5xl font-black text-black mt-2 tracking-tight italic">
+              Dinleme & İşitsel Testler
+            </h1>
+            <p className="text-xs font-mono text-slate-800 mt-1 font-bold">
+              Kategorilere ayrılmış dinleme sınavları ve ses kayıtları.
+            </p>
           </div>
 
-          <div className="flex flex-wrap gap-2 bg-slate-900 p-2 rounded-2xl border border-slate-800">
+          <div className="flex flex-wrap gap-2 bg-[#FAF8F5] p-2 border-2 border-black shadow-brutal-sm font-mono">
             {LANGUAGES.map(lang => (
               <button
                 key={lang.id}
                 onClick={() => setSelectedLang(lang.id)}
-                className={`px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center space-x-2 border ${
+                className={`px-3 py-1.5 font-black text-xs uppercase transition border-2 border-black ${
                   selectedLang === lang.id
-                    ? 'bg-purple-600 border-purple-500 text-white shadow-lg shadow-purple-500/20'
-                    : 'bg-slate-800 border-slate-700 text-slate-300 hover:border-slate-600'
+                    ? 'bg-[#EAB308] text-black shadow-brutal-sm'
+                    : 'bg-white text-black hover:bg-[#F2EFE9]'
                 }`}
               >
-                <span>{lang.flag}</span>
-                <span>{lang.name.split(' ')[0]}</span>
+                <span>{lang.flag}</span> <span className="ml-1">{lang.name.split(' ')[0]}</span>
               </button>
             ))}
           </div>
         </div>
 
         {/* LISTENING CATEGORIES */}
-        <div className="space-y-3">
-          <div className="flex justify-between items-center text-xs font-mono text-slate-400 uppercase font-bold">
-            <span className="flex items-center gap-1.5 text-purple-400">
-              <Folder className="w-4 h-4" /> DİNLEME KATEGORİSİ
+        <div className="space-y-3 font-mono">
+          <div className="flex justify-between items-center text-xs font-bold uppercase">
+            <span className="flex items-center gap-1.5 text-black">
+              <Folder className="w-4 h-4 text-[#65A30D]" /> DİNLEME KATEGORİSİ
             </span>
-            <span className="text-slate-500">İşitsel Test Paketleri</span>
+            <span className="text-slate-600">İşitsel Test Paketleri</span>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
             <button
               onClick={() => setSelectedCategory('ALL')}
-              className={`p-3.5 rounded-2xl border text-left transition space-y-1 ${
+              className={`p-3.5 border-2 border-black text-left transition space-y-1 ${
                 selectedCategory === 'ALL'
-                  ? 'bg-purple-600 border-purple-500 text-white shadow-lg shadow-purple-500/20'
-                  : 'bg-slate-900 border-slate-800 text-slate-400 hover:border-slate-700'
+                  ? 'bg-[#EAB308] text-black shadow-brutal font-black'
+                  : 'bg-[#FAF8F5] text-black hover:bg-white shadow-brutal-sm'
               }`}
             >
               <div className="text-lg">✨</div>
-              <div className="text-xs font-bold">Tüm Testler</div>
-              <div className="text-[10px] opacity-75 font-mono">Tüm Modüller</div>
+              <div className="text-xs font-black">Tüm Testler</div>
             </button>
 
             {LISTENING_CATEGORIES.map(cat => {
@@ -86,15 +88,14 @@ export default function ListeningPage() {
                 <button
                   key={cat.id}
                   onClick={() => setSelectedCategory(cat.id)}
-                  className={`p-3.5 rounded-2xl border text-left transition space-y-1 ${
+                  className={`p-3.5 border-2 border-black text-left transition space-y-1 ${
                     isSelected
-                      ? 'bg-purple-600 border-purple-500 text-white shadow-lg shadow-purple-500/20'
-                      : 'bg-slate-900 border-slate-800 text-slate-400 hover:border-slate-700'
+                      ? 'bg-[#EAB308] text-black shadow-brutal font-black'
+                      : 'bg-[#FAF8F5] text-black hover:bg-white shadow-brutal-sm'
                   }`}
                 >
                   <div className="text-lg">{cat.icon}</div>
-                  <div className="text-xs font-bold truncate">{cat.name}</div>
-                  <div className="text-[10px] font-mono text-slate-500 truncate">{cat.description}</div>
+                  <div className="text-xs font-black truncate">{cat.name}</div>
                 </button>
               );
             })}
@@ -102,20 +103,20 @@ export default function ListeningPage() {
         </div>
 
         {/* LEVEL FILTER */}
-        <div className="flex items-center justify-between bg-slate-900 p-4 rounded-2xl border border-slate-800 shadow-md">
+        <div className="flex items-center justify-between bg-[#FAF8F5] p-4 border-2 border-black shadow-brutal font-mono">
           <div className="flex items-center space-x-3">
-            <span className="text-xs font-mono text-slate-400 uppercase font-bold flex items-center gap-1">
-              <Filter className="w-3.5 h-3.5 text-purple-400" /> SEVİYE:
+            <span className="text-xs font-bold uppercase flex items-center gap-1">
+              <Filter className="w-3.5 h-3.5 text-[#65A30D]" /> SEVİYE:
             </span>
             <div className="flex gap-1.5">
               {['ALL', 'A1', 'A2', 'B1', 'B2'].map(lvl => (
                 <button
                   key={lvl}
                   onClick={() => setSelectedLevel(lvl)}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition border ${
+                  className={`px-3 py-1 font-black text-xs border-2 border-black transition ${
                     selectedLevel === lvl
-                      ? 'bg-purple-600 border-purple-500 text-white'
-                      : 'bg-slate-800 border-slate-700 text-slate-400 hover:text-white'
+                      ? 'bg-[#65A30D] text-white shadow-brutal-sm'
+                      : 'bg-white text-black hover:bg-[#F2EFE9]'
                   }`}
                 >
                   {lvl}
@@ -126,27 +127,27 @@ export default function ListeningPage() {
         </div>
 
         {/* LISTENING ITEMS */}
-        <div className="space-y-8">
+        <div className="space-y-8 font-mono">
           {items.length === 0 ? (
-            <div className="text-center py-16 bg-slate-900 rounded-3xl border border-slate-800 text-slate-400 font-mono text-sm">
+            <div className="text-center py-16 bg-[#FAF8F5] border-2 border-black shadow-brutal text-black font-bold text-sm">
               Seçilen kategori veya seviye için dinleme testi hazırlanıyor.
             </div>
           ) : (
             items.map((item: ListeningItem) => (
-              <div key={item.id} className="bg-slate-900 rounded-3xl p-8 border border-slate-800 shadow-xl space-y-6">
-                <div className="flex justify-between items-center border-b border-slate-800 pb-4">
-                  <span className="text-xs font-bold text-purple-400 bg-purple-950/60 px-3 py-1 rounded-full border border-purple-800/60 font-mono">
+              <div key={item.id} className="bg-[#FAF8F5] border-2 border-black p-8 shadow-brutal space-y-6">
+                <div className="flex justify-between items-center border-b-2 border-black pb-4">
+                  <span className="text-xs font-black bg-[#EAB308] text-black px-3 py-1 border border-black uppercase">
                     {item.level} SEVİYESİ
                   </span>
-                  <span className="text-xs text-slate-400 font-mono">{currentLangObj.flag} {currentLangObj.name}</span>
+                  <span className="text-xs font-bold text-slate-700">{currentLangObj.flag} {currentLangObj.name}</span>
                 </div>
 
                 <div className="text-center space-y-4 py-4">
-                  <h3 className="text-xl font-extrabold text-white">{item.title}</h3>
+                  <h3 className="font-editorial text-3xl font-black text-black italic">{item.title}</h3>
                   
                   <button
                     onClick={() => sounds.speak(item.targetText, item.langCode)}
-                    className="inline-flex items-center space-x-3 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold px-6 py-3.5 rounded-2xl text-xs uppercase shadow-lg shadow-purple-500/20 transition hover:scale-105"
+                    className="inline-flex items-center space-x-3 bg-[#65A30D] text-white border-2 border-black font-black px-6 py-3.5 text-xs uppercase shadow-brutal hover-brutal"
                   >
                     <Volume2 className="w-5 h-5" />
                     <span>SESİ DİNLENİN</span>
@@ -155,7 +156,7 @@ export default function ListeningPage() {
 
                 {/* Answer Options */}
                 <div className="space-y-3">
-                  <span className="text-xs font-bold text-slate-400 font-mono uppercase block">Duyduğunuz Doğru Cümleyi Seçin:</span>
+                  <span className="text-xs font-bold text-slate-700 uppercase block">Duyduğunuz Doğru Cümleyi Seçin:</span>
                   {item.options.map((opt: string, idx: number) => {
                     const isSelected = selectedOption[item.id] === opt;
                     const isCorrect = opt === item.targetText;
@@ -167,15 +168,15 @@ export default function ListeningPage() {
                           setSelectedOption(prev => ({ ...prev, [item.id]: opt }));
                           if (isCorrect) sounds.playCorrect(); else sounds.playWrong();
                         }}
-                        className={`w-full text-left p-4 rounded-2xl border text-sm font-semibold transition flex items-center justify-between ${
+                        className={`w-full text-left p-4 border-2 border-black text-sm font-black transition flex items-center justify-between ${
                           isSelected 
-                            ? (isCorrect ? 'bg-emerald-950/80 border-emerald-500 text-emerald-300' : 'bg-rose-950/80 border-rose-500 text-rose-300') 
-                            : 'bg-slate-950/60 border-slate-800 text-slate-200 hover:border-purple-500/50'
+                            ? (isCorrect ? 'bg-[#4ADE80] text-black shadow-brutal-sm' : 'bg-[#F87171] text-black shadow-brutal-sm') 
+                            : 'bg-white text-black hover:bg-[#F2EFE9] shadow-brutal-sm'
                         }`}
                       >
                         <span>{opt}</span>
                         {isSelected && (
-                          <span>{isCorrect ? <CheckCircle className="w-5 h-5 text-emerald-400" /> : <XCircle className="w-5 h-5 text-rose-400" />}</span>
+                          <span>{isCorrect ? <CheckCircle className="w-5 h-5 text-black" /> : <XCircle className="w-5 h-5 text-black" />}</span>
                         )}
                       </button>
                     );
@@ -187,8 +188,8 @@ export default function ListeningPage() {
         </div>
       </main>
 
-      <footer className="bg-slate-900 border-t border-slate-800 py-6 text-center text-xs text-slate-500 font-mono">
-        RECALLFLOW CATEGORIZED LISTENING MODULE
+      <footer className="bg-[#FAF8F5] border-t-2 border-black py-6 text-center text-xs font-mono font-bold text-slate-800">
+        RECALLFLOW EDITORIAL LISTENING SYSTEM
       </footer>
     </div>
   );

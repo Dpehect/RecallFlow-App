@@ -3,10 +3,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import Navbar from '@/components/Navbar';
 import GamificationBanner from '@/components/GamificationBanner';
-import { LANGUAGES, VOCAB_CATEGORIES, RECALLFLOW_ENTERPRISE_DATA, VocabItem, Category } from '@/lib/data';
+import { LANGUAGES, VOCAB_CATEGORIES, RECALLFLOW_ENTERPRISE_DATA } from '@/lib/data';
 import { SRSItem, calculateSM2, ReviewGrade } from '@/lib/srs';
 import { getStoredItems, saveStoredItems, getStoredStats, recordReview, UserStats } from '@/lib/storage';
-import { Volume2, RotateCw, CheckCircle2, Brain, Layers, Filter, Sparkles, Folder, ArrowRight } from 'lucide-react';
+import { Volume2, RotateCw, CheckCircle2, Brain, Layers, Filter, Sparkles, Folder } from 'lucide-react';
 
 export default function VocabPage() {
   const [selectedLang, setSelectedLang] = useState('english');
@@ -18,13 +18,11 @@ export default function VocabPage() {
   const [stats, setStats] = useState<UserStats>({ streak: 1, lastActiveDate: '', totalReviewed: 0, totalMastered: 0, dailyGoal: 20, todayCount: 0 });
   const [speaking, setSpeaking] = useState(false);
 
-  // Initialize storage
   useEffect(() => {
     setStats(getStoredStats());
     setSrsItems(getStoredItems());
   }, []);
 
-  // Filter raw vocabulary by Language, Category, and Level
   const filteredRawPacks = RECALLFLOW_ENTERPRISE_DATA.vocabPacks.filter(item => {
     const langMatch = item.language === selectedLang;
     const catMatch = selectedCategory === 'ALL' || item.category === selectedCategory;
@@ -32,7 +30,6 @@ export default function VocabPage() {
     return langMatch && catMatch && levelMatch;
   });
 
-  // Merge with stored SRS data
   const currentDeck: SRSItem[] = filteredRawPacks.map(raw => {
     if (srsItems[raw.id]) {
       return srsItems[raw.id];
@@ -56,7 +53,6 @@ export default function VocabPage() {
 
   const activeItem = currentDeck[currentIndex] || null;
 
-  // Speak word using Web Speech API
   const speakWord = useCallback((text: string, langCode: string, slow = false) => {
     if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
     window.speechSynthesis.cancel();
@@ -73,7 +69,6 @@ export default function VocabPage() {
     window.speechSynthesis.speak(utterance);
   }, [selectedLang]);
 
-  // Handle Review Grade (SM-2 SRS)
   const handleGrade = useCallback((grade: ReviewGrade) => {
     if (!activeItem) return;
 
@@ -95,7 +90,6 @@ export default function VocabPage() {
     }
   }, [activeItem, srsItems, currentIndex, currentDeck.length]);
 
-  // Keyboard Navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.code === 'Space' || e.code === 'Enter') {
@@ -113,34 +107,37 @@ export default function VocabPage() {
   }, [isFlipped, handleGrade]);
 
   return (
-    <div className="min-h-screen flex flex-col justify-between font-sans bg-slate-950 text-slate-100">
+    <div className="min-h-screen flex flex-col justify-between bg-[#F4F1EA] text-[#141413]">
       <Navbar />
 
       <main className="max-w-6xl mx-auto px-4 py-8 space-y-8 flex-1 w-full">
-        {/* Header Title */}
-        <div className="border-b border-slate-800 pb-6 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+        {/* Editorial Header */}
+        <div className="border-b-2 border-black pb-6 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
           <div>
-            <span className="text-xs font-mono text-blue-400 font-bold uppercase tracking-widest flex items-center gap-1.5">
-              <Layers className="w-4 h-4" /> KATEGORİLİ KELİME MODÜLÜ (600+ KELİME HAVUZU)
+            <span className="text-xs font-mono font-bold bg-[#EAB308] text-black px-3 py-1 border border-black inline-block uppercase">
+              EDITORIAL KELİME MODÜLÜ
             </span>
-            <h1 className="text-3xl font-black text-white mt-1">1. Kelime Öğrenme & Kartlar</h1>
-            <p className="text-sm text-slate-400 mt-1">Kategorilere ayrılmış kelime paketleri ve SuperMemo SM-2 akıllı tekrar sistemi.</p>
+            <h1 className="font-editorial text-4xl sm:text-5xl font-black text-black mt-2 tracking-tight italic">
+              Kelime & Akıllı Kartlar
+            </h1>
+            <p className="text-xs font-mono text-slate-800 mt-1 font-bold">
+              Kategorilere ayrılmış kart havuzu ve SuperMemo SM-2 algoritması.
+            </p>
           </div>
 
           {/* Language Selector */}
-          <div className="flex flex-wrap gap-2 bg-slate-900 p-2 rounded-2xl border border-slate-800">
+          <div className="flex flex-wrap gap-2 bg-[#FAF8F5] p-2 border-2 border-black shadow-brutal-sm">
             {LANGUAGES.map(lang => (
               <button
                 key={lang.id}
                 onClick={() => { setSelectedLang(lang.id); setCurrentIndex(0); setIsFlipped(false); }}
-                className={`px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center space-x-2 border ${
+                className={`px-3 py-1.5 font-mono text-xs font-black uppercase transition border-2 border-black ${
                   selectedLang === lang.id
-                    ? 'bg-blue-600 border-blue-500 text-white shadow-lg shadow-blue-500/20'
-                    : 'bg-slate-800 border-slate-700 text-slate-300 hover:border-slate-600'
+                    ? 'bg-[#EAB308] text-black shadow-brutal-sm'
+                    : 'bg-white text-black hover:bg-[#F2EFE9]'
                 }`}
               >
-                <span>{lang.flag}</span>
-                <span>{lang.name.split(' ')[0]}</span>
+                <span>{lang.flag}</span> <span className="ml-1">{lang.name.split(' ')[0]}</span>
               </button>
             ))}
           </div>
@@ -149,67 +146,64 @@ export default function VocabPage() {
         {/* Gamification Banner */}
         <GamificationBanner stats={stats} />
 
-        {/* CATEGORY EXPLORER BAR */}
-        <div className="space-y-3">
-          <div className="flex justify-between items-center text-xs font-mono text-slate-400 uppercase font-bold">
-            <span className="flex items-center gap-1.5 text-blue-400">
-              <Folder className="w-4 h-4" /> KATEGORİ SEÇİMİ
+        {/* CATEGORY EXPLORER */}
+        <div className="space-y-3 font-mono">
+          <div className="flex justify-between items-center text-xs font-bold uppercase">
+            <span className="flex items-center gap-1.5 text-black">
+              <Folder className="w-4 h-4 text-[#65A30D]" /> KATEGORİ SEÇİMİ
             </span>
-            <span className="text-slate-500">Kategorilere Ayrılmış Modüller</span>
+            <span className="text-slate-600">600+ Kelime Havuzu</span>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-2">
             <button
               onClick={() => { setSelectedCategory('ALL'); setCurrentIndex(0); setIsFlipped(false); }}
-              className={`p-3 rounded-2xl border text-left transition space-y-1 ${
+              className={`p-3 border-2 border-black text-left transition space-y-1 ${
                 selectedCategory === 'ALL'
-                  ? 'bg-blue-600 border-blue-500 text-white shadow-lg shadow-blue-500/20'
-                  : 'bg-slate-900 border-slate-800 text-slate-400 hover:border-slate-700'
+                  ? 'bg-[#EAB308] text-black shadow-brutal font-black'
+                  : 'bg-[#FAF8F5] text-black hover:bg-white shadow-brutal-sm'
               }`}
             >
               <div className="text-lg">✨</div>
-              <div className="text-xs font-bold">Tüm Kategoriler</div>
-              <div className="text-[10px] opacity-75 font-mono">Tüm Paketler</div>
+              <div className="text-xs font-black">Tüm Konular</div>
             </button>
 
             {VOCAB_CATEGORIES.map(cat => {
-              const count = RECALLFLOW_ENTERPRISE_DATA.vocabPacks.filter(v => v.language === selectedLang && v.category === cat.id).length;
               const isSelected = selectedCategory === cat.id;
 
               return (
                 <button
                   key={cat.id}
                   onClick={() => { setSelectedCategory(cat.id); setCurrentIndex(0); setIsFlipped(false); }}
-                  className={`p-3 rounded-2xl border text-left transition space-y-1 ${
+                  className={`p-3 border-2 border-black text-left transition space-y-1 ${
                     isSelected
-                      ? 'bg-blue-600 border-blue-500 text-white shadow-lg shadow-blue-500/20'
-                      : 'bg-slate-900 border-slate-800 text-slate-400 hover:border-slate-700'
+                      ? 'bg-[#EAB308] text-black shadow-brutal font-black'
+                      : 'bg-[#FAF8F5] text-black hover:bg-white shadow-brutal-sm'
                   }`}
                 >
                   <div className="text-lg">{cat.icon}</div>
-                  <div className="text-xs font-bold truncate">{cat.name}</div>
-                  <div className="text-[10px] font-mono text-slate-500">{count > 0 ? `${count} Kelime` : '600+ Havuz'}</div>
+                  <div className="text-xs font-black truncate">{cat.name}</div>
                 </button>
               );
             })}
           </div>
         </div>
 
-        {/* LEVEL FILTER BAR & CAPACITY BADGE */}
-        <div className="flex flex-wrap items-center justify-between gap-4 bg-slate-900 p-4 rounded-2xl border border-slate-800 shadow-md">
+        {/* LEVEL FILTER */}
+        <div className="flex flex-wrap items-center justify-between gap-4 bg-[#FAF8F5] p-4 border-2 border-black shadow-brutal font-mono">
           <div className="flex items-center space-x-3">
-            <span className="text-xs font-mono text-slate-400 uppercase font-bold flex items-center gap-1">
-              <Filter className="w-3.5 h-3.5 text-blue-400" /> SEVİYE:
+            <span className="text-xs font-bold uppercase flex items-center gap-1">
+              <Filter className="w-3.5 h-3.5 text-[#65A30D]" /> SEVİYE:
             </span>
             <div className="flex gap-1.5">
               {['ALL', 'A1', 'A2', 'B1', 'B2'].map(lvl => (
                 <button
                   key={lvl}
                   onClick={() => { setSelectedLevel(lvl); setCurrentIndex(0); setIsFlipped(false); }}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition border ${
+                  className={`px-3 py-1 font-black text-xs border-2 border-black transition ${
                     selectedLevel === lvl
-                      ? 'bg-indigo-600 border-indigo-500 text-white shadow-md'
-                      : 'bg-slate-800 border-slate-700 text-slate-400 hover:text-white'
+                      ? 'bg-[#65A30D] text-white shadow-brutal-sm'
+                      : 'bg-white text-black hover:bg-[#F2EFE9]'
                   }`}
                 >
                   {lvl}
@@ -218,22 +212,22 @@ export default function VocabPage() {
             </div>
           </div>
 
-          <div className="text-xs font-mono text-emerald-400 font-bold bg-emerald-950/60 px-3 py-1.5 rounded-xl border border-emerald-800/60 flex items-center gap-1.5">
-            <Sparkles className="w-3.5 h-3.5" /> SEVİYE BAŞINA MİNİMUM 600 KELİME KAPASİTESİ
+          <div className="text-xs font-black text-black bg-[#EAB308] px-3 py-1 border border-black flex items-center gap-1.5 uppercase">
+            <Sparkles className="w-3.5 h-3.5" /> MİNİMUM 600 KELİME KAPASİTESİ
           </div>
         </div>
 
         {/* FLASHCARD SECTION */}
         {activeItem ? (
-          <div className="space-y-6">
-            <div className="flex justify-between items-center text-xs font-mono text-slate-400">
-              <span className="flex items-center gap-1 text-blue-400 font-bold">
-                <Brain className="w-4 h-4" /> SM-2 SRS Algoritması Aktif
+          <div className="space-y-6 font-mono">
+            <div className="flex justify-between items-center text-xs font-bold text-black border-b border-black pb-2">
+              <span className="flex items-center gap-1 text-[#65A30D]">
+                <Brain className="w-4 h-4" /> SM-2 SRS ALGORİTMASI
               </span>
-              <span>Kart {currentIndex + 1} / {currentDeck.length}</span>
+              <span>KART {currentIndex + 1} / {currentDeck.length}</span>
             </div>
 
-            {/* 3D Glassmorphism Card */}
+            {/* BRUTALIST 3D CARD */}
             <div 
               onClick={() => setIsFlipped(prev => !prev)}
               className="cursor-pointer group perspective-1000 min-h-[380px] w-full"
@@ -241,20 +235,22 @@ export default function VocabPage() {
               <div className={`relative w-full min-h-[380px] duration-500 transform-style-3d transition-transform ${isFlipped ? 'rotate-y-180' : ''}`}>
                 
                 {/* CARD FRONT SIDE */}
-                <div className="absolute inset-0 backface-hidden bg-slate-900/90 border-2 border-slate-800 group-hover:border-blue-500/50 rounded-3xl p-8 flex flex-col justify-between shadow-2xl backdrop-blur-xl">
-                  <div className="flex justify-between items-center">
-                    <span className="text-xs font-mono font-bold bg-blue-950 text-blue-400 px-3 py-1 rounded-full border border-blue-800">
-                      {activeItem.level} SEVİYE
+                <div className="absolute inset-0 backface-hidden bg-[#FAF8F5] border-2 border-black rounded-none p-8 flex flex-col justify-between shadow-brutal-lg">
+                  <div className="flex justify-between items-center border-b-2 border-black pb-3">
+                    <span className="text-xs font-black bg-[#EAB308] text-black px-3 py-1 border border-black uppercase">
+                      {activeItem.level} SEVİYESİ
                     </span>
-                    <span className="text-xs text-slate-500 font-mono">
-                      {activeItem.repetition > 0 ? `Öğrenme Derecesi: ${activeItem.repetition}` : 'Yeni Kelime'}
+                    <span className="text-xs font-bold text-slate-700">
+                      {activeItem.repetition > 0 ? `DERECE: ${activeItem.repetition}` : 'YENİ KELİME'}
                     </span>
                   </div>
 
                   <div className="text-center space-y-4 my-auto">
-                    <h2 className="text-5xl font-black text-white tracking-tight">{activeItem.word}</h2>
+                    <h2 className="font-editorial text-6xl font-black text-black tracking-tight italic">
+                      {activeItem.word}
+                    </h2>
                     {activeItem.phonetic && (
-                      <p className="text-sm font-mono text-indigo-400 bg-indigo-950/40 inline-block px-3 py-1 rounded-lg border border-indigo-800/40">
+                      <p className="text-xs font-bold text-black bg-[#EAB308]/30 inline-block px-3 py-1 border border-black">
                         {activeItem.phonetic}
                       </p>
                     )}
@@ -262,119 +258,117 @@ export default function VocabPage() {
                     <div className="pt-2 flex justify-center gap-3" onClick={e => e.stopPropagation()}>
                       <button
                         onClick={() => speakWord(activeItem.word, activeItem.language)}
-                        className={`p-3 rounded-2xl bg-blue-600/20 border border-blue-500/40 text-blue-400 hover:bg-blue-600 hover:text-white transition flex items-center space-x-2 ${speaking ? 'animate-pulse' : ''}`}
-                        title="Normal Hızda Dinle"
+                        className="px-4 py-2 bg-[#65A30D] text-white border-2 border-black font-black text-xs shadow-brutal-sm hover-brutal flex items-center gap-2"
                       >
-                        <Volume2 className="w-5 h-5" />
-                        <span className="text-xs font-bold font-mono">Dinle</span>
+                        <Volume2 className="w-4 h-4" />
+                        <span>DİNLE</span>
                       </button>
                       <button
                         onClick={() => speakWord(activeItem.word, activeItem.language, true)}
-                        className="p-3 rounded-2xl bg-slate-800 border border-slate-700 text-slate-300 hover:bg-slate-700 transition flex items-center space-x-2 text-xs font-mono"
-                        title="Yavaş Hızda Dinle"
+                        className="px-3 py-2 bg-white text-black border-2 border-black font-black text-xs shadow-brutal-sm hover-brutal"
                       >
-                        <span>🐢 Yavaş</span>
+                        🐢 YAVAŞ
                       </button>
                     </div>
                   </div>
 
-                  <div className="text-center">
-                    <span className="text-xs text-slate-500 font-mono flex items-center justify-center gap-1">
-                      <RotateCw className="w-3.5 h-3.5" /> Cevabı ve örnek cümleyi görmek için tıklayın veya SPACE tuşuna basın
+                  <div className="text-center border-t-2 border-black pt-3">
+                    <span className="text-xs font-bold text-slate-700 flex items-center justify-center gap-1 uppercase">
+                      <RotateCw className="w-3.5 h-3.5" /> TIKLAYIN VEYA SPACE TUŞUNA BASIN
                     </span>
                   </div>
                 </div>
 
                 {/* CARD BACK SIDE */}
-                <div className="absolute inset-0 backface-hidden rotate-y-180 bg-slate-900/95 border-2 border-indigo-500/40 rounded-3xl p-8 flex flex-col justify-between shadow-2xl backdrop-blur-xl">
-                  <div className="flex justify-between items-center border-b border-slate-800 pb-3">
-                    <span className="text-xs font-mono font-bold text-indigo-400 uppercase">TÜRKÇE KARŞILIĞI & ÖRNEK</span>
-                    <span className="text-xs text-emerald-400 font-mono font-bold">SM-2 Tekrar Sıklığı: {activeItem.interval} Gün</span>
+                <div className="absolute inset-0 backface-hidden rotate-y-180 bg-[#FAF8F5] border-2 border-black rounded-none p-8 flex flex-col justify-between shadow-brutal-lg">
+                  <div className="flex justify-between items-center border-b-2 border-black pb-3">
+                    <span className="text-xs font-black text-black bg-[#EAB308] px-3 py-1 border border-black uppercase">TÜRKÇE KARŞILIĞI</span>
+                    <span className="text-xs font-bold text-[#65A30D]">TEKRAR SIKLIĞI: {activeItem.interval} GÜN</span>
                   </div>
 
                   <div className="space-y-6 my-auto text-left">
                     <div>
-                      <span className="text-xs font-mono text-slate-400 block uppercase">Anlamı</span>
-                      <h3 className="text-3xl font-black text-amber-400">{activeItem.translation}</h3>
+                      <span className="text-xs text-slate-600 font-bold block uppercase">Anlamı</span>
+                      <h3 className="font-editorial text-4xl font-black text-black italic">{activeItem.translation}</h3>
                     </div>
 
-                    <div className="bg-slate-950/60 p-4 rounded-2xl border border-slate-800/80 space-y-2">
-                      <span className="text-xs font-mono text-indigo-400 font-bold block">Örnek Cümle:</span>
-                      <p className="text-base text-slate-200 font-medium italic">"{activeItem.example}"</p>
-                      <p className="text-xs text-slate-400 font-mono">→ {activeItem.exampleTranslation}</p>
+                    <div className="bg-white p-4 border-2 border-black shadow-brutal-sm space-y-1.5">
+                      <span className="text-xs font-bold text-[#65A30D] block uppercase">Örnek Cümle:</span>
+                      <p className="text-base text-black font-bold italic">"{activeItem.example}"</p>
+                      <p className="text-xs text-slate-700 font-bold">→ {activeItem.exampleTranslation}</p>
                     </div>
                   </div>
 
-                  <div className="text-center text-xs text-slate-500 font-mono">
-                    Derecelendirmek için aşağıdaki butonlara veya 1, 2, 3, 4 tuşlarına basın
+                  <div className="text-center text-xs font-bold text-slate-700 border-t-2 border-black pt-3">
+                    DERECELENDİRMEK İÇİN 1, 2, 3, 4 TUŞLARINA BASIN
                   </div>
                 </div>
 
               </div>
             </div>
 
-            {/* SRS Review Action Bar (SM-2 Grading) */}
+            {/* SRS Review Action Bar */}
             {isFlipped && (
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
                 <button
                   onClick={() => handleGrade(1)}
-                  className="bg-red-950/60 border border-red-800/60 hover:bg-red-900 text-red-300 p-4 rounded-2xl transition text-left space-y-1"
+                  className="bg-[#F87171] border-2 border-black text-black p-4 shadow-brutal hover-brutal text-left space-y-1 font-mono"
                 >
                   <div className="flex justify-between items-center">
-                    <span className="font-bold text-sm">1. Tekrar Et</span>
-                    <span className="text-xs font-mono bg-red-900/60 px-2 py-0.5 rounded text-red-200">Tuş: 1</span>
+                    <span className="font-black text-sm uppercase">1. Tekrar Et</span>
+                    <span className="text-xs font-bold bg-white px-1.5 border border-black">1</span>
                   </div>
-                  <p className="text-xs text-red-400/80">Hatırlayamadım (Hemen tekrar et)</p>
+                  <p className="text-[10px] font-bold">Hatırlayamadım</p>
                 </button>
 
                 <button
                   onClick={() => handleGrade(2)}
-                  className="bg-amber-950/60 border border-amber-800/60 hover:bg-amber-900 text-amber-300 p-4 rounded-2xl transition text-left space-y-1"
+                  className="bg-[#FBBF24] border-2 border-black text-black p-4 shadow-brutal hover-brutal text-left space-y-1 font-mono"
                 >
                   <div className="flex justify-between items-center">
-                    <span className="font-bold text-sm">2. Zor</span>
-                    <span className="text-xs font-mono bg-amber-900/60 px-2 py-0.5 rounded text-amber-200">Tuş: 2</span>
+                    <span className="font-black text-sm uppercase">2. Zor</span>
+                    <span className="text-xs font-bold bg-white px-1.5 border border-black">2</span>
                   </div>
-                  <p className="text-xs text-amber-400/80">Zor hatırlandı (+1 gün)</p>
+                  <p className="text-[10px] font-bold">Zor hatırlandı (+1 gün)</p>
                 </button>
 
                 <button
                   onClick={() => handleGrade(3)}
-                  className="bg-blue-950/60 border border-blue-800/60 hover:bg-blue-900 text-blue-300 p-4 rounded-2xl transition text-left space-y-1"
+                  className="bg-[#60A5FA] border-2 border-black text-black p-4 shadow-brutal hover-brutal text-left space-y-1 font-mono"
                 >
                   <div className="flex justify-between items-center">
-                    <span className="font-bold text-sm">3. İyi</span>
-                    <span className="text-xs font-mono bg-blue-900/60 px-2 py-0.5 rounded text-blue-200">Tuş: 3</span>
+                    <span className="font-black text-sm uppercase">3. İyi</span>
+                    <span className="text-xs font-bold bg-white px-1.5 border border-black">3</span>
                   </div>
-                  <p className="text-xs text-blue-400/80">Normal hatırlandı (Standart aralık)</p>
+                  <p className="text-[10px] font-bold">Normal hatırlandı</p>
                 </button>
 
                 <button
                   onClick={() => handleGrade(4)}
-                  className="bg-emerald-950/60 border border-emerald-800/60 hover:bg-emerald-900 text-emerald-300 p-4 rounded-2xl transition text-left space-y-1"
+                  className="bg-[#4ADE80] border-2 border-black text-black p-4 shadow-brutal hover-brutal text-left space-y-1 font-mono"
                 >
                   <div className="flex justify-between items-center">
-                    <span className="font-bold text-sm">4. Kolay</span>
-                    <span className="text-xs font-mono bg-emerald-900/60 px-2 py-0.5 rounded text-emerald-200">Tuş: 4</span>
+                    <span className="font-black text-sm uppercase">4. Kolay</span>
+                    <span className="text-xs font-bold bg-white px-1.5 border border-black">4</span>
                   </div>
-                  <p className="text-xs text-emerald-400/80">Çok kolay hatırlandı (+Geniş aralık)</p>
+                  <p className="text-[10px] font-bold">Çok kolay hatırlandı</p>
                 </button>
               </div>
             )}
           </div>
         ) : (
-          <div className="text-center py-16 bg-slate-900 rounded-3xl border border-slate-800 space-y-4">
-            <CheckCircle2 className="w-16 h-16 text-emerald-400 mx-auto" />
-            <h3 className="text-2xl font-black text-white">Bu Kategori ve Seviyedeki Tüm Kartları Tamamladınız!</h3>
-            <p className="text-sm text-slate-400 max-w-md mx-auto">
-              Seçili kategorideki kartları bitirdiniz. Başka bir kategori veya seviye seçerek çalışmaya devam edebilirsiniz.
+          <div className="text-center py-16 bg-[#FAF8F5] border-2 border-black shadow-brutal space-y-4 font-mono">
+            <CheckCircle2 className="w-16 h-16 text-[#65A30D] mx-auto" />
+            <h3 className="font-editorial text-3xl font-black text-black italic">Tüm Kartlar Tamamlandı!</h3>
+            <p className="text-xs font-bold text-slate-700 max-w-md mx-auto">
+              Seçili kategorideki kartları bitirdiniz. Başka bir kategori seçerek devam edebilirsiniz.
             </p>
           </div>
         )}
       </main>
 
-      <footer className="bg-slate-900 border-t border-slate-800 py-6 text-center text-xs text-slate-500 font-mono">
-        RECALLFLOW CATEGORIZED VOCABULARY ENGINE — 600+ WORDS CAPACITY PER LEVEL
+      <footer className="bg-[#FAF8F5] border-t-2 border-black py-6 text-center text-xs font-mono font-bold text-slate-800">
+        RECALLFLOW EDITORIAL BRUTALIST VOCABULARY SYSTEM
       </footer>
     </div>
   );
