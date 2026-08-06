@@ -11,6 +11,7 @@ export default function Navbar() {
     { href: '/grammar', label: '2. Dil Bilgisi' },
     { href: '/reading', label: '3. Reading' },
     { href: '/listening', label: '4. Listening' },
+    { href: '/practice', label: '5. AI Almanca Pratik' },
   ];
 
   return (
@@ -25,14 +26,14 @@ export default function Navbar() {
         </Link>
 
         {/* Editorial Navigation Links */}
-        <nav className="hidden md:flex items-center space-x-3 font-mono text-xs font-bold uppercase tracking-wider">
+        <nav className="hidden lg:flex items-center space-x-2.5 font-mono text-xs font-bold uppercase tracking-wider">
           {navLinks.map(link => {
             const isActive = pathname === link.href;
             return (
               <Link
                 key={link.href}
                 href={link.href}
-                className={`px-4 py-2 border-2 border-black transition ${
+                className={`px-3 py-1.5 border-2 border-black transition ${
                   isActive
                     ? 'bg-[#EAB308] text-black shadow-[3px_3px_0px_0px_#121212] font-black'
                     : 'bg-white text-black hover:bg-[#F2EFE9] shadow-[2px_2px_0px_0px_#121212]'
@@ -47,10 +48,10 @@ export default function Navbar() {
         {/* HIGH-CONTRAST PUNCHY TERRACOTTA / ORANGE CTA BUTTON */}
         <div className="flex items-center space-x-3">
           <Link
-            href="/vocab"
-            className="bg-[#EA580C] hover:bg-[#DC2626] text-white border-2 border-black font-mono font-black text-xs px-5 py-2.5 shadow-[4px_4px_0px_0px_#121212] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_#121212] transition-all uppercase tracking-wider inline-block"
+            href="/practice"
+            className="bg-[#EA580C] hover:bg-[#DC2626] text-white border-2 border-black font-mono font-black text-xs px-4 py-2.5 shadow-[4px_4px_0px_0px_#121212] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_#121212] transition-all uppercase tracking-wider inline-block"
           >
-            ÖĞRENMEYE BAŞLA ➔
+            AI PRATİK ROBOTU ➔
           </Link>
         </div>
       </div>
