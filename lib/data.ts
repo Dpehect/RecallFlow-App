@@ -75,68 +75,62 @@ export const LANGUAGES: Language[] = [
 ];
 
 export const VOCAB_CATEGORIES: Category[] = [
-  { id: "cafe-travel", name: "Kafe & Seyahat", icon: "☕", description: "Sipariş verme, otel rezervasyonu ve gezinti kelimeleri" },
-  { id: "daily-life", name: "Günlük Yaşam", icon: "🏠", description: "Ev, aile, hobiler ve günlük rutin ifadeleri" },
-  { id: "work-business", name: "İş & Kariyer", icon: "💼", description: "Ofis, toplantı, e-posta ve profesyonel terimler" },
-  { id: "city-emergency", name: "Şehir & Acil Durum", icon: "🏙️", description: "Yön tarifleri, hastane, eczane ve acil durumlar" },
-  { id: "tech-science", name: "Teknoloji & Bilim", icon: "💻", description: "Yazılım, dijital dünya ve bilimsel terimler" },
-  { id: "art-culture", name: "Sanat & Kültür", icon: "🎨", description: "Sinema, müzik, edebiyat ve kültürel terimler" }
+  { id: "cafe-travel", name: "Kafe & Seyahat", icon: "☕", description: "Sipariş verme, otel rezervasyonu ve seyahat terimleri" },
+  { id: "daily-life", name: "Günlük Yaşam", icon: "🏠", description: "Ev, aile, rutinler ve günlük iletişim" },
+  { id: "work-business", name: "İş & Kariyer", icon: "💼", description: "Kurumsal iletişim, mülakatlar ve strateji" },
+  { id: "city-emergency", name: "Şehir & Acil Durum", icon: "🏙️", description: "Yön tarifleri, sağlık ve güvenlik ifadeleri" },
+  { id: "tech-science", name: "Teknoloji & Bilim", icon: "💻", description: "Yazılım, yapay zeka ve bilimsel literatür" },
+  { id: "art-culture", name: "Sanat & Kültür", icon: "🎨", description: "Edebiyat, sinema, felsefe ve sanat terimleri" }
 ];
 
 export const GRAMMAR_CATEGORIES: Category[] = [
-  { id: "sentence-structure", name: "Temel Cümle Yapısı", icon: "🧩", description: "Özne, yüklem, nesne dizilimi ve temel kurallar" },
-  { id: "tenses-verbs", name: "Zamanlar & Fiiller", icon: "⏳", description: "Şimdiki zaman, geçmiş zaman, gelecek zaman ve fiil çekimleri" },
-  { id: "nouns-articles", name: "İsimler & Edatlar", icon: "📌", description: "Tanımlıklar (artikel), ismin halleri ve yön edatları" },
-  { id: "clauses-connectors", name: "Bağlaçlar & Karmaşık Cümleler", icon: "🔗", description: "Neden-sonuç bağlaçları, yan cümleler ve koşul yapıları" }
+  { id: "sentence-structure", name: "Temel Cümle Yapısı", icon: "🧩", description: "Özne-yüklem uyumu ve kelime dizilimi" },
+  { id: "tenses-verbs", name: "Zamanlar & Fiiller", icon: "⏳", description: "Fiil çekimleri, zamanlar ve kip yapıları" },
+  { id: "nouns-articles", name: "İsimler & Edatlar", icon: "📌", description: "Tanımlıklar, ismin halleri ve bağlama edatları" },
+  { id: "clauses-connectors", name: "Bağlaçlar & Karmaşık Cümleler", icon: "🔗", description: "Koşul cümleleri, neden-sonuç bağlaçları" }
 ];
 
 export const READING_CATEGORIES: Category[] = [
-  { id: "daily-dialogues", name: "Günlük Diyaloglar", icon: "💬", description: "İki kişi arasındaki doğal sohbet metinleri" },
-  { id: "travel-stories", name: "Seyahat & Kültür", icon: "✈️", description: "Şehir rehberleri ve gezi anıları" },
-  { id: "business-articles", name: "İş & Ekonomi", icon: "📈", description: "Kurumsal makaleler ve e-posta örnekleri" },
-  { id: "short-stories", name: "Kısa Öyküler", icon: "📖", description: "Sürükleyici edebi kısa metinler" }
+  { id: "daily-dialogues", name: "Günlük Diyaloglar", icon: "💬", description: "Doğal konuşma akışına sahip günlük diyaloglar" },
+  { id: "travel-stories", name: "Seyahat & Kültür", icon: "✈️", description: "Kültürel makaleler ve gezi yazıları" },
+  { id: "business-articles", name: "İş & Ekonomi", icon: "📈", description: "Kurumsal e-postalar ve strateji raporları" },
+  { id: "short-stories", name: "Kısa Öyküler", icon: "📖", description: "Edebi değere sahip derinlikli kısa metinler" }
 ];
 
 export const LISTENING_CATEGORIES: Category[] = [
-  { id: "social-chat", name: "Sosyal Sohbetler", icon: "🗣️", description: "Günlük konuşmaları dinleme ve anlama" },
-  { id: "travel-reservations", name: "Seyahat & Otel", icon: "🏨", description: "Bilet alma ve resepsiyon diyalogları" },
-  { id: "business-interviews", name: "İş Görüşmeleri", icon: "🎙️", description: "Mülakat soruları ve iş yeri sunumları" },
-  { id: "daily-news", name: "Günlük Haberler", icon: "📻", description: "Kısa haber bültenleri ve duyurular" }
+  { id: "social-chat", name: "Sosyal Sohbetler", icon: "🗣️", description: "Doğal tempoda sohbet dinlemeleri" },
+  { id: "travel-reservations", name: "Seyahat & Otel", icon: "🏨", description: "Resepsiyon ve ulaşım diyalogları" },
+  { id: "business-interviews", name: "İş Görüşmeleri", icon: "🎙️", description: "Mülakat ve toplantı ses kayıtları" },
+  { id: "daily-news", name: "Günlük Haberler", icon: "📻", description: "Güncel haber bültenleri ve ses kayıtları" }
 ];
 
-// Comprehensive Vocab Data
+// Rich Contextual Vocabulary Dataset
 const vocabPacks: VocabItem[] = [
   // English
-  { id: "v-en-1", language: "english", langCode: "en-US", category: "daily-life", word: "resilience", phonetic: "/rɪˈzɪl.jəns/", translation: "Dayanıklılık / Esneklik", type: "İsim", level: "B2", exampleTarget: "Building resilience helps you recover from failure quickly.", exampleTranslation: "Dayanıklılık geliştirmek, başarısızlıktan hızlıca toparlanmanıza yardımcı olur." },
-  { id: "v-en-2", language: "english", langCode: "en-US", category: "work-business", word: "streamline", phonetic: "/ˈstriːm.laɪn/", translation: "Verimli hale getirmek", type: "Fiil", level: "B1", exampleTarget: "We need to streamline our workflow to save time.", exampleTranslation: "Zaman kazanmak için iş akışımızı verimli hale getirmeliyiz." },
-  { id: "v-en-3", language: "english", langCode: "en-US", category: "cafe-travel", word: "itinerary", phonetic: "/aɪˈtɪn.ər.ər.i/", translation: "Gezi programı", type: "İsim", level: "B1", exampleTarget: "Please share the travel itinerary before our departure.", exampleTranslation: "Lütfen yola çıkmadan önce seyahat programını paylaşın." },
-  { id: "v-en-4", language: "english", langCode: "en-US", category: "cafe-travel", word: "coffee", phonetic: "/ˈkɒf.i/", translation: "Kahve", type: "İsim", level: "A1", exampleTarget: "I drink black coffee every morning.", exampleTranslation: "Her sabah sade kahve içerim." },
-  { id: "v-en-5", language: "english", langCode: "en-US", category: "city-emergency", word: "pharmacy", phonetic: "/ˈfɑː.mə.si/", translation: "Eczane", type: "İsim", level: "A1", exampleTarget: "Is there an open pharmacy near the hotel?", exampleTranslation: "Otel yakınında açık bir eczane var mı?" },
-  { id: "v-en-6", language: "english", langCode: "en-US", category: "tech-science", word: "algorithm", phonetic: "/ˈæl.ɡə.rɪ.ðəm/", translation: "Algoritma", type: "İsim", level: "A2", exampleTarget: "The algorithm optimizes the review intervals.", exampleTranslation: "Algoritma tekrar aralıklarını optimize eder." },
+  { id: "v-en-1", language: "english", langCode: "en-US", category: "daily-life", word: "resilience", phonetic: "/rɪˈzɪl.jəns/", translation: "Dayanıklılık / Esneklik", type: "İsim", level: "B2", exampleTarget: "Her remarkable resilience during the crisis inspired the entire team to persevere.", exampleTranslation: "Kriz sırasındaki olağanüstü dayanıklılığı tüm ekibe azimle devam etme ilhamı verdi." },
+  { id: "v-en-2", language: "english", langCode: "en-US", category: "work-business", word: "streamline", phonetic: "/ˈstriːm.laɪn/", translation: "Yalınlaştırmak / Verimli Kılmak", type: "Fiil", level: "B1", exampleTarget: "The management decided to streamline the production pipeline to minimize operational costs.", exampleTranslation: "Yönetim, operasyonel maliyetleri en aza indirmek için üretim sürecini verimli hale getirmeye karar verdi." },
+  { id: "v-en-3", language: "english", langCode: "en-US", category: "cafe-travel", word: "itinerary", phonetic: "/aɪˈtɪn.ər.ər.i/", translation: "Gezi Programı / Seyahat Rotası", type: "İsim", level: "B1", exampleTarget: "Before boarding the flight, double-check your travel itinerary to ensure all hotel bookings are confirmed.", exampleTranslation: "Uçağa binmeden önce tüm otel rezervasyonlarının onaylandığından emin olmak için seyahat programınızı tekrar kontrol edin." },
+  { id: "v-en-4", language: "english", langCode: "en-US", category: "cafe-travel", word: "coffee", phonetic: "/ˈkɒf.i/", translation: "Kahve", type: "İsim", level: "A1", exampleTarget: "I always order a strong black coffee to start my morning productively.", exampleTranslation: "Sabahıma verimli başlamak için her zaman koyu bir sade kahve sipariş ederim." },
+  { id: "v-en-5", language: "english", langCode: "en-US", category: "city-emergency", word: "pharmacy", phonetic: "/ˈfɑː.mə.si/", translation: "Eczane", type: "İsim", level: "A1", exampleTarget: "Could you please direct me to the nearest 24-hour pharmacy in this neighborhood?", exampleTranslation: "Lütfen beni bu mahalledeki en yakın 24 saat açık eczaneye yönlendirebilir misiniz?" },
 
   // German
-  { id: "v-de-1", language: "german", langCode: "de-DE", category: "cafe-travel", word: "Kaffee", phonetic: "[ˈkafe]", translation: "Kahve", type: "İsim (m)", level: "A1", exampleTarget: "Ich trinke morgens gerne Kaffee.", exampleTranslation: "Sabahları kahve içmeyi severim." },
-  { id: "v-de-2", language: "german", langCode: "de-DE", category: "cafe-travel", word: "bestellen", phonetic: "[bəˈʃtɛlən]", translation: "Sipariş vermek", type: "Fiil", level: "A1", exampleTarget: "Wir möchten zwei Kaffee bestellen.", exampleTranslation: "İki kahve sipariş etmek istiyoruz." },
-  { id: "v-de-3", language: "german", langCode: "de-DE", category: "work-business", word: "Verantwortung", phonetic: "[fɛɐ̯ˈʔantvɔʁtʊŋ]", translation: "Sorumluluk", type: "İsim (f)", level: "B2", exampleTarget: "Er übernimmt die volle Verantwortung für das Projekt.", exampleTranslation: "Proje için tüm sorumluluğu üstleniyor." },
-  { id: "v-de-4", language: "german", langCode: "de-DE", category: "daily-life", word: "aufstehen", phonetic: "[ˈaʊ̯fˌʃteːən]", translation: "Uyanmak / Kalkmak", type: "Fiil", level: "A1", exampleTarget: "Ich stehe jeden Tag um 7 Uhr auf.", exampleTranslation: "Her gün saat 7'de kalkıyorum." },
-  { id: "v-de-5", language: "german", langCode: "de-DE", category: "city-emergency", word: "Krankenhaus", phonetic: "[ˈkʁaŋkənˌhaʊ̯s]", translation: "Hastane", type: "İsim (n)", level: "A2", exampleTarget: "Das Krankenhaus ist nicht weit von hier.", exampleTranslation: "Hastane buradan uzak değil." },
+  { id: "v-de-1", language: "german", langCode: "de-DE", category: "cafe-travel", word: "Kaffee", phonetic: "[ˈkafe]", translation: "Kahve", type: "İsim (m)", level: "A1", exampleTarget: "Ich trinke morgens vor der Arbeit immer einen frisch gemahlenen Kaffee.", exampleTranslation: "Sabahları işten önce her zaman taze çekilmiş bir kahve içerim." },
+  { id: "v-de-2", language: "german", langCode: "de-DE", category: "cafe-travel", word: "bestellen", phonetic: "[bəˈʃtɛlən]", translation: "Sipariş Vermek", type: "Fiil", level: "A1", exampleTarget: "Wir möchten gerne zwei Cappuccino und ein Stück Apfelkuchen bestellen.", exampleTranslation: "İki kapuçino ve bir dilim elmalı pasta sipariş etmek istiyoruz." },
+  { id: "v-de-3", language: "german", langCode: "de-DE", category: "work-business", word: "Verantwortung", phonetic: "[fɛɐ̯ˈʔantvɔʁtʊŋ]", translation: "Sorumluluk", type: "İsim (f)", level: "B2", exampleTarget: "Als Projektleiter trägt er die volle Verantwortung für das Erreichen der Meilensteine.", exampleTranslation: "Proje lideri olarak, kilometre taşlarına ulaşılmasından tam sorumluluk taşır." },
 
   // Spanish
-  { id: "v-es-1", language: "spanish", langCode: "es-ES", category: "cafe-travel", word: "café", phonetic: "/kaˈfe/", translation: "Kahve", type: "İsim", level: "A1", exampleTarget: "Un café con leche, por favor.", exampleTranslation: "Sütlü bir kahve lütfen." },
-  { id: "v-es-2", language: "spanish", langCode: "es-ES", category: "work-business", word: "desarrollo", phonetic: "/desaˈroʎo/", translation: "Gelişim / Yazılım", type: "İsim", level: "B1", exampleTarget: "El desarrollo de software requiere práctica.", exampleTranslation: "Yazılım geliştirme pratik gerektirir." },
-  { id: "v-es-3", language: "spanish", langCode: "es-ES", category: "daily-life", word: "despertar", phonetic: "/despaʁˈtaɾ/", translation: "Uyanmak", type: "Fiil", level: "A1", exampleTarget: "Me despierto a las seis de la mañana.", exampleTranslation: "Sabah saat altıda uyanıyorum." },
+  { id: "v-es-1", language: "spanish", langCode: "es-ES", category: "cafe-travel", word: "café", phonetic: "/kaˈfe/", translation: "Kahve", type: "İsim", level: "A1", exampleTarget: "Por favor, tráigame un café cortado sin azúcar y un vaso de agua.", exampleTranslation: "Lütfen bana şekersiz bir cortado kahve ve bir bardak su getirin." },
+  { id: "v-es-2", language: "spanish", langCode: "es-ES", category: "work-business", word: "desarrollo", phonetic: "/desaˈroʎo/", translation: "Geliştirme / İlerleme", type: "İsim", level: "B1", exampleTarget: "El desarrollo constante de nuevas habilidades es fundamental para el éxito profesional.", exampleTranslation: "Yeni becerilerin sürekli geliştirilmesi, mesleki başarı için esastır." },
 
   // French
-  { id: "v-fr-1", language: "french", langCode: "fr-FR", category: "cafe-travel", word: "café", phonetic: "/ka.fe/", translation: "Kahve", type: "İsim (m)", level: "A1", exampleTarget: "Un café s'il vous plaît.", exampleTranslation: "Bir kahve lütfen." },
-  { id: "v-fr-2", language: "french", langCode: "fr-FR", category: "daily-life", word: "habitude", phonetic: "/a.bi.tyd/", translation: "Alışkanlık", type: "İsim (f)", level: "B1", exampleTarget: "C'est une bonne habitude de lire.", exampleTranslation: "Okumak iyi bir alışkanlıktır." },
-  { id: "v-fr-3", language: "french", langCode: "fr-FR", category: "work-business", word: "entreprise", phonetic: "/ɑ̃.tʁə.pʁiz/", translation: "Şirket / Firma", type: "İsim (f)", level: "B2", exampleTarget: "L'entreprise développe de nouvelles technologies.", exampleTranslation: "Şirket yeni teknolojiler geliştiriyor." },
+  { id: "v-fr-1", language: "french", langCode: "fr-FR", category: "cafe-travel", word: "café", phonetic: "/ka.fe/", translation: "Kahve", type: "İsim (m)", level: "A1", exampleTarget: "J'aimerais commander un café crème avec un croissant au beurre, s'il vous plaît.", exampleTranslation: "Lütfen terayağlı bir kruvasan ile sütlü bir kahve sipariş etmek isterim." },
+  { id: "v-fr-2", language: "french", langCode: "fr-FR", category: "daily-life", word: "habitude", phonetic: "/a.bi.tyd/", translation: "Alışkanlık", type: "İsim (f)", level: "B1", exampleTarget: "Prendre l'habitude de lire chaque soir améliore considérablement le vocabulaire.", exampleTranslation: "Her akşam okuma alışkanlığı edinmek kelime dağarcığını önemli ölçüde geliştirir." },
 
   // Portuguese
-  { id: "v-pt-1", language: "portuguese", langCode: "pt-PT", category: "cafe-travel", word: "pastel de nata", phonetic: "/pɐʃˈtɛl dɨ ˈnatɐ/", translation: "Kremalı çörek", type: "İsim", level: "A1", exampleTarget: "Gosto de comer pastel de nata no café.", exampleTranslation: "Kafede kremalı çörek yemeyi severim." },
-  { id: "v-pt-2", language: "portuguese", langCode: "pt-PT", category: "daily-life", word: "obrigado", phonetic: "/o.bɾiˈɡa.du/", translation: "Teşekkür ederim", type: "İnterjeksiyon", level: "A1", exampleTarget: "Muito obrigado pela sua ajuda.", exampleTranslation: "Yardımınız için çok teşekkür ederim." }
+  { id: "v-pt-1", language: "portuguese", langCode: "pt-PT", category: "cafe-travel", word: "pastel de nata", phonetic: "/pɐʃˈtɛl dɨ ˈnatɐ/", translation: "Kremalı Çörek", type: "İsim", level: "A1", exampleTarget: "Sempre que me sento nesta esplanada, peço um café expresso e um pastel de nata quente.", exampleTranslation: "Ne zaman bu terasta otursam, sıcak bir espresso ve kremalı çörek söylerim." }
 ];
 
-// Comprehensive Grammar Data FOR ALL 5 LANGUAGES
+// Rich Contextual Grammar Data
 const grammarGuides: GrammarLesson[] = [
   // German
   {
@@ -144,11 +138,12 @@ const grammarGuides: GrammarLesson[] = [
     language: "german",
     level: "A1",
     category: "nouns-articles",
-    title: "Der, Die, Das — Almanca Artikel Yapısı",
-    rule: "Almancada isimler Eril (der), Dişil (die) veya Nötr (das) cinsiyetler alır.",
+    title: "Der, Die, Das — Almanca Artikel Hiyerarşisi",
+    rule: "Almancada tüm isimler cinsiyetlerine göre Der (eril), Die (dişil) veya Das (nötr) belirli tanımlıklarını alır. İsimlerin baş harfi her zaman büyük yazılır.",
     examples: [
-      { target: "Der Kaffee ist heiß.", translation: "Kahve sıcak." },
-      { target: "Die Sonne scheint.", translation: "Güneş açıyor." }
+      { target: "Der Kaffee ist heiß und steht auf dem Tisch.", translation: "Kahve sıcak ve masanın üzerinde duruyor." },
+      { target: "Die Sonne scheint heute sehr hell.", translation: "Güneş bugün çok parlak açıyor." },
+      { target: "Das Buch liegt in der Bibliothek.", translation: "Kitap kütüphanede bulunuyor." }
     ]
   },
   {
@@ -157,10 +152,10 @@ const grammarGuides: GrammarLesson[] = [
     level: "A1",
     category: "sentence-structure",
     title: "Fiil Pozisyonu (Verb-Second Rule)",
-    rule: "Düz cümlelerde ana fiil her zaman 2. pozisyonda yer alır.",
+    rule: "Almanca kurallı bildirim cümlelerinde çekimli ana fiil istisnasız ikinci sırada yer alır. Cümle başı zaman belirteciyle başlasa dahi fiil konumunu korur.",
     examples: [
-      { target: "Ich lerne heute Deutsch.", translation: "Bugün Almanca öğreniyorum." },
-      { target: "Heute lerne ich Deutsch.", translation: "Bugün Almanca öğreniyorum." }
+      { target: "Ich lerne jeden Tag intensiver Deutsch.", translation: "Her gün daha yoğun şekilde Almanca öğreniyorum." },
+      { target: "Heute lerne ich intensiv Deutsch.", translation: "Bugün yoğun şekilde Almanca öğreniyorum." }
     ]
   },
 
@@ -171,22 +166,10 @@ const grammarGuides: GrammarLesson[] = [
     level: "A1",
     category: "sentence-structure",
     title: "Subject-Verb-Object (SVO) Cümle Yapısı",
-    rule: "İngilizce cümle dizilimi sırasıyla Özne + Fiil + Nesne şeklindedir.",
+    rule: "İngilizce temel cümle dizilimi Özne + Fiil + Nesne katı sırasını takip eder. Zaman ifadeleri genellikle cümlenin en sonuna yerleştirilir.",
     examples: [
-      { target: "I learn English every day.", translation: "Her gün İngilizce öğreniyorum." },
-      { target: "She drinks coffee in the morning.", translation: "O sabahları kahve içer." }
-    ]
-  },
-  {
-    id: "g-en-b1-1",
-    language: "english",
-    level: "B1",
-    category: "tenses-verbs",
-    title: "Present Perfect vs Past Simple",
-    rule: "Zamanı belirsiz tecrübelerde Present Perfect, zamanı belli geçmiş eylemlerde Past Simple kullanılır.",
-    examples: [
-      { target: "I have visited Berlin twice.", translation: "Berlin'i iki kez ziyaret ettim." },
-      { target: "I visited Berlin in 2024.", translation: "Berlin'i 2024'te ziyaret ettim." }
+      { target: "Professional engineers design sustainable solutions every day.", translation: "Profesyonel mühendisler her gün sürdürülebilir çözümler tasarlar." },
+      { target: "She drinks dark roasted coffee in the morning.", translation: "O sabahları koyu kavrulmuş kahve içer." }
     ]
   },
 
@@ -196,11 +179,11 @@ const grammarGuides: GrammarLesson[] = [
     language: "spanish",
     level: "A1",
     category: "tenses-verbs",
-    title: "Ser vs Estar — Olmak Fiilinin Kullanımı",
-    rule: "İspanyolcada 'Ser' kalıcı özellikler, 'Estar' ise geçici durumlar ve konumlar için kullanılır.",
+    title: "Ser vs Estar — Olmak Fiili Ayrımı",
+    rule: "İspanyolcada 'Ser' öznel kimlik, milliyet, meslek ve kalıcı nitelikler için kullanılırken; 'Estar' konum, geçici duygu ve anlık durumlar için kullanılır.",
     examples: [
-      { target: "Yo soy estudiante.", translation: "Ben öğrenciyim (kalıcı kimlik)." },
-      { target: "Yo estoy en la cafetería.", translation: "Ben kafetaryadayım (geçici konum)." }
+      { target: "Ella es arquitecta y es muy dedicada.", translation: "O mimardır ve çok özverilidir (kalıcı meslek/nitelik)." },
+      { target: "Ella está en la oficina y está muy ocupada.", translation: "O ofistedir ve çok meşguldür (geçici konum/durum)." }
     ]
   },
 
@@ -210,11 +193,11 @@ const grammarGuides: GrammarLesson[] = [
     language: "french",
     level: "A1",
     category: "nouns-articles",
-    title: "Le, La, Les — Fransızca Tanımlıklar",
-    rule: "Fransızcada eril isimler 'Le', dişil isimler 'La', çoğul isimler 'Les' alır.",
+    title: "Les Articles Définis: Le, La, L', Les",
+    rule: "Fransızca belirli tanımlıklar ismin cinsiyetine ve sessiz/sesli harfle başlamasına göre seçilir: Le (eril), La (dişil), L' (sesli harfle başlayan tekiller) ve Les (çoğul).",
     examples: [
-      { target: "Le café est très chaud.", translation: "Kahve çok sıcak." },
-      { target: "La voiture est rapide.", translation: "Araba hızlı." }
+      { target: "Le professeur explique la leçon clairement.", translation: "Öğretmen dersi anlaşılır şekilde açıklıyor." },
+      { target: "L'étudiant écoute attentivement les conseils.", translation: "Öğrenci tavsiyeleri dikkatle dinliyor." }
     ]
   },
 
@@ -224,16 +207,16 @@ const grammarGuides: GrammarLesson[] = [
     language: "portuguese",
     level: "A1",
     category: "sentence-structure",
-    title: "Ser e Estar em Português",
-    rule: "Portekizcede 'Ser' kalıcı nitelikler, 'Estar' geçici durumlar için kullanılır.",
+    title: "Verbos Ser e Estar em Português",
+    rule: "Portekizce 'Ser' doğuştan gelen ve kalıcı durumları ifade ederken; 'Estar' konumu, hava durumunu ve geçici hisleri temsil eder.",
     examples: [
-      { target: "Ele é professor.", translation: "O bir öğretmendir." },
-      { target: "Ela está feliz hoje.", translation: "O bugün mutlu." }
+      { target: "Ele é engenheiro civil e muito competente.", translation: "O inşaat mühendisidir ve çok yetkindir." },
+      { target: "Eles estão no escritório em Lisboa.", translation: "Onlar Lizbon'daki ofistedir." }
     ]
   }
 ];
 
-// Comprehensive Reading Data FOR ALL 5 LANGUAGES
+// Rich Contextual Reading Data
 const readingStories: ReadingStory[] = [
   // German
   {
@@ -242,11 +225,12 @@ const readingStories: ReadingStory[] = [
     langCode: "de-DE",
     category: "travel-stories",
     title: "Ein Morgen im Berliner Café",
-    summary: "Berlindeki bir kafede sipariş verme diyalogu.",
+    summary: "Berlin'in tarihi Mitte semtindeki geleneksel bir kafede geçen sipariş ve sohbet diyalogu.",
     level: "A1",
     sentences: [
-      { speaker: "Kellner", targetText: "Guten Tag! Was möchten Sie trinken?", translation: "İyi günler! Ne içmek istersiniz?", audioText: "Guten Tag! Was möchten Sie trinken?" },
-      { speaker: "Anna", targetText: "Ich möchte einen heißen Kaffee mit Milch, bitte.", translation: "Sütlü sıcak bir kahve istiyorum, lütfen.", audioText: "Ich möchte einen heißen Kaffee mit Milch bitte." }
+      { speaker: "Kellner", targetText: "Guten Tag! Willkommen im Café Mitte. Was darf ich Ihnen bringen?", translation: "İyi günler! Café Mitte'ye hoş geldiniz. Size ne getirebilirim?", audioText: "Guten Tag! Willkommen im Café Mitte. Was darf ich Ihnen bringen?" },
+      { speaker: "Anna", targetText: "Ich hätte gerne einen heißen Cappuccino mit Hafermilch und ein frisches Croissant.", translation: "Yulaf sütlü sıcak bir kapuçino ve taze bir kruvasan almak isterim.", audioText: "Ich hätte gerne einen heißen Cappuccino mit Hafermilch und ein frisches Croissant." },
+      { speaker: "Kellner", targetText: "Sehr gerne. Das macht zusammen vier Euro fünfzig. Zahlen Sie mit Karte?", translation: "Memnuniyetle. Toplam dört euro elli sent yapıyor. Kartla mı ödeyeceksiniz?", audioText: "Sehr gerne. Das macht zusammen vier Euro fünfzig. Zahlen Sie mit Karte?" }
     ]
   },
 
@@ -256,12 +240,12 @@ const readingStories: ReadingStory[] = [
     language: "english",
     langCode: "en-US",
     category: "daily-dialogues",
-    title: "Morning Coffee Routine",
-    summary: "Sabah kahvesi sohbeti ve diyalog.",
+    title: "Strategic Morning Briefing",
+    summary: "Kurumsal bir teknoloji şirketindeki sabah toplantısı sohbeti.",
     level: "A1",
     sentences: [
-      { speaker: "Sarah", targetText: "Good morning! Would you like some coffee?", translation: "Günaydın! Biraz kahve ister misin?", audioText: "Good morning! Would you like some coffee?" },
-      { speaker: "David", targetText: "Yes please, black with no sugar.", translation: "Evet lütfen, şekersiz ve sade.", audioText: "Yes please, black with no sugar." }
+      { speaker: "Sarah", targetText: "Good morning David! Did you review the quarterly product roadmap before our standup?", translation: "Günaydın David! Standup toplantımızdan önce çeyreklik ürün yol haritasını inceledin mi?", audioText: "Good morning David! Did you review the quarterly product roadmap before our standup?" },
+      { speaker: "David", targetText: "Yes Sarah, all core metrics look promising and the new user feedback is overwhelmingly positive.", translation: "Evet Sarah, tüm temel metrikler umut verici görünüyor ve yeni kullanıcı geri bildirimleri son derece olumlu.", audioText: "Yes Sarah, all core metrics look promising and the new user feedback is overwhelmingly positive." }
     ]
   },
 
@@ -271,12 +255,12 @@ const readingStories: ReadingStory[] = [
     language: "spanish",
     langCode: "es-ES",
     category: "travel-stories",
-    title: "Un café en Madrid",
-    summary: "Madrid merkezinde kahve içme diyalogu.",
+    title: "Un café en el centro de Madrid",
+    summary: "Madrid'in merkezindeki tarihi Plaza Mayor meydanında kahve siparişi.",
     level: "A1",
     sentences: [
-      { speaker: "Camarero", targetText: "¡Buenos días! ¿Qué desea tomar?", translation: "Günaydın! Ne almak istersiniz?", audioText: "¡Buenos días! ¿Qué desea tomar?" },
-      { speaker: "Carlos", targetText: "Un café con leche y la cuenta, por favor.", translation: "Sütlü bir kahve ve hesap lütfen.", audioText: "Un café con leche y la cuenta por favor." }
+      { speaker: "Camarero", targetText: "¡Buenos días! ¿Qué se le ofrece tomar en esta hermosa mañana?", translation: "Günaydın! Bu güzel sabahta ne almak istersiniz?", audioText: "¡Buenos días! ¿Qué se le ofrece tomar en esta hermosa mañana?" },
+      { speaker: "Carlos", targetText: "Un café con leche bien caliente y la cuenta, por favor.", translation: "Sıcak bir sütlü kahve ve hesap lütfen.", audioText: "Un café con leche bien caliente y la cuenta por favor." }
     ]
   },
 
@@ -286,12 +270,12 @@ const readingStories: ReadingStory[] = [
     language: "french",
     langCode: "fr-FR",
     category: "daily-dialogues",
-    title: "Un matin à Paris",
-    summary: "Paris'te bir fırında diyalog.",
+    title: "Un matin à la boulangerie parisienne",
+    summary: "Paris'te tipik bir fırın siparişi diyalogu.",
     level: "A1",
     sentences: [
-      { speaker: "Boulanger", targetText: "Bonjour! Vous désirez?", translation: "Merhaba! Ne arzu edersiniz?", audioText: "Bonjour! Vous désirez?" },
-      { speaker: "Marie", targetText: "Un croissant et un café s'il vous plaît.", translation: "Bir kruvasan ve bir kahve lütfen.", audioText: "Un croissant et un café s'il vous plaît." }
+      { speaker: "Boulanger", targetText: "Bonjour Madame! Que désiriez-vous aujourd'hui?", translation: "Günaydın Hanımefendi! Bugün ne arzu ederdiniz?", audioText: "Bonjour Madame! Que désiriez-vous aujourd'hui?" },
+      { speaker: "Marie", targetText: "Un croissant au beurre frais et un café crème, s'il vous plaît.", translation: "Taze tereyağlı bir kruvasan ve sütlü bir kahve lütfen.", audioText: "Un croissant au beurre frais et un café crème s'il vous plaît." }
     ]
   },
 
@@ -301,17 +285,17 @@ const readingStories: ReadingStory[] = [
     language: "portuguese",
     langCode: "pt-PT",
     category: "travel-stories",
-    title: "Uma manhã em Lisboa",
-    summary: "Lizbon'da kafe sohbeti.",
+    title: "Uma manhã tradicional em Lisboa",
+    summary: "Lizbon'un tarihi Chiado semtinde kafe sohbeti.",
     level: "A1",
     sentences: [
-      { speaker: "Garçom", targetText: "Bom dia! O que deseja?", translation: "Günaydın! Ne arzu edersiniz?", audioText: "Bom dia! O que deseja?" },
-      { speaker: "João", targetText: "Um café e um pastel de nata, por favor.", translation: "Bir kahve ve bir kremalı çörek lütfen.", audioText: "Um café e um pastel de nata por favor." }
+      { speaker: "Garçom", targetText: "Bom dia! Seja bem-vindo ao Chiado. O que deseja tomar?", translation: "Günaydın! Chiado'ya hoş geldiniz. Ne almak istersiniz?", audioText: "Bom dia! Seja bem-vindo ao Chiado. O que deseja tomar?" },
+      { speaker: "João", targetText: "Um café expresso forte e um pastel de nata bem quente, por favor.", translation: "Sert bir espresso ve çok sıcak bir kremalı çörek lütfen.", audioText: "Um café expresso forte e um pastel de nata bem quente por favor." }
     ]
   }
 ];
 
-// Comprehensive Listening Data FOR ALL 5 LANGUAGES
+// Rich Contextual Listening Data
 const listeningItems: ListeningItem[] = [
   // German
   {
@@ -321,9 +305,13 @@ const listeningItems: ListeningItem[] = [
     category: "travel-reservations",
     level: "A1",
     title: "Dinleme Pratiği: İçecek Siparişi",
-    targetText: "Ich trinke einen heißen Kaffee.",
-    translation: "Sıcak bir kahve içiyorum.",
-    options: ["Ich trinke einen heißen Kaffee.", "Ich trinke kalte Milch.", "Wir bestellen Tee."]
+    targetText: "Ich trinke morgens vor der Arbeit immer einen heißen Kaffee.",
+    translation: "Sabahları işten önce her zaman sıcak bir kahve içerim.",
+    options: [
+      "Ich trinke morgens vor der Arbeit immer einen heißen Kaffee.",
+      "Ich bestelle kalte Milch mit frischem Apfelkuchen.",
+      "Wir fahren morgen früh direkt nach Berlin."
+    ]
   },
 
   // English
@@ -333,10 +321,14 @@ const listeningItems: ListeningItem[] = [
     langCode: "en-US",
     category: "social-chat",
     level: "A1",
-    title: "Listening Practice: Greeting",
-    targetText: "Nice to meet you!",
-    translation: "Tanıştığıma memnun oldum!",
-    options: ["Nice to meet you!", "Good night see you.", "Where is the hotel?"]
+    title: "Listening Practice: Strategic Greeting",
+    targetText: "It is an absolute pleasure to meet you at this conference!",
+    translation: "Bu konferansta sizinle tanışmak mutlak bir zevkti!",
+    options: [
+      "It is an absolute pleasure to meet you at this conference!",
+      "Good night see you at the airport tomorrow.",
+      "Where can I find the nearest pharmacy around here?"
+    ]
   },
 
   // Spanish
@@ -346,10 +338,14 @@ const listeningItems: ListeningItem[] = [
     langCode: "es-ES",
     category: "social-chat",
     level: "A1",
-    title: "Práctica de escucha: Saludo",
-    targetText: "¡Mucho gusto en conocerte!",
-    translation: "Tanıştığıma çok memnun oldum!",
-    options: ["¡Mucho gusto en conocerte!", "Hasta luego mi amigo.", "Por favor una cuenta."]
+    title: "Práctica de escucha: Saludo Profesional",
+    targetText: "¡Es un verdadero placer conocerlo en esta reunión!",
+    translation: "Bu toplantıda sizinle tanışmak gerçek bir zevkti!",
+    options: [
+      "¡Es un verdadero placer conocerlo en esta reunión!",
+      "Hasta luego mi amigo nos vemos mañana.",
+      "Por favor tráigame la cuenta inmediatamente."
+    ]
   },
 
   // French
@@ -359,10 +355,14 @@ const listeningItems: ListeningItem[] = [
     langCode: "fr-FR",
     category: "social-chat",
     level: "A1",
-    title: "Pratique d'écoute: Salutation",
-    targetText: "Enchanté de vous rencontrer!",
-    translation: "Sizinle tanıştığıma memnun oldum!",
-    options: ["Enchanté de vous rencontrer!", "Au revoir à demain.", "Un café s'il vous plaît."]
+    title: "Pratique d'écoute: Salutation Professionnelle",
+    targetText: "C'est un véritable plaisir de vous rencontrer aujourd'hui!",
+    translation: "Bugün sizinle tanışmak gerçek bir zevkti!",
+    options: [
+      "C'est un véritable plaisir de vous rencontrer aujourd'hui!",
+      "Au revoir à demain matin à l'aéroport.",
+      "Un café crème s'il vous plaît."
+    ]
   },
 
   // Portuguese
@@ -372,10 +372,14 @@ const listeningItems: ListeningItem[] = [
     langCode: "pt-PT",
     category: "social-chat",
     level: "A1",
-    title: "Prática de escuta: Saudação",
-    targetText: "Prazer em conhecê-lo!",
-    translation: "Tanıştığıma memnun oldum!",
-    options: ["Prazer em conhecê-lo!", "Boa noite até amanhã.", "Onde fica o hotel?"]
+    title: "Prática de escuta: Saudação Profissional",
+    targetText: "É um enorme prazer conhecê-lo nesta conferência!",
+    translation: "Bu konferansta sizinle tanışmak büyük bir zevkti!",
+    options: [
+      "É um enorme prazer conhecê-lo nesta conferência!",
+      "Boa noite até amanhã de manhã.",
+      "Onde fica a farmácia mais próxima?"
+    ]
   }
 ];
 

@@ -5,8 +5,8 @@ import Navbar from '@/components/Navbar';
 import GamificationBanner from '@/components/GamificationBanner';
 import { LANGUAGES, VOCAB_CATEGORIES, RECALLFLOW_ENTERPRISE_DATA } from '@/lib/data';
 import { SRSItem, calculateSM2, ReviewGrade } from '@/lib/srs';
-import { getStoredItems, saveStoredItems, getStoredStats, recordReview, UserStats } from '@/lib/storage';
-import { Volume2, RotateCw, CheckCircle2, Brain, Layers, Filter, Sparkles, Folder } from 'lucide-react';
+import { getStoredItems, saveStoredItem, getStoredStats, recordReview, UserStats } from '@/lib/storage';
+import { Volume2, RotateCw, CheckCircle2, Brain, Folder, Filter, Sparkles } from 'lucide-react';
 
 export default function VocabPage() {
   const [selectedLang, setSelectedLang] = useState('english');
@@ -18,9 +18,15 @@ export default function VocabPage() {
   const [stats, setStats] = useState<UserStats>({ streak: 1, lastActiveDate: '', totalReviewed: 0, totalMastered: 0, dailyGoal: 20, todayCount: 0 });
   const [speaking, setSpeaking] = useState(false);
 
+  // Initialize DB and Storage
   useEffect(() => {
-    setStats(getStoredStats());
-    setSrsItems(getStoredItems());
+    async function loadData() {
+      const loadedStats = await getStoredStats();
+      setStats(loadedStats);
+      const storedSrs = await getStoredItems();
+      setSrsItems(storedSrs);
+    }
+    loadData();
   }, []);
 
   const filteredRawPacks = RECALLFLOW_ENTERPRISE_DATA.vocabPacks.filter(item => {
@@ -32,7 +38,13 @@ export default function VocabPage() {
 
   const currentDeck: SRSItem[] = filteredRawPacks.map(raw => {
     if (srsItems[raw.id]) {
-      return srsItems[raw.id];
+      return {
+        ...srsItems[raw.id],
+        translation: raw.translation,
+        example: raw.exampleTarget,
+        exampleTranslation: raw.exampleTranslation,
+        phonetic: raw.phonetic
+      };
     }
     return {
       id: raw.id,
@@ -69,7 +81,7 @@ export default function VocabPage() {
     window.speechSynthesis.speak(utterance);
   }, [selectedLang]);
 
-  const handleGrade = useCallback((grade: ReviewGrade) => {
+  const handleGrade = useCallback(async (grade: ReviewGrade) => {
     if (!activeItem) return;
 
     const updatedItem = calculateSM2(activeItem, grade);
@@ -77,9 +89,9 @@ export default function VocabPage() {
 
     const newSrsMap = { ...srsItems, [updatedItem.id]: updatedItem };
     setSrsItems(newSrsMap);
-    saveStoredItems(newSrsMap);
+    await saveStoredItem(updatedItem);
 
-    const updatedStats = recordReview(isMastered);
+    const updatedStats = await recordReview(isMastered);
     setStats(updatedStats);
 
     setIsFlipped(false);
@@ -114,26 +126,26 @@ export default function VocabPage() {
         {/* Editorial Header */}
         <div className="border-b-2 border-black pb-6 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
           <div>
-            <span className="text-xs font-mono font-bold bg-[#EAB308] text-black px-3 py-1 border border-black inline-block uppercase">
-              EDITORIAL KELİME MODÜLÜ
+            <span className="text-xs font-mono font-black bg-[#EA580C] text-white px-3 py-1 border border-black inline-block uppercase">
+              EDITORIAL KELİME & VERİTABANI
             </span>
             <h1 className="font-editorial text-4xl sm:text-5xl font-black text-black mt-2 tracking-tight italic">
               Kelime & Akıllı Kartlar
             </h1>
             <p className="text-xs font-mono text-slate-800 mt-1 font-bold">
-              Kategorilere ayrılmış kart havuzu ve SuperMemo SM-2 algoritması.
+              Kategorilere ayrılmış kart havuzu ve IndexedDB + SuperMemo SM-2 algoritması.
             </p>
           </div>
 
           {/* Language Selector */}
-          <div className="flex flex-wrap gap-2 bg-[#FAF8F5] p-2 border-2 border-black shadow-brutal-sm">
+          <div className="flex flex-wrap gap-2 bg-[#FAF8F5] p-2 border-2 border-black shadow-[3px_3px_0px_0px_#121212]">
             {LANGUAGES.map(lang => (
               <button
                 key={lang.id}
                 onClick={() => { setSelectedLang(lang.id); setCurrentIndex(0); setIsFlipped(false); }}
                 className={`px-3 py-1.5 font-mono text-xs font-black uppercase transition border-2 border-black ${
                   selectedLang === lang.id
-                    ? 'bg-[#EAB308] text-black shadow-brutal-sm'
+                    ? 'bg-[#EAB308] text-black shadow-[2px_2px_0px_0px_#121212]'
                     : 'bg-white text-black hover:bg-[#F2EFE9]'
                 }`}
               >
@@ -160,8 +172,8 @@ export default function VocabPage() {
               onClick={() => { setSelectedCategory('ALL'); setCurrentIndex(0); setIsFlipped(false); }}
               className={`p-3 border-2 border-black text-left transition space-y-1 ${
                 selectedCategory === 'ALL'
-                  ? 'bg-[#EAB308] text-black shadow-brutal font-black'
-                  : 'bg-[#FAF8F5] text-black hover:bg-white shadow-brutal-sm'
+                  ? 'bg-[#EAB308] text-black shadow-[4px_4px_0px_0px_#121212] font-black'
+                  : 'bg-[#FAF8F5] text-black hover:bg-white shadow-[2px_2px_0px_0px_#121212]'
               }`}
             >
               <div className="text-lg">✨</div>
@@ -177,8 +189,8 @@ export default function VocabPage() {
                   onClick={() => { setSelectedCategory(cat.id); setCurrentIndex(0); setIsFlipped(false); }}
                   className={`p-3 border-2 border-black text-left transition space-y-1 ${
                     isSelected
-                      ? 'bg-[#EAB308] text-black shadow-brutal font-black'
-                      : 'bg-[#FAF8F5] text-black hover:bg-white shadow-brutal-sm'
+                      ? 'bg-[#EAB308] text-black shadow-[4px_4px_0px_0px_#121212] font-black'
+                      : 'bg-[#FAF8F5] text-black hover:bg-white shadow-[2px_2px_0px_0px_#121212]'
                   }`}
                 >
                   <div className="text-lg">{cat.icon}</div>
@@ -190,7 +202,7 @@ export default function VocabPage() {
         </div>
 
         {/* LEVEL FILTER */}
-        <div className="flex flex-wrap items-center justify-between gap-4 bg-[#FAF8F5] p-4 border-2 border-black shadow-brutal font-mono">
+        <div className="flex flex-wrap items-center justify-between gap-4 bg-[#FAF8F5] p-4 border-2 border-black shadow-[4px_4px_0px_0px_#121212] font-mono">
           <div className="flex items-center space-x-3">
             <span className="text-xs font-bold uppercase flex items-center gap-1">
               <Filter className="w-3.5 h-3.5 text-[#65A30D]" /> SEVİYE:
@@ -202,7 +214,7 @@ export default function VocabPage() {
                   onClick={() => { setSelectedLevel(lvl); setCurrentIndex(0); setIsFlipped(false); }}
                   className={`px-3 py-1 font-black text-xs border-2 border-black transition ${
                     selectedLevel === lvl
-                      ? 'bg-[#65A30D] text-white shadow-brutal-sm'
+                      ? 'bg-[#65A30D] text-white shadow-[2px_2px_0px_0px_#121212]'
                       : 'bg-white text-black hover:bg-[#F2EFE9]'
                   }`}
                 >
@@ -212,7 +224,7 @@ export default function VocabPage() {
             </div>
           </div>
 
-          <div className="text-xs font-black text-black bg-[#EAB308] px-3 py-1 border border-black flex items-center gap-1.5 uppercase">
+          <div className="text-xs font-black text-white bg-[#EA580C] px-3 py-1 border border-black flex items-center gap-1.5 uppercase">
             <Sparkles className="w-3.5 h-3.5" /> MİNİMUM 600 KELİME KAPASİTESİ
           </div>
         </div>
@@ -220,9 +232,9 @@ export default function VocabPage() {
         {/* FLASHCARD SECTION */}
         {activeItem ? (
           <div className="space-y-6 font-mono">
-            <div className="flex justify-between items-center text-xs font-bold text-black border-b border-black pb-2">
+            <div className="flex justify-between items-center text-xs font-bold text-black border-b-2 border-black pb-2">
               <span className="flex items-center gap-1 text-[#65A30D]">
-                <Brain className="w-4 h-4" /> SM-2 SRS ALGORİTMASI
+                <Brain className="w-4 h-4" /> SM-2 SRS ALGORİTMASI & INDEXEDDB VERİTABANI
               </span>
               <span>KART {currentIndex + 1} / {currentDeck.length}</span>
             </div>
@@ -235,7 +247,7 @@ export default function VocabPage() {
               <div className={`relative w-full min-h-[380px] duration-500 transform-style-3d transition-transform ${isFlipped ? 'rotate-y-180' : ''}`}>
                 
                 {/* CARD FRONT SIDE */}
-                <div className="absolute inset-0 backface-hidden bg-[#FAF8F5] border-2 border-black rounded-none p-8 flex flex-col justify-between shadow-brutal-lg">
+                <div className="absolute inset-0 backface-hidden bg-[#FAF8F5] border-2 border-black p-8 flex flex-col justify-between shadow-[6px_6px_0px_0px_#121212]">
                   <div className="flex justify-between items-center border-b-2 border-black pb-3">
                     <span className="text-xs font-black bg-[#EAB308] text-black px-3 py-1 border border-black uppercase">
                       {activeItem.level} SEVİYESİ
@@ -258,14 +270,14 @@ export default function VocabPage() {
                     <div className="pt-2 flex justify-center gap-3" onClick={e => e.stopPropagation()}>
                       <button
                         onClick={() => speakWord(activeItem.word, activeItem.language)}
-                        className="px-4 py-2 bg-[#65A30D] text-white border-2 border-black font-black text-xs shadow-brutal-sm hover-brutal flex items-center gap-2"
+                        className="px-4 py-2 bg-[#65A30D] text-white border-2 border-black font-black text-xs shadow-[2px_2px_0px_0px_#121212] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_0px_#121212] transition-all flex items-center gap-2"
                       >
                         <Volume2 className="w-4 h-4" />
                         <span>DİNLE</span>
                       </button>
                       <button
                         onClick={() => speakWord(activeItem.word, activeItem.language, true)}
-                        className="px-3 py-2 bg-white text-black border-2 border-black font-black text-xs shadow-brutal-sm hover-brutal"
+                        className="px-3 py-2 bg-white text-black border-2 border-black font-black text-xs shadow-[2px_2px_0px_0px_#121212] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_0px_#121212] transition-all"
                       >
                         🐢 YAVAŞ
                       </button>
@@ -280,7 +292,7 @@ export default function VocabPage() {
                 </div>
 
                 {/* CARD BACK SIDE */}
-                <div className="absolute inset-0 backface-hidden rotate-y-180 bg-[#FAF8F5] border-2 border-black rounded-none p-8 flex flex-col justify-between shadow-brutal-lg">
+                <div className="absolute inset-0 backface-hidden rotate-y-180 bg-[#FAF8F5] border-2 border-black p-8 flex flex-col justify-between shadow-[6px_6px_0px_0px_#121212]">
                   <div className="flex justify-between items-center border-b-2 border-black pb-3">
                     <span className="text-xs font-black text-black bg-[#EAB308] px-3 py-1 border border-black uppercase">TÜRKÇE KARŞILIĞI</span>
                     <span className="text-xs font-bold text-[#65A30D]">TEKRAR SIKLIĞI: {activeItem.interval} GÜN</span>
@@ -292,8 +304,8 @@ export default function VocabPage() {
                       <h3 className="font-editorial text-4xl font-black text-black italic">{activeItem.translation}</h3>
                     </div>
 
-                    <div className="bg-white p-4 border-2 border-black shadow-brutal-sm space-y-1.5">
-                      <span className="text-xs font-bold text-[#65A30D] block uppercase">Örnek Cümle:</span>
+                    <div className="bg-white p-4 border-2 border-black shadow-[3px_3px_0px_0px_#121212] space-y-1.5">
+                      <span className="text-xs font-bold text-[#65A30D] block uppercase">Bağlamsal Örnek Cümle:</span>
                       <p className="text-base text-black font-bold italic">"{activeItem.example}"</p>
                       <p className="text-xs text-slate-700 font-bold">→ {activeItem.exampleTranslation}</p>
                     </div>
@@ -312,7 +324,7 @@ export default function VocabPage() {
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
                 <button
                   onClick={() => handleGrade(1)}
-                  className="bg-[#F87171] border-2 border-black text-black p-4 shadow-brutal hover-brutal text-left space-y-1 font-mono"
+                  className="bg-[#F87171] border-2 border-black text-black p-4 shadow-[4px_4px_0px_0px_#121212] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_#121212] transition-all text-left space-y-1 font-mono"
                 >
                   <div className="flex justify-between items-center">
                     <span className="font-black text-sm uppercase">1. Tekrar Et</span>
@@ -323,7 +335,7 @@ export default function VocabPage() {
 
                 <button
                   onClick={() => handleGrade(2)}
-                  className="bg-[#FBBF24] border-2 border-black text-black p-4 shadow-brutal hover-brutal text-left space-y-1 font-mono"
+                  className="bg-[#FBBF24] border-2 border-black text-black p-4 shadow-[4px_4px_0px_0px_#121212] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_#121212] transition-all text-left space-y-1 font-mono"
                 >
                   <div className="flex justify-between items-center">
                     <span className="font-black text-sm uppercase">2. Zor</span>
@@ -334,7 +346,7 @@ export default function VocabPage() {
 
                 <button
                   onClick={() => handleGrade(3)}
-                  className="bg-[#60A5FA] border-2 border-black text-black p-4 shadow-brutal hover-brutal text-left space-y-1 font-mono"
+                  className="bg-[#60A5FA] border-2 border-black text-black p-4 shadow-[4px_4px_0px_0px_#121212] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_#121212] transition-all text-left space-y-1 font-mono"
                 >
                   <div className="flex justify-between items-center">
                     <span className="font-black text-sm uppercase">3. İyi</span>
@@ -345,7 +357,7 @@ export default function VocabPage() {
 
                 <button
                   onClick={() => handleGrade(4)}
-                  className="bg-[#4ADE80] border-2 border-black text-black p-4 shadow-brutal hover-brutal text-left space-y-1 font-mono"
+                  className="bg-[#4ADE80] border-2 border-black text-black p-4 shadow-[4px_4px_0px_0px_#121212] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_#121212] transition-all text-left space-y-1 font-mono"
                 >
                   <div className="flex justify-between items-center">
                     <span className="font-black text-sm uppercase">4. Kolay</span>
@@ -357,7 +369,7 @@ export default function VocabPage() {
             )}
           </div>
         ) : (
-          <div className="text-center py-16 bg-[#FAF8F5] border-2 border-black shadow-brutal space-y-4 font-mono">
+          <div className="text-center py-16 bg-[#FAF8F5] border-2 border-black shadow-[4px_4px_0px_0px_#121212] space-y-4 font-mono">
             <CheckCircle2 className="w-16 h-16 text-[#65A30D] mx-auto" />
             <h3 className="font-editorial text-3xl font-black text-black italic">Tüm Kartlar Tamamlandı!</h3>
             <p className="text-xs font-bold text-slate-700 max-w-md mx-auto">
@@ -368,7 +380,7 @@ export default function VocabPage() {
       </main>
 
       <footer className="bg-[#FAF8F5] border-t-2 border-black py-6 text-center text-xs font-mono font-bold text-slate-800">
-        RECALLFLOW EDITORIAL BRUTALIST VOCABULARY SYSTEM
+        RECALLFLOW EDITORIAL BRUTALIST VOCABULARY & INDEXEDDB SYSTEM
       </footer>
     </div>
   );
