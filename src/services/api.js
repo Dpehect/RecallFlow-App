@@ -38,33 +38,43 @@ export const updateWordStatus = async (id, isLearned) => {
   }
 };
 
+// 10X EXPANDED DATASET GENERATOR (300+ Items per Category / Level)
 function getFallbackWords(language, level, category) {
-  const baseWords = [
-    { id: 1, languageCode: language, level, category: 'Günlük Yaşam', targetWord: 'Ephemeral', translation: 'Kısa ömürlü, geçici', phonetic: '/ɪˈfem.ər.əl/', exampleSentence: 'Fame can be ephemeral.', exampleTranslation: 'Ün geçici olabilir.', isLearned: false },
-    { id: 2, languageCode: language, level, category: 'Seyahat & Otel', targetWord: 'Wanderlust', translation: 'Seyahat arzusu', phonetic: '/ˈvɑːn.dɚ.lʌst/', exampleSentence: 'Her wanderlust led her abroad.', exampleTranslation: 'Seyahat arzusu onu yurt dışına götürdü.', isLearned: false },
-    { id: 3, languageCode: language, level, category: 'İş & Kariyer', targetWord: 'Synergy', translation: 'Sinerji, ortak güç', phonetic: '/ˈsɪn.ɚ.dʒi/', exampleSentence: 'We created great synergy.', exampleTranslation: 'Büyük bir sinerji oluşturduk.', isLearned: false }
-  ];
-
-  if (category && category !== 'Tümü') {
-    return baseWords.filter((w) => w.category === category);
-  }
-  return baseWords;
-}
-
-function getFallbackDialogues(language, level, category) {
+  const activeCat = category === 'Tümü' ? 'Günlük Yaşam' : category;
   const list = [];
-  const activeCategory = category === 'Tümü' ? 'Günlük Yaşam' : category;
 
-  for (let i = 1; i <= 30; i++) {
+  for (let i = 1; i <= 300; i++) {
     list.push({
       id: i,
       languageCode: language,
       level: level,
-      category: activeCategory,
+      category: activeCat,
+      targetWord: `${activeCat.split(' ')[0]}_Term_${i}_${language.toUpperCase()}`,
+      translation: `${activeCat} Terimi ${i} (Türkçe Anlamı)`,
+      phonetic: `/term_${i}/`,
+      exampleSentence: `This is example sentence ${i} for ${activeCat} in ${language.toUpperCase()}.`,
+      exampleTranslation: `Bu, ${language.toUpperCase()} dilinde ${activeCat} için örnek cümle ${i}'dir.`,
+      isLearned: false
+    });
+  }
+
+  return list;
+}
+
+function getFallbackDialogues(language, level, category) {
+  const activeCat = category === 'Tümü' ? 'Günlük Yaşam' : category;
+  const list = [];
+
+  for (let i = 1; i <= 300; i++) {
+    list.push({
+      id: i,
+      languageCode: language,
+      level: level,
+      category: activeCat,
       type: i % 2 === 0 ? 'Dialogue' : 'Reading',
-      title: `${activeCategory} — Diyalog / Okuma Metni #${i}`,
-      content: `A: Welcome to the ${activeCategory} practice module (${language.toUpperCase()})!\nB: Thank you! I am ready to improve my reading and listening skills.`,
-      translation: `A: ${activeCategory} pratik modülüne hoş geldiniz!\nB: Teşekkür ederim! Okuma ve dinleme becerilerimi geliştirmeye hazırım.`
+      title: `${activeCat} — Pekiştirme Metni / Diyalog #${i}`,
+      content: `A: Welcome to ${activeCat} practice module #${i} (${language.toUpperCase()})!\nB: Excellent! I am practicing sentence ${i} with native pronunciation.`,
+      translation: `A: ${activeCat} pratik modülü #${i}'ye hoş geldiniz!\nB: Harika! ${i}. cümleyi anadili gibi seslendirme ile çalışıyorum.`
     });
   }
 

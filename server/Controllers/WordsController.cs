@@ -1,5 +1,4 @@
 using LexiFlow.Api.Data;
-using LexiFlow.Api.Dtos;
 using LexiFlow.Api.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -17,88 +16,62 @@ namespace LexiFlow.Api.Controllers
             _context = context;
         }
 
-        /// <summary>
-        /// Fetch word deck filtered by Language Code and CEFR Level.
-        /// </summary>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<WordDto>>> GetWords(
+        public async Task<ActionResult<IEnumerable<Word>>> GetWords(
             [FromQuery] string language = "en",
             [FromQuery] string level = "A1",
-            [FromQuery] bool unlearnedOnly = false)
+            [FromQuery] string? category = null)
         {
             var query = _context.Words
                 .Where(w => w.LanguageCode.ToLower() == language.ToLower() &&
                             w.Level.ToUpper() == level.ToUpper());
 
-            if (unlearnedOnly)
+            if (!string.IsNullOrEmpty(category))
             {
-                query = query.Where(w => !w.IsLearned);
+                query = query.Where(w => w.Category.ToLower() == category.ToLower());
             }
 
-            var words = await query
-                .OrderBy(w => w.IsLearned)
-                .ThenBy(w => w.Id)
-                .Select(w => new WordDto
-                {
-                    Id = w.Id,
-                    LanguageCode = w.LanguageCode,
-                    Level = w.Level,
-                    TargetWord = w.TargetWord,
-                    Translation = w.Translation,
-                    Phonetic = w.Phonetic,
-                    ExampleSentence = w.ExampleSentence,
-                    ExampleTranslation = w.ExampleTranslation,
-                    AudioUrl = w.AudioUrl,
-                    Category = w.Category,
-                    IsLearned = w.IsLearned,
-                    ReviewCount = w.ReviewCount
-                })
+            return Ok(await query.ToListAsync());
+        }
+
+        [HttpGet("categories")]
+        public async Task<ActionResult<IEnumerable<string>>> GetCategories()
+        {
+            var categories = await _context.Words
+                .Select(w => w.Category)
+                .Distinct()
                 .ToListAsync();
+            return Ok(categories);
+        }
+    }
 
-            return Ok(words);
+    [ApiController]
+    [Route("api/[controller]")]
+    public class DialoguesController : ControllerBase
+    {
+        private readonly AppDbContext _context;
+
+        public DialoguesController(AppDbContext context)
+        {
+            _context = context;
         }
 
-        /// <summary>
-        /// Update learning status of a specific word (Learned / Review).
-        /// </summary>
-        [HttpPatch("{id:int}/status")]
-        public async Task<IActionResult> UpdateStatus(int id, [FromBody] UpdateWordStatusDto dto)
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<DialogueText>>> GetDialogues(
+            [FromQuery] string language = "en",
+            [FromQuery] string level = "A1",
+            [FromQuery] string? category = null)
         {
-            var word = await _context.Words.FindAsync(id);
-            if (word == null) return NotFound(new { message = "Word not found." });
+            var query = _context.DialogueTexts
+                .Where(d => d.LanguageCode.ToLower() == language.ToLower() &&
+                            d.Level.ToUpper() == level.ToUpper());
 
-            word.IsLearned = dto.IsLearned;
-            if (!dto.IsLearned)
+            if (!string.IsNullOrEmpty(category))
             {
-                word.ReviewCount += 1;
+                query = query.Where(d => d.Category.ToLower() == category.ToLower());
             }
 
-            await _context.SaveChangesAsync();
-            return Ok(new { message = "Status updated successfully.", word.Id, word.IsLearned, word.ReviewCount });
-        }
-
-        /// <summary>
-        /// Get learning stats overview for current language and level.
-        /// </summary>
-        [HttpGet("stats")]
-        public async Task<ActionResult<LanguageStatsDto>> GetStats(
-            [FromQuery] string language = "en",
-            [FromQuery] string level = "A1")
-        {
-            var query = _context.Words
-                .Where(w => w.LanguageCode.ToLower() == language.ToLower() &&
-                            w.Level.ToUpper() == level.ToUpper());
-
-            var total = await query.CountAsync();
-            var learned = await query.CountAsync(w => w.IsLearned);
-
-            return Ok(new LanguageStatsDto
-            {
-                LanguageCode = language,
-                Level = level,
-                TotalWords = total,
-                LearnedWords = learned
-            });
+            return Ok(await query.ToListAsync());
         }
     }
 }
