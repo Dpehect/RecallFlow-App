@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Navbar from '@/components/Navbar';
-import { LANGUAGES, VOCAB_CATEGORIES } from '@/lib/data';
-import { Bot, CheckCircle2, XCircle, ArrowRight, RefreshCw, Volume2 } from 'lucide-react';
+import { LANGUAGES, VOCAB_CATEGORIES, RECALLFLOW_ENTERPRISE_DATA } from '@/lib/data';
+import { Bot, CheckCircle2, XCircle, ArrowRight, RefreshCw, Volume2, Sparkles } from 'lucide-react';
 import { sounds } from '@/lib/sound';
 
 interface PracticePrompt {
@@ -43,6 +43,28 @@ const PRACTICE_DATABASE: PracticePrompt[] = [
     keyWords: ["möchten", "zwei", "Cappuccino", "bestellen"]
   },
   {
+    id: "p-de-a1-3",
+    language: "german",
+    langCode: "de-DE",
+    level: "A1",
+    category: "daily-life",
+    turkishSentence: "Her gün saat yedi civarında uyanıyorum.",
+    expectedTarget: "Ich stehe jeden Tag um sieben Uhr auf.",
+    grammarNote: "Aufstehen ayrılabilen bir fiildir. 'Stehe' 2. sırada, 'auf' öneki en sondadır.",
+    keyWords: ["stehe", "Tag", "sieben", "Uhr", "auf"]
+  },
+  {
+    id: "p-de-a2-1",
+    language: "german",
+    langCode: "de-DE",
+    level: "A2",
+    category: "work-business",
+    turkishSentence: "Bugün yeni proje için önemli bir toplantımız var.",
+    expectedTarget: "Heute haben wir ein wichtiges Treffen für das neue Projekt.",
+    grammarNote: "Zaman zarfı (Heute) başa geldiğinde fiil (haben) 2. sırada, özne (wir) 3. sırada kalır.",
+    keyWords: ["Heute", "haben", "Treffen", "Projekt"]
+  },
+  {
     id: "p-de-b1-1",
     language: "german",
     langCode: "de-DE",
@@ -65,6 +87,17 @@ const PRACTICE_DATABASE: PracticePrompt[] = [
     expectedTarget: "I always order a strong black coffee in the morning.",
     grammarNote: "İngilizcede sıklık zarfı (always) özne ile ana fiil arasına yerleştirilir.",
     keyWords: ["always", "order", "strong", "black", "coffee"]
+  },
+  {
+    id: "p-en-a2-1",
+    language: "english",
+    langCode: "en-US",
+    level: "A2",
+    category: "daily-life",
+    turkishSentence: "Bütün gün bilgisayar başında çalışmak gözleri yorabilir.",
+    expectedTarget: "Working at the computer all day can strain your eyes.",
+    grammarNote: "Gerund (Working) cümle öznesi olarak kullanılmıştır.",
+    keyWords: ["working", "computer", "strain", "eyes"]
   },
   {
     id: "p-en-b1-1",
@@ -90,17 +123,6 @@ const PRACTICE_DATABASE: PracticePrompt[] = [
     grammarNote: "İspanyolca emretme/rica kalıbında 'tráigame' fiili nezaket kipiyle kullanılır.",
     keyWords: ["favor", "tráigame", "café", "leche", "azúcar", "agua"]
   },
-  {
-    id: "p-es-b1-1",
-    language: "spanish",
-    langCode: "es-ES",
-    level: "B1",
-    category: "work-business",
-    turkishSentence: "Yeni becerilerin sürekli geliştirilmesi mesleki başarı için esastır.",
-    expectedTarget: "El desarrollo constante de nuevas habilidades es fundamental para el éxito profesional.",
-    grammarNote: "'Desarrollo' eril isim olduğu için 'El' artikelini alır. İsim tamlamalarında 'de' kullanılır.",
-    keyWords: ["desarrollo", "constante", "habilidades", "fundamental", "éxito"]
-  },
 
   // --- FRENCH (FRANSIZCA) ---
   {
@@ -113,17 +135,6 @@ const PRACTICE_DATABASE: PracticePrompt[] = [
     expectedTarget: "J'aimerais commander un croissant au beurre et un café crème s'il vous plaît.",
     grammarNote: "Nezaketle isteme ifadesi için 'J'aimerais' (koşul kipi) kullanılır.",
     keyWords: ["aimerais", "commander", "croissant", "beurre", "café"]
-  },
-  {
-    id: "p-fr-b1-1",
-    language: "french",
-    langCode: "fr-FR",
-    level: "B1",
-    category: "daily-life",
-    turkishSentence: "Her akşam kitap okuma alışkanlığı edinmek kelime dağarcığını geliştirir.",
-    expectedTarget: "Prendre l'habitude de lire chaque soir améliore le vocabulaire.",
-    grammarNote: "Mastarlık isimleşme için 'Prendre l'habitude de' kalıbı tercih edilir.",
-    keyWords: ["habitude", "lire", "chaque", "soir", "vocabulaire"]
   },
 
   // --- PORTUGUESE (PORTEKİZCE) ---
@@ -144,7 +155,7 @@ export default function PracticePage() {
   const [selectedLang, setSelectedLang] = useState('english');
   const [selectedLevel, setSelectedLevel] = useState('A1');
   const [selectedCategory, setSelectedCategory] = useState('ALL');
-  const [currentPrompt, setCurrentPrompt] = useState<PracticePrompt>(PRACTICE_DATABASE[0]);
+  const [currentPromptIndex, setCurrentPromptIndex] = useState(0);
   const [userAnswer, setUserAnswer] = useState('');
   const [feedback, setFeedback] = useState<{
     score: number;
@@ -163,20 +174,24 @@ export default function PracticePage() {
     return langMatch && levelMatch && catMatch;
   });
 
-  const generateNewPrompt = () => {
-    const pool = filteredPrompts.length > 0 
-      ? filteredPrompts 
-      : PRACTICE_DATABASE.filter(p => p.language === selectedLang);
+  const activePool = filteredPrompts.length > 0 
+    ? filteredPrompts 
+    : PRACTICE_DATABASE.filter(p => p.language === selectedLang);
 
-    const activePool = pool.length > 0 ? pool : PRACTICE_DATABASE;
-    const randomIndex = Math.floor(Math.random() * activePool.length);
-    setCurrentPrompt(activePool[randomIndex]);
+  const finalPool = activePool.length > 0 ? activePool : PRACTICE_DATABASE;
+
+  const currentPrompt = finalPool[currentPromptIndex % finalPool.length] || PRACTICE_DATABASE[0];
+
+  const generateNewPrompt = useCallback(() => {
+    setCurrentPromptIndex(prev => (prev + 1) % finalPool.length);
     setUserAnswer('');
     setFeedback(null);
-  };
+  }, [finalPool.length]);
 
   useEffect(() => {
-    generateNewPrompt();
+    setCurrentPromptIndex(0);
+    setUserAnswer('');
+    setFeedback(null);
   }, [selectedLang, selectedLevel, selectedCategory]);
 
   const normalizeText = (str: string) => {
@@ -333,9 +348,9 @@ export default function PracticePage() {
 
               <button
                 onClick={generateNewPrompt}
-                className="bg-white border-2 border-black text-black text-xs font-black px-3 py-1.5 shadow-[2px_2px_0px_0px_#121212] hover:translate-x-[-1px] hover:translate-y-[-1px] transition flex items-center gap-1.5"
+                className="bg-[#EA580C] hover:bg-[#DC2626] text-white border-2 border-black text-xs font-black px-4 py-2 shadow-[2px_2px_0px_0px_#121212] hover:translate-x-[-1px] hover:translate-y-[-1px] transition flex items-center gap-1.5 uppercase"
               >
-                <RefreshCw className="w-3.5 h-3.5" />
+                <RefreshCw className="w-4 h-4" />
                 <span>Yeni Cümle Üret</span>
               </button>
             </div>
