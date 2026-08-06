@@ -1,48 +1,37 @@
 import React, { useState, useEffect } from 'react';
-import { Volume2, RotateCw, CheckCircle2, RefreshCw, Bookmark, Sparkles } from 'lucide-react';
+import { Volume2, CheckCircle2, RefreshCw, Sparkles, PartyPopper } from 'lucide-react';
 
 export default function Flashcard({ word, language, onNext, onReview }) {
   const [isFlipped, setIsFlipped] = useState(false);
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
+  const [showCelebration, setShowCelebration] = useState(false);
 
-  // Reset flip state when word changes
   useEffect(() => {
     setIsFlipped(false);
+    setShowCelebration(false);
   }, [word]);
 
   if (!word) {
     return (
-      <div className="w-full max-w-md h-[420px] mx-auto rounded-3xl glass-card flex flex-col items-center justify-center p-8 text-center border border-white/10">
-        <Sparkles className="w-12 h-12 text-cyan-400 mb-4 animate-bounce" />
-        <h3 className="text-xl font-bold text-slate-100">Tebrikler! Deste Tamamlandı 🎉</h3>
-        <p className="text-xs text-slate-400 mt-2 max-w-xs">
-          Bu seviyedeki tüm kelimeleri öğrendiniz. Yeni bir seviye veya dil seçebilirsiniz.
+      <div className="w-full max-w-md h-[400px] mx-auto rounded-3xl glass-card flex flex-col items-center justify-center p-8 text-center border border-emerald-500/30 bg-emerald-500/5">
+        <PartyPopper className="w-16 h-16 text-emerald-400 mb-4 animate-bounce" />
+        <h3 className="text-2xl font-black text-white">Harika İş! Deste Tamamlandı 🎉</h3>
+        <p className="text-xs text-slate-300 mt-2 max-w-xs">
+          Bu kategorideki tüm kelimeleri başarıyla öğrendiniz. Başka bir kategori veya seviye seçebilirsiniz!
         </p>
       </div>
     );
   }
 
-  // Text-To-Speech Pronunciation trigger
   const playAudio = (e, text = word.targetWord) => {
     e.stopPropagation();
-    if (!('speechSynthesis' in window)) {
-      alert('Tarayıcınız sesli okumayı desteklemiyor.');
-      return;
-    }
+    if (!('speechSynthesis' in window)) return;
 
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
-    
-    // Map language code to TTS locale
-    const localeMap = {
-      en: 'en-US',
-      de: 'de-DE',
-      fr: 'fr-FR',
-      es: 'es-ES',
-      pt: 'pt-PT',
-    };
+    const localeMap = { en: 'en-US', de: 'de-DE', fr: 'fr-FR', es: 'es-ES', pt: 'pt-PT' };
     utterance.lang = localeMap[language] || 'en-US';
-    utterance.rate = 0.9;
+    utterance.rate = 0.85;
 
     setIsPlayingAudio(true);
     utterance.onend = () => setIsPlayingAudio(false);
@@ -51,9 +40,24 @@ export default function Flashcard({ word, language, onNext, onReview }) {
     window.speechSynthesis.speak(utterance);
   };
 
+  const handleLearnedClick = () => {
+    setShowCelebration(true);
+    setTimeout(() => {
+      onNext(word.id);
+    }, 400);
+  };
+
   return (
-    <div className="w-full max-w-md mx-auto my-6 px-4">
-      {/* 3D Flip Card Container */}
+    <div className="w-full max-w-md mx-auto my-4 px-2 relative">
+      {/* XP Pop-up Animation */}
+      {showCelebration && (
+        <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-gradient-to-r from-emerald-400 to-teal-400 text-slate-950 font-black px-4 py-1.5 rounded-full text-xs shadow-2xl animate-bounce z-50 flex items-center gap-1">
+          <Sparkles className="w-4 h-4 fill-slate-950" />
+          <span>+10 XP Kazandın! 🎉</span>
+        </div>
+      )}
+
+      {/* 3D Flip Card */}
       <div
         onClick={() => setIsFlipped(!isFlipped)}
         className="w-full h-[380px] perspective-1000 cursor-pointer group select-none"
@@ -63,33 +67,30 @@ export default function Flashcard({ word, language, onNext, onReview }) {
             isFlipped ? 'rotate-y-180' : ''
           }`}
         >
-          {/* ================= FRONT SIDE ================= */}
-          <div className="absolute inset-0 w-full h-full rounded-3xl glass-card p-8 flex flex-col justify-between backface-hidden border border-white/10 group-hover:border-cyan-500/30 transition-colors shadow-2xl">
-            {/* Card Header */}
-            <div className="flex justify-between items-center text-xs text-slate-400">
-              <span className="px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 font-semibold tracking-wide">
-                {word.category || 'Vocabulary'}
+          {/* FRONT SIDE */}
+          <div className="absolute inset-0 w-full h-full rounded-3xl glass-card p-8 flex flex-col justify-between backface-hidden border border-white/10 group-hover:border-cyan-400/40 transition-all duration-300 shadow-2xl bg-gradient-to-b from-slate-900/90 to-slate-950/90">
+            <div className="flex justify-between items-center text-xs">
+              <span className="px-3.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 font-extrabold flex items-center gap-1">
+                <span>✨ {word.category}</span>
               </span>
-              <span className="text-[11px] font-mono text-slate-500 uppercase tracking-widest">
+              <span className="text-[11px] font-mono text-slate-400 font-bold">
                 Kartı Çevir ↺
               </span>
             </div>
 
-            {/* Word Center */}
             <div className="text-center my-auto">
-              <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-white mb-2 group-hover:scale-105 transition-transform duration-300">
+              <h2 className="text-4xl sm:text-5xl font-black tracking-tight text-white mb-2 group-hover:scale-105 transition-transform duration-300">
                 {word.targetWord}
               </h2>
               {word.phonetic && (
-                <p className="text-sm font-mono text-cyan-400/80 mt-1">
+                <p className="text-sm font-mono text-cyan-400 font-semibold">
                   {word.phonetic}
                 </p>
               )}
 
-              {/* Audio Pronunciation Button */}
               <button
                 onClick={(e) => playAudio(e)}
-                className={`mt-6 inline-flex items-center gap-2 px-4 py-2 rounded-full glass-pill border border-cyan-500/30 text-cyan-300 text-xs font-semibold hover:bg-cyan-500/20 hover:scale-105 transition-all duration-300 ${
+                className={`mt-6 inline-flex items-center gap-2 px-5 py-2.5 rounded-full glass-pill border border-cyan-400/40 text-cyan-300 text-xs font-bold hover:bg-cyan-500/20 hover:scale-105 active:scale-95 transition-all shadow-lg ${
                   isPlayingAudio ? 'ring-2 ring-cyan-400 animate-pulse' : ''
                 }`}
               >
@@ -98,42 +99,36 @@ export default function Flashcard({ word, language, onNext, onReview }) {
               </button>
             </div>
 
-            {/* Footer Prompt */}
             <div className="text-center">
-              <span className="text-[11px] text-slate-500 font-medium">
-                Anlamı ve örnek cümleyi görmek için tıklayın
+              <span className="text-[11px] text-slate-400 font-medium">
+                💡 Türkçe anlamını görmek için tıkla
               </span>
             </div>
           </div>
 
-          {/* ================= BACK SIDE ================= */}
-          <div className="absolute inset-0 w-full h-full rounded-3xl glass-card p-8 flex flex-col justify-between backface-hidden rotate-y-180 border border-purple-500/30 shadow-2xl bg-gradient-to-br from-[#0A0D18] via-[#0D1021] to-[#120B24]">
-            {/* Header */}
+          {/* BACK SIDE */}
+          <div className="absolute inset-0 w-full h-full rounded-3xl glass-card p-8 flex flex-col justify-between backface-hidden rotate-y-180 border border-purple-500/40 shadow-2xl bg-gradient-to-br from-[#0B0D1B] via-[#0E122B] to-[#160E30]">
             <div className="flex justify-between items-center text-xs">
-              <span className="px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-300 font-semibold">
-                Türkçe Anlamı
+              <span className="px-3.5 py-1 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-300 font-extrabold">
+                🇹🇷 Türkçe Anlamı
               </span>
               <button
                 onClick={(e) => playAudio(e)}
-                className="p-2 rounded-full bg-white/5 hover:bg-white/10 text-slate-300 transition-colors"
-                title="Yeniden Dinle"
+                className="p-2 rounded-full bg-white/10 hover:bg-white/20 text-purple-300 transition-colors"
               >
-                <Volume2 className="w-4 h-4 text-purple-400" />
+                <Volume2 className="w-4 h-4" />
               </button>
             </div>
 
-            {/* Translation Content */}
             <div className="my-auto space-y-4">
-              <div>
-                <h3 className="text-3xl font-extrabold text-white tracking-wide">
-                  {word.translation}
-                </h3>
-              </div>
+              <h3 className="text-3xl font-black text-white tracking-wide">
+                {word.translation}
+              </h3>
 
               {word.exampleSentence && (
-                <div className="p-4 rounded-2xl bg-white/5 border border-white/5 space-y-1.5 text-left">
-                  <p className="text-xs font-semibold text-slate-300 italic flex items-start gap-1.5">
-                    <span>“{word.exampleSentence}”</span>
+                <div className="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-1 text-left">
+                  <p className="text-xs font-bold text-slate-200 italic">
+                    “{word.exampleSentence}”
                   </p>
                   {word.exampleTranslation && (
                     <p className="text-[11px] text-slate-400">
@@ -144,32 +139,31 @@ export default function Flashcard({ word, language, onNext, onReview }) {
               )}
             </div>
 
-            {/* Hint */}
             <div className="text-center">
-              <span className="text-[11px] text-slate-500 font-medium">
-                Sonucu aşağıdan seçin
+              <span className="text-[11px] text-slate-400 font-medium">
+                Sonucu aşağıdan seçin 👇
               </span>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Action Buttons: Tekrar Et vs Öğrendim */}
+      {/* Action Buttons */}
       <div className="flex items-center gap-4 mt-6">
         <button
           onClick={() => onReview(word.id)}
-          className="flex-1 py-3.5 px-6 rounded-2xl glass-pill border border-red-500/30 text-red-400 font-semibold text-sm flex items-center justify-center gap-2 hover:bg-red-500/10 hover:border-red-500/50 active:scale-95 transition-all shadow-lg duration-300"
+          className="flex-1 py-3.5 px-6 rounded-2xl glass-pill border border-rose-500/40 text-rose-300 font-bold text-sm flex items-center justify-center gap-2 hover:bg-rose-500/15 active:scale-95 transition-all shadow-lg"
         >
           <RefreshCw className="w-4 h-4" />
           <span>Tekrar Et</span>
         </button>
 
         <button
-          onClick={() => onNext(word.id)}
-          className="flex-1 py-3.5 px-6 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 text-slate-950 font-extrabold text-sm flex items-center justify-center gap-2 hover:from-emerald-400 hover:to-teal-500 hover:shadow-[0_0_20px_rgba(16,185,129,0.4)] active:scale-95 transition-all duration-300"
+          onClick={handleLearnedClick}
+          className="flex-1 py-3.5 px-6 rounded-2xl bg-gradient-to-r from-emerald-400 to-teal-500 text-slate-950 font-black text-sm flex items-center justify-center gap-2 hover:shadow-[0_0_25px_rgba(16,185,129,0.5)] active:scale-95 transition-all shadow-xl"
         >
-          <CheckCircle2 className="w-5 h-5" />
-          <span>Öğrendim</span>
+          <CheckCircle2 className="w-5 h-5 fill-slate-950 text-emerald-400" />
+          <span>Öğrendim (+10 XP)</span>
         </button>
       </div>
     </div>

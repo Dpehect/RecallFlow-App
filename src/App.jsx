@@ -12,16 +12,16 @@ import { getWords, getDialogues, updateWordStatus } from './services/api';
 export default function App() {
   const [language, setLanguage] = useState('en');
   const [level, setLevel] = useState('A1');
-  const [category, setCategory] = useState('Tümü');
-  const [mode, setMode] = useState('flashcards'); // 'flashcards' | 'reading_listening'
+  const [category, setCategory] = useState('Seyahat & Otel');
+  const [mode, setMode] = useState('flashcards');
 
   const [words, setWords] = useState([]);
   const [dialogues, setDialogues] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [learnedCount, setLearnedCount] = useState(0);
+  const [xpPoints, setXpPoints] = useState(140);
   const [loading, setLoading] = useState(true);
 
-  // Load Words or Dialogues
   useEffect(() => {
     let isMounted = true;
     setLoading(true);
@@ -44,9 +44,7 @@ export default function App() {
       });
     }
 
-    return () => {
-      isMounted = false;
-    };
+    return () => { isMounted = false; };
   }, [language, level, category, mode]);
 
   const currentWord = words[currentIndex];
@@ -55,6 +53,7 @@ export default function App() {
     await updateWordStatus(wordId, true);
     setWords((prev) => prev.map((w) => (w.id === wordId ? { ...w, isLearned: true } : w)));
     setLearnedCount((prev) => prev + 1);
+    setXpPoints((prev) => prev + 10);
 
     if (currentIndex < words.length - 1) {
       setCurrentIndex((prev) => prev + 1);
@@ -75,25 +74,36 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[#05070E] text-slate-100 flex flex-col justify-between selection:bg-cyan-500/30 relative overflow-hidden">
       {/* Background Ambient Glows */}
-      <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-purple-600/10 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-purple-600/10 rounded-full blur-[160px] pointer-events-none" />
 
-      {/* Header */}
-      <Header streak={7} learnedToday={learnedCount} />
+      {/* Header with Gamification Stats */}
+      <Header streak={7} learnedCount={learnedCount} xpPoints={xpPoints} />
 
-      {/* Main Content */}
-      <main className="flex-1 max-w-4xl w-full mx-auto px-4 py-3 flex flex-col justify-center">
-        {/* Language & Level Selectors */}
-        <LanguageSelector selectedLanguage={language} onSelectLanguage={setLanguage} />
-        <LevelSelector selectedLevel={level} onSelectLevel={setLevel} />
+      {/* Main Container */}
+      <main className="flex-1 max-w-5xl w-full mx-auto px-4 py-4 flex flex-col justify-center space-y-4">
+        
+        {/* Dock 1: Language & Level Dock */}
+        <section className="p-4 rounded-3xl bg-slate-900/40 border border-white/5 backdrop-blur-md">
+          <div className="text-center mb-2 text-[11px] font-bold uppercase tracking-widest text-slate-400">
+            1. Dil ve Seviye Seçin
+          </div>
+          <LanguageSelector selectedLanguage={language} onSelectLanguage={setLanguage} />
+          <LevelSelector selectedLevel={level} onSelectLevel={setLevel} />
+        </section>
 
-        {/* Mode Switcher: Flashcards vs Reading & Listening */}
-        <ModeSwitcher activeMode={mode} onSwitchMode={setMode} />
+        {/* Dock 2: Mode Switcher */}
+        <section className="p-3 rounded-3xl bg-slate-900/40 border border-white/5 backdrop-blur-md">
+          <div className="text-center mb-1 text-[11px] font-bold uppercase tracking-widest text-slate-400">
+            2. Çalışma Modu Seçin
+          </div>
+          <ModeSwitcher activeMode={mode} onSwitchMode={setMode} />
+        </section>
 
-        {/* Category Selector Bar */}
+        {/* Dock 3: Category Grid */}
         <CategorySelector selectedCategory={category} onSelectCategory={setCategory} />
 
-        {/* Mode View */}
+        {/* Content Arena */}
         {mode === 'flashcards' ? (
           <>
             <ProgressBar current={learnedCount} total={words.length} />

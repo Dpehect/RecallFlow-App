@@ -10,51 +10,41 @@ namespace LexiFlow.Api.Data
 
             if (context.Words.Any()) return;
 
-            var categories = new[] { "Günlük Yaşam", "Seyahat & Otel", "İş & Kariyer", "Yiyecek & İçecek", "Teknoloji", "Sağlık & Sosyal" };
-            var languages = new[] { "en", "de", "fr", "es", "pt" };
-            var levels = new[] { "A1", "A2", "B1", "B2" };
-
-            var wordList = new List<Word>();
-            var dialogueList = new List<DialogueText>();
-
-            // 10X EXPANDED DATASET GENERATOR: 300+ entries per category/level
-            foreach (var lang in languages)
+            var words = new List<Word>
             {
-                foreach (var lvl in levels)
+                // ENGLISH (en)
+                new Word { LanguageCode = "en", Level = "A1", Category = "Seyahat & Otel", TargetWord = "Boarding Pass", Translation = "Uçuş Biniş Kartı", Phonetic = "/ˈbɔːr.dɪŋ ˌpæs/", ExampleSentence = "Please present your boarding pass at gate 12.", ExampleTranslation = "Lütfen kapı 12’de biniş kartınızı gösterin." },
+                new Word { LanguageCode = "en", Level = "A1", Category = "Seyahat & Otel", TargetWord = "Luggage Claim", Translation = "Bagaj Teslim Alanı", Phonetic = "/ˈlʌɡ.ɪdʒ kleɪm/", ExampleSentence = "We picked up our bags at luggage claim.", ExampleTranslation = "Bavullarımızı bagaj teslim alanından aldık." },
+                new Word { LanguageCode = "en", Level = "A1", Category = "Seyahat & Otel", TargetWord = "Passport Control", Translation = "Pasaport Kontrolü", Phonetic = "/ˈpæs.pɔːrt kənˈtroʊl/", ExampleSentence = "The line at passport control was short.", ExampleTranslation = "Pasaport kontrolündeki sıra kısaydı." },
+                new Word { LanguageCode = "en", Level = "A1", Category = "Günlük Yaşam", TargetWord = "Neighborhood", Translation = "Mahalle, Çevre", Phonetic = "/ˈneɪ.bɚ.hʊd/", ExampleSentence = "It is a quiet neighborhood.", ExampleTranslation = "Sessiz bir mahalle." },
+                new Word { LanguageCode = "en", Level = "A1", Category = "İş & Kariyer", TargetWord = "Deadline", Translation = "Son Teslim Tarihi", Phonetic = "/ˈded.laɪn/", ExampleSentence = "The project deadline is Friday.", ExampleTranslation = "Projenin son teslim tarihi cuma." },
+                
+                // GERMAN (de)
+                new Word { LanguageCode = "de", Level = "A1", Category = "Seyahat & Otel", TargetWord = "Reisepass", Translation = "Pasaport", Phonetic = "[ˈʁaɪ̯zəˌpas]", ExampleSentence = "Zeigen Sie Ihren Reisepass.", ExampleTranslation = "Pasaportunuzu gösterin." },
+                
+                // FRENCH (fr)
+                new Word { LanguageCode = "fr", Level = "A1", Category = "Seyahat & Otel", TargetWord = "Passeport", Translation = "Pasaport", Phonetic = "[paspɔʁ]", ExampleSentence = "Montrez votre passeport s'il vous plaît.", ExampleTranslation = "Lütfen pasaportunuzu gösterin." },
+
+                // SPANISH (es)
+                new Word { LanguageCode = "es", Level = "A1", Category = "Seyahat & Otel", TargetWord = "Pasaporte", Translation = "Pasaport", Phonetic = "[pa.saˈpoɾ.te]", ExampleSentence = "Aquí está mi pasaporte.", ExampleTranslation = "İşte pasaportum." },
+
+                // PORTUGUESE (pt)
+                new Word { LanguageCode = "pt", Level = "A1", Category = "Seyahat & Otel", TargetWord = "Passaporte", Translation = "Pasaport", Phonetic = "[pa.saˈpɔʁ.tʃi]", ExampleSentence = "Onde está o seu passaporte?", ExampleTranslation = "Pasaportunuz nerede?" }
+            };
+
+            var dialogues = new List<DialogueText>
+            {
+                new DialogueText
                 {
-                    foreach (var cat in categories)
-                    {
-                        for (int i = 1; i <= 300; i++)
-                        {
-                            wordList.Add(new Word
-                            {
-                                LanguageCode = lang,
-                                Level = lvl,
-                                Category = cat,
-                                TargetWord = $"{cat.Split(' ')[0]}_Word_{i}_{lang.ToUpper()}",
-                                Translation = $"{cat} Kelimesi {i} (Türkçe Karşılığı)",
-                                Phonetic = $"/word_{i}/",
-                                ExampleSentence = $"Example sentence {i} for {cat} in {lang.ToUpper()}.",
-                                ExampleTranslation = $"{lang.ToUpper()} dilinde {cat} kelimesi {i} için örnek cümle."
-                            });
-
-                            dialogueList.Add(new DialogueText
-                            {
-                                LanguageCode = lang,
-                                Level = lvl,
-                                Category = cat,
-                                Title = $"{cat} — Pekiştirme Metni / Diyalog #{i}",
-                                Content = $"A: Welcome to {cat} practice #{i} in {lang.ToUpper()}.\nB: Let us review dialogue passage #{i} for reading and listening.",
-                                Translation = $"A: {lang.ToUpper()} dilinde {cat} pratik metni #{i}'ye hoş geldiniz.\nB: Okuma ve dinleme için {i}. diyalog pasajını inceleyelim.",
-                                Type = i % 2 == 0 ? "Dialogue" : "Reading"
-                            });
-                        }
-                    }
+                    LanguageCode = "en", Level = "A1", Category = "Seyahat & Otel", Title = "✈️ Otel Check-in Diyaloğu",
+                    Content = "Receptionist: Welcome to Grand Plaza! How can I help you?\nGuest: Hello! I have a reservation under Alex Smith.",
+                    Translation = "Resepsiyonist: Grand Plaza'ya hoş geldiniz! Nasıl yardımcı olabilirim?\nMüşteri: Merhaba! Alex Smith adına rezervasyonum var.",
+                    Type = "Dialogue"
                 }
-            }
+            };
 
-            context.Words.AddRange(wordList);
-            context.DialogueTexts.AddRange(dialogueList);
+            context.Words.AddRange(words);
+            context.DialogueTexts.AddRange(dialogues);
             context.SaveChanges();
         }
     }
