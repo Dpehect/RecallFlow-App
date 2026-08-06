@@ -2,30 +2,19 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import Navbar from '@/components/Navbar';
-import { LANGUAGES, VOCAB_CATEGORIES, RECALLFLOW_ENTERPRISE_DATA, VocabItem } from '@/lib/data';
-import { Bot, CheckCircle2, XCircle, ArrowRight, RefreshCw, Volume2, Sparkles, Zap, Award } from 'lucide-react';
+import { LANGUAGES, VOCAB_CATEGORIES } from '@/lib/data';
+import { NaturalPracticePrompt, getNaturalPracticePrompt } from '@/lib/practice_generator';
+import { Bot, CheckCircle2, XCircle, ArrowRight, RefreshCw, Volume2, Sparkles } from 'lucide-react';
 import { sounds } from '@/lib/sound';
-
-interface GeneratedSentence {
-  id: string;
-  language: string;
-  langCode: string;
-  level: string;
-  category: string;
-  turkishSentence: string;
-  expectedTarget: string;
-  grammarNote: string;
-  keywords: string[];
-}
 
 export default function PracticePage() {
   const [selectedLang, setSelectedLang] = useState('german');
   const [selectedLevel, setSelectedLevel] = useState('A1');
   const [selectedCategory, setSelectedCategory] = useState('ALL');
 
-  const [currentPrompt, setCurrentPrompt] = useState<GeneratedSentence | null>(null);
+  const [currentPrompt, setCurrentPrompt] = useState<NaturalPracticePrompt | null>(null);
   const [userAnswer, setUserAnswer] = useState('');
-  const [usedSentenceHashes, setUsedSentenceHashes] = useState<Set<string>>(new Set());
+  const [usedIds, setUsedIds] = useState<Set<string>>(new Set());
   const [feedback, setFeedback] = useState<{
     score: number;
     isCorrect: boolean;
@@ -35,130 +24,16 @@ export default function PracticePage() {
 
   const [sessionStats, setScoreHistory] = useState({ totalCompleted: 0, totalScore: 0, correctCount: 0 });
 
-  // 100% DYNAMIC COMBINATORIAL PROCEDURAL SENTENCE ENGINE (Millions of unique possibilities)
-  const generateProceduralPrompt = useCallback(() => {
-    const vocabPool = RECALLFLOW_ENTERPRISE_DATA.vocabPacks.filter(v => {
-      const langMatch = v.language === selectedLang;
-      const levelMatch = selectedLevel === 'ALL' || v.level === selectedLevel;
-      const catMatch = selectedCategory === 'ALL' || v.category === selectedCategory;
-      return langMatch && levelMatch && catMatch;
-    });
-
-    const fallbackPool = RECALLFLOW_ENTERPRISE_DATA.vocabPacks.filter(v => v.language === selectedLang);
-    const activePool = vocabPool.length > 0 ? vocabPool : fallbackPool;
-
-    // Pick random vocabulary item
-    const vItem: VocabItem = activePool[Math.floor(Math.random() * activePool.length)] || {
-      id: 'default',
-      language: selectedLang,
-      langCode: 'de-DE',
-      category: 'cafe-travel',
-      word: 'Kaffee',
-      translation: 'Kahve',
-      type: 'İsim',
-      level: 'A1',
-      exampleTarget: 'Ich trinke Kaffee.',
-      exampleTranslation: 'Kahve içiyorum.'
-    };
-
-    const word = vItem.word;
-    const meaning = vItem.translation.toLowerCase();
-
-    // Combinatorial Matrices
-    const timeAdverbs = [
-      { tr: "Her sabah", de: "jeden Morgen", en: "every morning", es: "cada mañana", fr: "chaque matin", pt: "todas as manhãs" },
-      { tr: "Bugün erken saatlerde", de: "heute früh", en: "early today", es: "hoy temprano", fr: "tôt aujourd'hui", pt: "hoje cedo" },
-      { tr: "Gelecek hafta", de: "nächste Woche", en: "next week", es: "la próxima semana", fr: "la semaine prochaine", pt: "na próxima semana" },
-      { tr: "İşten sonra", de: "nach der Arbeit", en: "after work", es: "después del trabajo", fr: "après le travail", pt: "depois do trabalho" },
-      { tr: "Hafta sonları", de: "am Wochenende", en: "on weekends", es: "los fines de semana", fr: "le week-end", pt: "nos fins de semana" },
-      { tr: "Kriz anlarında", de: "in Krisenzeiten", en: "during crisis", es: "en tiempos de crisis", fr: "en temps de crise", pt: "em tempos de crise" },
-      { tr: "Önemli durumlarda", de: "in wichtigen Situationen", en: "in important situations", es: "en situaciones importantes", fr: "dans des situations importantes", pt: "em situações importantes" }
-    ];
-
-    const actors = [
-      { tr: "ben", deSubject: "ich", deVerbHave: "habe", deVerbNeed: "brauche", deVerbWant: "möchte", enSubject: "I", esSubject: "yo", frSubject: "je", ptSubject: "eu" },
-      { tr: "bizim ekip", deSubject: "unser Team", deVerbHave: "hat", deVerbNeed: "braucht", deVerbWant: "möchte", enSubject: "our team", esSubject: "nuestro equipo", frSubject: "notre équipe", ptSubject: "nossa equipe" },
-      { tr: "uzmanlar", deSubject: "Experten", deVerbHave: "haben", deVerbNeed: "brauchen", deVerbWant: "möchten", enSubject: "experts", esSubject: "los expertos", frSubject: "les experts", ptSubject: "os especialistas" },
-      { tr: "yöneticiler", deSubject: "Manager", deVerbHave: "haben", deVerbNeed: "brauchen", deVerbWant: "möchten", enSubject: "managers", esSubject: "los gerentes", frSubject: "les managers", ptSubject: "os gerentes" }
-    ];
-
-    let trSentence = "";
-    let targetSentence = "";
-    let gNote = "";
-
-    // Pick random combination
-    const adv = timeAdverbs[Math.floor(Math.random() * timeAdverbs.length)];
-    const act = actors[Math.floor(Math.random() * actors.length)];
-    const patternType = Math.floor(Math.random() * 3);
-
-    if (selectedLang === 'german') {
-      if (patternType === 0) {
-        trSentence = `${adv.tr} ${act.tr} ${meaning} konusuna odaklanmalı.`;
-        targetSentence = `${adv.de} muss ${act.deSubject} auf ${word} fokussieren.`;
-        gNote = "Almancada zaman zarfı cümle başında olduğunda fiil (muss) 2. sırada, özne 3. sırada kalır.";
-      } else if (patternType === 1) {
-        trSentence = `${act.tr.toUpperCase()} ${adv.tr.toLowerCase()} ${meaning} için hazırlık yapıyor.`;
-        targetSentence = `${act.deSubject} bereitet sich ${adv.de} auf ${word} vor.`;
-        gNote = "'Vorbereiten' ayrılabilen bir fiildir. 'Vor' öneki cümlenin en sonuna gider.";
-      } else {
-        trSentence = `${adv.tr} ${meaning} kullanmak ${act.tr} için büyük önem taşıyor.`;
-        targetSentence = `${adv.de} ist die Nutzung von ${word} für ${act.deSubject} von großer Bedeutung.`;
-        gNote = "İsimleşmiş yapı 'von großer Bedeutung sein' önem taşımak anlamına gelir.";
-      }
-    } else if (selectedLang === 'english') {
-      if (patternType === 0) {
-        trSentence = `${adv.tr} ${act.tr} ${meaning} geliştirmeyi hedefliyor.`;
-        targetSentence = `${adv.en}, ${act.enSubject} aims to improve ${word}.`;
-        gNote = "İngilizcede 'aim to + verb' hedeflemek kalıbıdır.";
-      } else {
-        trSentence = `${act.tr.toUpperCase()} ${adv.tr.toLowerCase()} ${meaning} konusunda uzmanlaşıyor.`;
-        targetSentence = `${act.enSubject} specializes in ${word} ${adv.en}.`;
-        gNote = "'Specialize in' edatı ile kullanılır.";
-      }
-    } else if (selectedLang === 'spanish') {
-      trSentence = `${adv.tr} ${act.tr} ${meaning} konusunu analiz ediyor.`;
-      targetSentence = `${adv.es}, ${act.esSubject} analiza ${word}.`;
-      gNote = "İspanyolcada zaman ifadesinden sonra virgül kullanılır.";
-    } else if (selectedLang === 'french') {
-      trSentence = `${adv.tr} ${act.tr} ${meaning} geliştirmeye karar verdi.`;
-      targetSentence = `${adv.fr}, ${act.frSubject} a décidé d'améliorer ${word}.`;
-      gNote = "Passé composé geçmiş zaman yapısı kullanılmıştır.";
-    } else {
-      trSentence = `${adv.tr} ${act.tr} ${meaning} üzerine çalışıyor.`;
-      targetSentence = `${adv.pt}, ${act.ptSubject} trabalha em ${word}.`;
-      gNote = "'Trabalhar em' edat kalıbı ile bağlanır.";
-    }
-
-    const uniqueHash = `${selectedLang}-${selectedLevel}-${vItem.id}-${trSentence}`;
-
-    // Ensure non-repeating
-    if (usedSentenceHashes.has(uniqueHash) && usedSentenceHashes.size < 1000) {
-      generateProceduralPrompt(); // Re-roll
-      return;
-    }
-
-    setUsedSentenceHashes(prev => new Set(prev).add(uniqueHash));
-
-    const langObj = LANGUAGES.find(l => l.id === selectedLang) || LANGUAGES[0];
-
-    setCurrentPrompt({
-      id: `prompt-${Date.now()}-${Math.random()}`,
-      language: selectedLang,
-      langCode: langObj.code,
-      level: vItem.level,
-      category: vItem.category,
-      turkishSentence: trSentence,
-      expectedTarget: targetSentence,
-      grammarNote: gNote,
-      keywords: [word.toLowerCase()]
-    });
-
+  const generateNewPrompt = useCallback(() => {
+    const prompt = getNaturalPracticePrompt(selectedLang, selectedLevel, selectedCategory, usedIds);
+    setUsedIds(prev => new Set(prev).add(prompt.id));
+    setCurrentPrompt(prompt);
     setUserAnswer('');
     setFeedback(null);
-  }, [selectedLang, selectedLevel, selectedCategory, usedSentenceHashes]);
+  }, [selectedLang, selectedLevel, selectedCategory, usedIds]);
 
   useEffect(() => {
-    generateProceduralPrompt();
+    generateNewPrompt();
   }, [selectedLang, selectedLevel, selectedCategory]);
 
   const normalizeText = (str: string) => {
@@ -175,7 +50,7 @@ export default function PracticePage() {
       setFeedback({
         score: 100,
         isCorrect: true,
-        explanation: "Mükemmel! Cümleyi kelime dizilimi ve gramer açısından eksiksiz çevirdiniz.",
+        explanation: "Mükemmel! Cümleyi kelime dizilimi ve gramer açısından kusursuz çevirdiniz.",
         missingWords: []
       });
       sounds.playCorrect();
@@ -190,18 +65,18 @@ export default function PracticePage() {
     const userWords = normUser.split(/\s+/);
     const expectedWords = normExpected.split(/\s+/);
 
-    const missing = expectedWords.filter(ew => !userWords.some(uw => uw.includes(ew) || ew.includes(uw)));
-    const matchedCount = expectedWords.length - missing.length;
-    const matchRatio = matchedCount / Math.max(1, expectedWords.length);
-    const calculatedScore = Math.max(20, Math.round(matchRatio * 90));
+    const missing = currentPrompt.keyWords.filter(kw => !userWords.some(uw => uw.includes(kw.toLowerCase())));
+    const matchedCount = currentPrompt.keyWords.length - missing.length;
+    const matchRatio = matchedCount / Math.max(1, currentPrompt.keyWords.length);
+    const calculatedScore = Math.max(25, Math.round(matchRatio * 90));
 
     const isGood = calculatedScore >= 70;
 
     let note = "";
     if (missing.length > 0) {
-      note = `Eksik veya farklı yazılan kelimeler: [${missing.slice(0, 3).join(', ')}]. `;
+      note = `Eksik veya farklı kullanılan kritik kelimeler: [${missing.join(', ')}]. `;
     } else {
-      note = "Kelime kullanımı doğru, ancak kelime dizilimi veya takılara dikkat edin. ";
+      note = "Tüm temel kelimeleri kullandınız, ancak kelime sırası veya takılara dikkat edin. ";
     }
 
     setFeedback({
@@ -230,13 +105,13 @@ export default function PracticePage() {
         <div className="border-b-2 border-black pb-6 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
           <div>
             <span className="text-xs font-black bg-[#EA580C] text-white px-3 py-1 border border-black inline-block uppercase">
-              7.7 MİLYON KOMBİNASYONLU BENZERSİZ AI PRATİK MOTORU
+              DOĞAL TÜRKÇE & SIFIR TEKRAR AI PRATİK ROBOTU
             </span>
             <h1 className="font-editorial text-4xl sm:text-5xl font-black text-black mt-2 tracking-tight italic">
               AI Cümle & Çeviri Robotu
             </h1>
             <p className="text-xs text-slate-800 mt-1 font-bold">
-              12,000+ kelime ve kombine gramer matrislerinden üretilen benzersiz cümleler. Asla tekrar etmez.
+              Kusursuz Türkçe cümlelerin hedef dildeki karşılığını yazın, sistem kelime ve gramer analizini anında yapsın.
             </p>
           </div>
 
@@ -322,7 +197,7 @@ export default function PracticePage() {
 
               {/* GENERATE NEW SENTENCE BUTTON */}
               <button
-                onClick={generateProceduralPrompt}
+                onClick={generateNewPrompt}
                 className="bg-[#EA580C] hover:bg-[#DC2626] text-white border-2 border-black text-xs font-black px-4 py-2 shadow-[2px_2px_0px_0px_#121212] hover:translate-x-[-1px] hover:translate-y-[-1px] transition flex items-center gap-1.5 uppercase"
               >
                 <RefreshCw className="w-4 h-4" />
@@ -408,7 +283,7 @@ export default function PracticePage() {
 
                 <div className="pt-2 flex justify-end">
                   <button
-                    onClick={generateProceduralPrompt}
+                    onClick={generateNewPrompt}
                     className="bg-black text-white border-2 border-black font-black text-xs px-5 py-2.5 shadow-[2px_2px_0px_0px_#121212] hover:bg-slate-900 transition flex items-center gap-2"
                   >
                     <span>Sonraki Cümleye Geç ➔</span>
@@ -421,7 +296,7 @@ export default function PracticePage() {
       </main>
 
       <footer className="bg-[#FAF8F5] border-t-2 border-black py-6 text-center text-xs font-mono font-bold text-slate-800">
-        RECALLFLOW MULTILINGUAL COMBINATORIAL PROCEDURAL SENTENCE ENGINE
+        RECALLFLOW PURE NATURAL TURKISH AI PRACTICE ROBOT & EVALUATOR
       </footer>
     </div>
   );
