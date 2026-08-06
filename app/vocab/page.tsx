@@ -55,6 +55,7 @@ export default function VocabPage() {
     if (srsItems[raw.id]) {
       return {
         ...srsItems[raw.id],
+        type: raw.type,
         translation: raw.translation,
         example: raw.exampleTarget,
         exampleTranslation: raw.exampleTranslation,
@@ -64,6 +65,7 @@ export default function VocabPage() {
     return {
       id: raw.id,
       word: raw.word,
+      type: raw.type,
       phonetic: raw.phonetic,
       translation: raw.translation,
       example: raw.exampleTarget,
@@ -191,7 +193,7 @@ export default function VocabPage() {
         {/* Gamification Banner */}
         <GamificationBanner stats={stats} />
 
-        {/* VIEW MODE TOGGLE & LIVE SEARCH BAR (SÖZLÜK MODU) */}
+        {/* VIEW MODE TOGGLE & LIVE SEARCH BAR */}
         <div className="flex flex-wrap items-center justify-between gap-4 bg-[#FAF8F5] p-4 border-2 border-black shadow-[4px_4px_0px_0px_#121212] font-mono">
           {/* View Mode Toggle Switch */}
           <div className="flex items-center space-x-2">
@@ -366,7 +368,7 @@ export default function VocabPage() {
                           <div>{item.word}</div>
                           {item.phonetic && <div className="text-[10px] text-slate-600 font-normal">{item.phonetic}</div>}
                         </td>
-                        <td className="p-3 border-r-2 border-black whitespace-nowrap text-slate-700">{item.type}</td>
+                        <td className="p-3 border-r-2 border-black whitespace-nowrap text-slate-700">{item.type || 'Sözcük'}</td>
                         <td className="p-3 border-r-2 border-black font-black text-[#EA580C]">{item.translation}</td>
                         <td className="p-3 border-r-2 border-black max-w-xs">
                           <div className="italic text-black">"{item.example}"</div>
