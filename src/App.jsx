@@ -5,20 +5,23 @@ import LevelSelector from './components/LevelSelector';
 import CategorySelector from './components/CategorySelector';
 import ModeSwitcher from './components/ModeSwitcher';
 import Flashcard from './components/Flashcard';
-import DialogueList from './components/DialogueList';
+import ReadingModule from './components/ReadingModule';
+import ListeningModule from './components/ListeningModule';
 import QuizMode from './components/QuizMode';
 import AchievementsModal from './components/AchievementsModal';
 import ProgressBar from './components/ProgressBar';
-import { getWords, getDialogues, updateWordStatus } from './services/api';
+import { getWords, getReadings, getListenings, updateWordStatus } from './services/api';
 
 export default function App() {
   const [language, setLanguage] = useState('en');
   const [level, setLevel] = useState('A1');
-  const [category, setCategory] = useState('Seyahat & Otel');
+  const [category, setCategory] = useState('Tümü');
   const [mode, setMode] = useState('flashcards');
 
   const [words, setWords] = useState([]);
-  const [dialogues, setDialogues] = useState([]);
+  const [readings, setReadings] = useState([]);
+  const [listenings, setListenings] = useState([]);
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [learnedCount, setLearnedCount] = useState(0);
   const [xpPoints, setXpPoints] = useState(140);
@@ -38,10 +41,17 @@ export default function App() {
           setLoading(false);
         }
       });
-    } else {
-      getDialogues(language, level, category).then((data) => {
+    } else if (mode === 'reading') {
+      getReadings(language, level, category).then((data) => {
         if (isMounted) {
-          setDialogues(data);
+          setReadings(data);
+          setLoading(false);
+        }
+      });
+    } else if (mode === 'listening') {
+      getListenings(language, level, category).then((data) => {
+        if (isMounted) {
+          setListenings(data);
           setLoading(false);
         }
       });
@@ -80,7 +90,7 @@ export default function App() {
       <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[140px] pointer-events-none" />
       <div className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-purple-600/10 rounded-full blur-[160px] pointer-events-none" />
 
-      {/* Header with Achievements Modal Trigger */}
+      {/* Header */}
       <Header
         streak={7}
         learnedCount={learnedCount}
@@ -108,7 +118,7 @@ export default function App() {
           <ModeSwitcher activeMode={mode} onSwitchMode={setMode} />
         </section>
 
-        {/* Dock 3: Category Grid */}
+        {/* Dock 3: Exam Category Grid */}
         <CategorySelector selectedCategory={category} onSelectCategory={setCategory} />
 
         {/* Content Arena */}
@@ -130,8 +140,12 @@ export default function App() {
           </>
         )}
 
-        {mode === 'reading_listening' && (
-          <DialogueList dialogues={dialogues} language={language} category={category} />
+        {mode === 'reading' && (
+          <ReadingModule readings={readings} category={category} language={language} />
+        )}
+
+        {mode === 'listening' && (
+          <ListeningModule listenings={listenings} category={category} language={language} />
         )}
 
         {mode === 'quiz' && (
