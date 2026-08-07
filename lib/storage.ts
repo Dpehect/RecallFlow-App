@@ -5,6 +5,9 @@ export interface UserStats {
   streak: number;
   level: number;
   totalSentences: number;
+  totalMastered: number;
+  totalReviews?: number;
+  totalWords?: number;
   lastActiveDate?: string;
 }
 
@@ -15,6 +18,9 @@ export const DEFAULT_USER_STATS: UserStats = {
   streak: 0,
   level: 1,
   totalSentences: 0,
+  totalMastered: 0,
+  totalReviews: 0,
+  totalWords: 0,
 };
 
 export function getUserStats(): UserStats {
@@ -22,7 +28,7 @@ export function getUserStats(): UserStats {
   try {
     const data = localStorage.getItem('recallflow_user_stats');
     if (!data) return DEFAULT_USER_STATS;
-    return JSON.parse(data);
+    return { ...DEFAULT_USER_STATS, ...JSON.parse(data) };
   } catch (e) {
     return DEFAULT_USER_STATS;
   }
@@ -60,6 +66,8 @@ export function incrementUserProgress(xpEarned: number = 10): UserStats {
     ...current,
     todayCount: (current.todayCount || 0) + 1,
     totalSentences: (current.totalSentences || 0) + 1,
+    totalMastered: (current.totalMastered || 0) + 1,
+    totalReviews: (current.totalReviews || 0) + 1,
     xp: (current.xp || 0) + xpEarned,
     level: Math.floor(((current.xp || 0) + xpEarned) / 100) + 1,
     streak: streak || 1,
