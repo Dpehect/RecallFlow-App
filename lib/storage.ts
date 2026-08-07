@@ -79,7 +79,7 @@ export function saveStoredItem(item: any): void {
 export function recordReview(itemId: string, grade: any): void {
   if (typeof window === 'undefined') return;
   try {
-    incrementUserProgress(10);
+    incrementUserProgress(15);
   } catch (e) {
     console.error('recordReview kaydedilemedi:', e);
   }

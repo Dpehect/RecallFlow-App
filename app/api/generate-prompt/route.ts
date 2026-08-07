@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 
 export async function POST(req: Request) {
   try {
-    const { category, level, targetLanguage, previousSentences } = await req.json();
+    const { category, difficulty, targetLanguage, previousSentences } = await req.json();
 
     const apiKey = process.env.OPENAI_API_KEY;
     if (!apiKey) {
@@ -12,21 +12,28 @@ export async function POST(req: Request) {
       );
     }
 
+    const difficultyGuide = {
+      Kolay: 'A1-A2 seviyesi: Kısa, doğrudan, temel kelimeler ve basit zamanlar (Örn: Özne + Nesne + Fiil).',
+      Orta: 'B1-B2 seviyesi: Orta uzunlukta, zaman zarfları, edatlar ve bağlaçlar içeren cümleler.',
+      Zor: 'C1-C2 seviyesi: Karmaşık yan cümleler, ileri düzey akademik/mesleki kelimeler ve soyut anlatım.'
+    }[difficulty as 'Kolay' | 'Orta' | 'Zor'] || 'A1-A2 seviyesi: Basit ve doğrudan cümleler.';
+
     const systemPrompt = `
-      Sen profesyonel bir dil öğretmenisin. Kullanıcının ${targetLanguage} diline çevirmesi için tam olarak istenen kategoride ve CEFR zorluk seviyesinde %100 doğal, anlamlı ve benzersiz bir Türkçe cümle üreteceksin.
+      Sen profesyonel bir dil öğretmenisin. Kullanıcının ${targetLanguage} diline çevirmesi için mantıklı, doğal ve %100 benzersiz bir Türkçe cümle üreteceksin.
 
       Parametreler:
       - Kategori: ${category}
-      - CEFR Seviyesi: ${level} (A1: Çok basit SVO cümleler; A2: Basit zamanlar ve zaman zarfları; B1: Yan cümleler ve bağlaçlar; B2: Karmaşık yapılar ve iş/akademik terimler; C1: İleri düzey soyut ifadeler ve edebi/teknik anlatım)
+      - Zorluk Seviyesi: ${difficulty} (${difficultyGuide})
       - Hedef Dil: ${targetLanguage}
 
       Kurallar:
-      1. Cümle saçma kelime birleşimlerinden OLUŞMAMALI, tamamen mantıklı ve doğal olmalıdır.
-      2. Daha önce üretilmiş şu cümleleri veya benzerlerini KESİNLİKLE TEKRAR ETME: ${JSON.stringify(previousSentences?.slice(-40) || [])}
-      3. Yanıtını strictly JSON formatında ver:
+      1. Cümle saçma kelime birleşimlerinden OLUŞMAMALI, gerçek hayatta kullanılan anlamlı bir Türkçe cümle olmalıdır.
+      2. Zorluk seviyesinin kelime dağarcığı ve gramer karmaşıklığı ${difficulty} seviyesiyle tam örtüşmelidir.
+      3. Daha önce üretilmiş şu cümleleri veya benzerlerini KESİNLİKLE TEKRAR ETME: ${JSON.stringify(previousSentences?.slice(-40) || [])}
+      4. Yanıtını strictly JSON formatında ver:
       {
         "tr": "Üretilen Türkçe cümle",
-        "targetHint": "Zor kelimeler için ipucu",
+        "targetHint": "Zor kelimeler veya ipucu",
         "grammarNote": "Bu seviyeye ait gramer kuralı"
       }
     `;

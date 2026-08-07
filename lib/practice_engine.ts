@@ -2,7 +2,7 @@ import { generateOfflineSentence } from './sentence_matrix';
 
 export interface SentenceRequest {
   category: string;
-  level: string;
+  difficulty: string; // Kolay, Orta, Zor
   targetLanguage: string;
   history: string[];
   useLLM?: boolean;
@@ -23,7 +23,7 @@ export async function fetchNextSentence(req: SentenceRequest): Promise<SentenceR
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           category: req.category,
-          level: req.level,
+          difficulty: req.difficulty,
           targetLanguage: req.targetLanguage,
           previousSentences: req.history
         })
@@ -41,11 +41,11 @@ export async function fetchNextSentence(req: SentenceRequest): Promise<SentenceR
         }
       }
     } catch (e) {
-      console.warn('LLM API çağrısı başarısız oldu, matrise geçiliyor.', e);
+      console.warn('AI Prompt API çağrısı başarısız, offline matrise geçiliyor.');
     }
   }
 
-  const trSentence = generateOfflineSentence(req.category, req.level, req.history);
+  const trSentence = generateOfflineSentence(req.category, req.difficulty, req.history);
   return {
     tr: trSentence,
     source: 'matrix'
