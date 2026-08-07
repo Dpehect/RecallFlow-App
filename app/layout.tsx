@@ -1,23 +1,18 @@
-import type { Metadata } from "next";
-import "./globals.css";
+import React from 'react';
 
-export const metadata: Metadata = {
-  title: "RecallFlow - German Fluency. Minimal Effort.",
-  description: "Interactive German language learning platform built with Next.js",
+export const metadata = {
+  title: 'RecallFlow - Radical Practice Engine',
+  description: 'AI-Powered Multilingual Practice Engine',
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="en" className="scroll-smooth">
-      <head>
-        <script src="https://cdn.tailwindcss.com"></script>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
-      </head>
-      <body className="min-h-screen flex flex-col justify-between bg-slate-50 text-slate-900 font-sans">
+    <html lang="tr">
+      <body style={{ margin: 0, padding: 0, fontFamily: 'system-ui, sans-serif', backgroundColor: '#faf9f6' }}>
         {children}
       </body>
     </html>
