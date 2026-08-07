@@ -1,4 +1,0 @@
-"use client";
-import { AnimatePresence,motion } from "framer-motion";
-import { useState } from "react";
-export function RecallOverlay({word,open,onClose}:{word:string;open:boolean;onClose:()=>void}){const[input,setInput]=useState("");return <AnimatePresence>{open&&<motion.div className="recall" initial={{y:"100%"}} animate={{y:0}} exit={{y:"100%"}} transition={{type:"spring",damping:26,stiffness:220}} role="dialog" aria-modal="true" aria-label="Geri çağırma egzersizi"><button className="close" onClick={onClose}>KAPAT ×</button><div><p className="label">İLK GERİ ÇAĞIRMA</p><h2>{word}</h2><p>Bu sözcüğü İngilizce, Almanca veya Fransızca çağır. Kusursuzluk değil, hatırlama önemli.</p><label htmlFor="recall-answer">Cevabın</label><input id="recall-answer" value={input} onChange={e=>setInput(e.target.value)} autoFocus/><button className="text-cta" onClick={onClose}>İzi sakla →</button></div></motion.div>}</AnimatePresence>}

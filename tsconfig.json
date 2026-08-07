@@ -19,11 +19,6 @@
         "name": "next"
       }
     ],
-    "paths": {
-      "@/*": [
-        "./*"
-      ]
-    },
     "allowJs": true,
     "skipLibCheck": true,
     "resolveJsonModule": true
