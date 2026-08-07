@@ -1,14 +1,8 @@
-# E-Lab - Online Learning Platform
+# RecallFlow - Vocabulary Atlas Module
 
-Designed & built matching the exact UI specification provided in the screenshots.
+Designed in the exact same modern UI structure matching the user's design layout.
 
 ## Features
-- **Navbar:** Brand logo, dropdown menus, and pill cart action button.
-- **Hero Section:** Bold headline, instructor visual showcase, and 4-card statistics bar.
-- **Features Section:** 3-column feature showcase (Expert-led learning, Flexible study options, Global networking) with custom visuals and dark/light/indigo themes.
-
-## Tech Stack
-- Next.js 14
-- React 18
-- Tailwind CSS
-- TypeScript
+- **Hero & Stats Section:** Word search, active words counter, learned progress bar, mastery rate.
+- **Filter Bar:** Category pills (Daily, People, Objects, Travel, Business) + CEFR Level pills (A1-C2).
+- **Interactive Vocab Cards:** Audio pronunciation, Turkish translations, contextual example sentences with usage notes, and mark-as-learned state management.

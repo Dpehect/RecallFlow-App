@@ -1,5 +1,5 @@
 {
-  "name": "recallflow-language-platform",
+  "name": "recallflow-vocab-app",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -12,6 +12,7 @@
     "next": "^14.2.0",
     "react": "^18.3.0",
     "react-dom": "^18.3.0",
+    "zustand": "^4.5.2",
     "lucide-react": "^0.378.0"
   },
   "devDependencies": {

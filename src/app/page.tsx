@@ -2,15 +2,17 @@
 
 import React from 'react';
 import { Navbar } from '@/components/Navbar';
-import { Hero } from '@/components/Hero';
-import { FeaturesSection } from '@/components/FeaturesSection';
+import { VocabHero } from '@/components/vocab/VocabHero';
+import { VocabFilterBar } from '@/components/vocab/VocabFilterBar';
+import { VocabGrid } from '@/components/vocab/VocabGrid';
 
 export default function HomePage() {
   return (
     <main className="min-h-screen bg-[#eef4fb]">
       <Navbar />
-      <Hero />
-      <FeaturesSection />
+      <VocabHero />
+      <VocabFilterBar />
+      <VocabGrid />
     </main>
   );
 }

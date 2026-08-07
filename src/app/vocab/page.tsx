@@ -6,7 +6,7 @@ import { VocabHero } from '@/components/vocab/VocabHero';
 import { VocabFilterBar } from '@/components/vocab/VocabFilterBar';
 import { VocabGrid } from '@/components/vocab/VocabGrid';
 
-export default function HomePage() {
+export default function VocabPage() {
   return (
     <main className="min-h-screen bg-[#eef4fb]">
       <Navbar />
