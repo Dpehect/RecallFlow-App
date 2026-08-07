@@ -6,6 +6,7 @@ export interface UserStats {
   level: number;
   totalSentences: number;
   totalMastered: number;
+  totalReviewed: number;
   totalReviews?: number;
   totalWords?: number;
   lastActiveDate?: string;
@@ -19,6 +20,7 @@ export const DEFAULT_USER_STATS: UserStats = {
   level: 1,
   totalSentences: 0,
   totalMastered: 0,
+  totalReviewed: 0,
   totalReviews: 0,
   totalWords: 0,
 };
@@ -67,6 +69,7 @@ export function incrementUserProgress(xpEarned: number = 10): UserStats {
     todayCount: (current.todayCount || 0) + 1,
     totalSentences: (current.totalSentences || 0) + 1,
     totalMastered: (current.totalMastered || 0) + 1,
+    totalReviewed: (current.totalReviewed || 0) + 1,
     totalReviews: (current.totalReviews || 0) + 1,
     xp: (current.xp || 0) + xpEarned,
     level: Math.floor(((current.xp || 0) + xpEarned) / 100) + 1,
