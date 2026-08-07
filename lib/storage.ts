@@ -1,138 +1,122 @@
-import { SRSItem } from './srs';
-import { getProgressFromDB, saveProgressToDB, getProfileFromDB, saveProfileToDB, UserProgressRecord, UserProfileRecord } from './db';
-
 export interface UserStats {
-  streak: number;
-  lastActiveDate: string;
-  totalReviewed: number;
-  totalMastered: number;
-  dailyGoal: number;
   todayCount: number;
+  dailyGoal: number;
+  xp: number;
+  streak: number;
+  level: number;
+  totalSentences: number;
+  totalMastered: number;
+  totalReviewed: number;
+  totalReviews?: number;
+  totalWords?: number;
+  lastActiveDate?: string;
 }
 
-const LOCAL_KEY_STATS = 'lexiflow_user_stats_v2';
-const LOCAL_KEY_ITEMS = 'lexiflow_srs_items_v2';
+export const DEFAULT_USER_STATS: UserStats = {
+  todayCount: 0,
+  dailyGoal: 10,
+  xp: 0,
+  streak: 0,
+  level: 1,
+  totalSentences: 0,
+  totalMastered: 0,
+  totalReviewed: 0,
+  totalReviews: 0,
+  totalWords: 0,
+};
 
-export async function getStoredStats(): Promise<UserStats> {
-  if (typeof window === 'undefined') {
-    return { streak: 1, lastActiveDate: new Date().toISOString().split('T')[0], totalReviewed: 0, totalMastered: 0, dailyGoal: 20, todayCount: 0 };
+export function getUserStats(): UserStats {
+  if (typeof window === 'undefined') return DEFAULT_USER_STATS;
+  try {
+    const data = localStorage.getItem('recallflow_user_stats');
+    if (!data) return DEFAULT_USER_STATS;
+    return { ...DEFAULT_USER_STATS, ...JSON.parse(data) };
+  } catch (e) {
+    return DEFAULT_USER_STATS;
   }
+}
 
-  // First try IndexedDB
-  const dbProfile = await getProfileFromDB();
-  const today = new Date().toISOString().split('T')[0];
+export function getStoredStats(): UserStats {
+  return getUserStats();
+}
 
-  let stats: UserStats = {
-    streak: dbProfile.streak || 1,
-    lastActiveDate: dbProfile.lastActiveDate || today,
-    totalReviewed: dbProfile.totalReviewed || 0,
-    totalMastered: dbProfile.totalMastered || 0,
-    dailyGoal: dbProfile.dailyGoal || 20,
-    todayCount: dbProfile.todayCount || 0
-  };
+export function saveUserStats(stats: UserStats): void {
+  if (typeof window === 'undefined') return;
+  try {
+    localStorage.setItem('recallflow_user_stats', JSON.stringify(stats));
+  } catch (e) {
+    console.error('UserStats kaydedilemedi:', e);
+  }
+}
 
-  if (stats.lastActiveDate !== today) {
-    const lastDate = new Date(stats.lastActiveDate);
-    const currDate = new Date(today);
-    const diffDays = Math.floor((currDate.getTime() - lastDate.getTime()) / (1000 * 3600 * 24));
-    
-    if (diffDays > 1) {
-      stats.streak = 0;
+export function getStoredItems(): any[] {
+  if (typeof window === 'undefined') return [];
+  try {
+    const data = localStorage.getItem('recallflow_srs_items');
+    if (!data) return [];
+    return JSON.parse(data);
+  } catch (e) {
+    return [];
+  }
+}
+
+export function saveStoredItem(item: any): void {
+  if (typeof window === 'undefined') return;
+  try {
+    const items = getStoredItems();
+    const index = items.findIndex((i: any) => i.id === item.id);
+    if (index >= 0) {
+      items[index] = item;
+    } else {
+      items.push(item);
     }
-    stats.todayCount = 0;
+    localStorage.setItem('recallflow_srs_items', JSON.stringify(items));
+  } catch (e) {
+    console.error('saveStoredItem kaydedilemedi:', e);
   }
-
-  return stats;
 }
 
-export async function recordReview(isMastered: boolean): Promise<UserStats> {
-  const stats = await getStoredStats();
+export function recordReview(itemId: string, grade: any): void {
+  if (typeof window === 'undefined') return;
+  try {
+    incrementUserProgress(10);
+  } catch (e) {
+    console.error('recordReview kaydedilemedi:', e);
+  }
+}
+
+export function incrementUserProgress(xpEarned: number = 10): UserStats {
+  const current = getUserStats();
   const today = new Date().toISOString().split('T')[0];
 
-  if (stats.lastActiveDate !== today) {
-    const lastDate = new Date(stats.lastActiveDate);
-    const currDate = new Date(today);
-    const diffDays = Math.floor((currDate.getTime() - lastDate.getTime()) / (1000 * 3600 * 24));
-    
+  let streak = current.streak;
+  if (current.lastActiveDate) {
+    const lastDate = new Date(current.lastActiveDate);
+    const currentDate = new Date(today);
+    const diffDays = Math.floor((currentDate.getTime() - lastDate.getTime()) / (1000 * 60 * 60 * 24));
+
     if (diffDays === 1) {
-      stats.streak += 1;
+      streak += 1;
     } else if (diffDays > 1) {
-      stats.streak = 1;
+      streak = 1;
     }
-    stats.lastActiveDate = today;
-    stats.todayCount = 0;
+  } else {
+    streak = 1;
   }
 
-  stats.totalReviewed += 1;
-  stats.todayCount += 1;
-  if (isMastered) stats.totalMastered += 1;
-
-  // Persist to IndexedDB
-  const profileRecord: UserProfileRecord = {
-    id: 'current_user',
-    ...stats
-  };
-  await saveProfileToDB(profileRecord);
-
-  // Fallback LocalStorage
-  if (typeof window !== 'undefined') {
-    localStorage.setItem(LOCAL_KEY_STATS, JSON.stringify(stats));
-  }
-
-  return stats;
-}
-
-export async function getStoredItems(): Promise<Record<string, SRSItem>> {
-  if (typeof window === 'undefined') return {};
-  
-  const dbMap = await getProgressFromDB();
-  const result: Record<string, SRSItem> = {};
-
-  Object.values(dbMap).forEach(rec => {
-    result[rec.id] = {
-      id: rec.id,
-      word: rec.word,
-      translation: '',
-      example: '',
-      exampleTranslation: '',
-      language: rec.language,
-      level: rec.level,
-      repetition: rec.repetition,
-      interval: rec.interval,
-      easeFactor: rec.easeFactor,
-      nextReview: rec.nextReview,
-      lastReviewed: rec.lastReviewed,
-      state: rec.state
-    };
-  });
-
-  return result;
-}
-
-export async function saveStoredItem(item: SRSItem): Promise<void> {
-  const rec: UserProgressRecord = {
-    id: item.id,
-    word: item.word,
-    language: item.language,
-    level: item.level,
-    category: item.level,
-    repetition: item.repetition,
-    interval: item.interval,
-    easeFactor: item.easeFactor,
-    nextReview: item.nextReview,
-    lastReviewed: item.lastReviewed,
-    state: item.state
+  const updated: UserStats = {
+    ...current,
+    todayCount: (current.todayCount || 0) + 1,
+    totalSentences: (current.totalSentences || 0) + 1,
+    totalMastered: (current.totalMastered || 0) + 1,
+    totalReviewed: (current.totalReviewed || 0) + 1,
+    totalReviews: (current.totalReviews || 0) + 1,
+    xp: (current.xp || 0) + xpEarned,
+    level: Math.floor(((current.xp || 0) + xpEarned) / 100) + 1,
+    streak: streak || 1,
+    lastActiveDate: today,
   };
 
-  await saveProgressToDB(rec);
-
-  // Fallback LocalStorage
-  if (typeof window !== 'undefined') {
-    try {
-      const existing = localStorage.getItem(LOCAL_KEY_ITEMS);
-      const map = existing ? JSON.parse(existing) : {};
-      map[item.id] = item;
-      localStorage.setItem(LOCAL_KEY_ITEMS, JSON.stringify(map));
-    } catch (e) {}
-  }
+  saveUserStats(updated);
+  return updated;
 }
