@@ -1,9 +1,9 @@
 'use client';
 
 import React from 'react';
-import { WordGrid } from '../components/organisms/WordGrid';
-import { useVocabularyStore } from '../store/useVocabularyStore';
-import { CEFRLevel } from '../types/vocabulary';
+import { WordGrid } from '@/components/organisms/WordGrid';
+import { useVocabularyStore } from '@/store/useVocabularyStore';
+import { CEFRLevel } from '@/types/vocabulary';
 
 const LEVELS: (CEFRLevel | 'ALL')[] = ['ALL', 'A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
 
