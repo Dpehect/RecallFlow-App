@@ -16,7 +16,6 @@ export default function PracticePage() {
   const [history, setHistory] = useState<string[]>([]);
   const [userInput, setUserInput] = useState('');
   const [loading, setLoading] = useState(false);
-  const [engineSource, setEngineSource] = useState<'llm' | 'matrix'>('matrix');
 
   const loadNewSentence = async () => {
     setLoading(true);
@@ -31,7 +30,6 @@ export default function PracticePage() {
     setCurrentSentence(res.tr);
     setHint(res.targetHint || '');
     setGrammarNote(res.grammarNote || '');
-    setEngineSource(res.source);
     setHistory((prev) => [...prev.slice(-50), res.tr]);
     setUserInput('');
     setLoading(false);
@@ -42,95 +40,222 @@ export default function PracticePage() {
   }, [category, level, targetLang]);
 
   return (
-    <div style={{ maxWidth: '850px', margin: '30px auto', padding: '20px' }}>
-      <header style={{ borderBottom: '2px solid #333', paddingBottom: '15px', marginBottom: '25px' }}>
-        <h1 style={{ margin: 0, fontSize: '24px', letterSpacing: '-0.5px' }}>RECALLFLOW — SINIRSIZ DİNAMİK PRATİK MOTORU</h1>
-        <p style={{ margin: '5px 0 0 0', color: '#666', fontSize: '14px' }}>
-          Zorluk seviyesine (A1-C1) ve kategoriye göre asla tekrarlamayan benzersiz cümleler üretir.
-        </p>
-      </header>
+    <div style={{
+      minHeight: '100vh',
+      backgroundColor: '#F5F2EB',
+      fontFamily: "'Courier New', Courier, monospace, sans-serif",
+      padding: '40px 20px',
+      boxSizing: 'border-box'
+    }}>
+      <div style={{ maxWidth: '900px', margin: '0 auto' }}>
 
-      {/* Kontrol Paneli */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '15px', background: '#eee', padding: '15px', borderRadius: '8px', marginBottom: '25px' }}>
-        <div>
-          <label style={{ fontWeight: 'bold', display: 'block', fontSize: '13px', marginBottom: '5px' }}>Kategori:</label>
-          <select value={category} onChange={(e) => setCategory(e.target.value)} style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}>
-            {CATEGORIES.map((cat) => (
-              <option key={cat.id} value={cat.id}>{cat.name}</option>
-            ))}
-          </select>
-        </div>
+        {/* ÜST BAR / KONTROLLER (Retro Brutalist Stil) */}
+        <div style={{
+          display: 'flex',
+          justify: 'space-between',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: '12px',
+          marginBottom: '15px'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+            <div style={{
+              backgroundColor: '#FACC15',
+              border: '2px solid #000',
+              padding: '6px 14px',
+              fontWeight: 'bold',
+              fontSize: '13px',
+              boxShadow: '2px 2px 0px #000',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px'
+            }}>
+              🤖 <span>{targetLang.toUpperCase()} ({level}) – RADİKAL CÜMLE</span>
+            </div>
 
-        <div>
-          <label style={{ fontWeight: 'bold', display: 'block', fontSize: '13px', marginBottom: '5px' }}>CEFR Zorluk Seviyesi:</label>
-          <select value={level} onChange={(e) => setLevel(e.target.value)} style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}>
-            {LEVELS.map((lvl) => (
-              <option key={lvl} value={lvl}>{lvl}</option>
-            ))}
-          </select>
-        </div>
+            {/* Kategori Seçimi */}
+            <select
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              style={{
+                backgroundColor: '#FFF',
+                border: '2px solid #000',
+                padding: '6px 10px',
+                fontWeight: 'bold',
+                fontSize: '12px',
+                cursor: 'pointer',
+                boxShadow: '2px 2px 0px #000'
+              }}
+            >
+              {CATEGORIES.map((cat) => (
+                <option key={cat.id} value={cat.id}>{cat.name}</option>
+              ))}
+            </select>
 
-        <div>
-          <label style={{ fontWeight: 'bold', display: 'block', fontSize: '13px', marginBottom: '5px' }}>Hedef Dil:</label>
-          <select value={targetLang} onChange={(e) => setTargetLang(e.target.value)} style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}>
-            <option value="German (Almanca)">German (Almanca)</option>
-            <option value="English (İngilizce)">English (İngilizce)</option>
-            <option value="Spanish (İspanyolca)">Spanish (İspanyolca)</option>
-            <option value="French (Fransızca)">French (Fransızca)</option>
-          </select>
-        </div>
+            {/* Zorluk Seviyesi Seçimi */}
+            <select
+              value={level}
+              onChange={(e) => setLevel(e.target.value)}
+              style={{
+                backgroundColor: '#FFF',
+                border: '2px solid #000',
+                padding: '6px 10px',
+                fontWeight: 'bold',
+                fontSize: '12px',
+                cursor: 'pointer',
+                boxShadow: '2px 2px 0px #000'
+              }}
+            >
+              {LEVELS.map((lvl) => (
+                <option key={lvl} value={lvl}>{lvl} Seviyesi</option>
+              ))}
+            </select>
+          </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-          <label style={{ fontWeight: 'bold', fontSize: '13px', marginBottom: '5px' }}>Motor Modu:</label>
-          <label style={{ cursor: 'pointer', fontSize: '13px', display: 'flex', alignItems: 'center', gap: '5px' }}>
-            <input type="checkbox" checked={useLLM} onChange={(e) => setUseLLM(e.target.checked)} />
-            AI LLM Mode (Sınırsız)
-          </label>
-        </div>
-      </div>
-
-      {/* Pratik Kartı */}
-      <div style={{ border: '2px solid #111', background: '#fff', borderRadius: '8px', padding: '25px', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #eee', paddingBottom: '12px', marginBottom: '15px' }}>
-          <span style={{ fontWeight: 'bold', color: '#d84315', fontSize: '14px' }}>
-            {targetLang.toUpperCase()} ({level}) — {CATEGORIES.find(c => c.id === category)?.name}
-          </span>
           <button
             onClick={loadNewSentence}
             disabled={loading}
-            style={{ background: '#111', color: '#fff', border: 'none', padding: '10px 18px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '13px' }}
+            style={{
+              backgroundColor: '#EA580C',
+              color: '#FFF',
+              border: '2px solid #000',
+              padding: '8px 18px',
+              fontWeight: 'bold',
+              fontSize: '13px',
+              cursor: 'pointer',
+              boxShadow: '3px 3px 0px #000',
+              letterSpacing: '0.5px'
+            }}
           >
-            {loading ? 'Üretiliyor...' : '🔄 YENİ BENZERSIZ CÜMLE ÜRET'}
+            {loading ? 'ÜRETİLİYOR...' : '🔄 YENİ BENZERSİZ CÜMLE ÜRET'}
           </button>
         </div>
 
-        <div style={{ padding: '20px', background: '#f8f9fa', borderRadius: '6px', borderLeft: '5px solid #2e7d32', marginBottom: '20px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-            <span style={{ fontSize: '11px', fontWeight: 'bold', color: '#555', textTransform: 'uppercase' }}>Çevrilecek %100 Doğal Türkçe Cümle</span>
-            <span style={{ fontSize: '11px', background: '#e8f5e9', color: '#2e7d32', padding: '2px 8px', borderRadius: '12px', fontWeight: 'bold' }}>
-              {engineSource === 'llm' ? '🤖 AI Üretimi (Sınırsız)' : '⚡ Matris Engine'}
+        {/* BÜYÜK PRATİK KART KUTUSU (Ekran Görüntüsüyle Birebir Brutalist Tasarım) */}
+        <div style={{
+          backgroundColor: '#FAF8F5',
+          border: '3px solid #000',
+          padding: '28px',
+          boxShadow: '6px 6px 0px #000',
+          marginBottom: '30px'
+        }}>
+          {/* Üst Etiketler */}
+          <div style={{
+            display: 'flex',
+            justify: 'space-between',
+            alignItems: 'center',
+            marginBottom: '18px',
+            borderBottom: '2px dashed #000',
+            paddingBottom: '12px'
+          }}>
+            <span style={{
+              color: '#EA580C',
+              fontWeight: '900',
+              fontSize: '13px',
+              letterSpacing: '0.5px'
+            }}>
+              ÇEVRİLECEK %100 DOĞAL TÜRKÇE CÜMLE:
+            </span>
+
+            <span style={{
+              backgroundColor: '#65A30D',
+              color: '#FFF',
+              border: '1.5px solid #000',
+              padding: '4px 10px',
+              fontWeight: 'bold',
+              fontSize: '11px',
+              boxShadow: '1.5px 1.5px 0px #000'
+            }}>
+              BENZERSİZLİK: %100 TEKRARSIZ
             </span>
           </div>
-          <h2 style={{ fontSize: '22px', margin: '10px 0', color: '#111', lineHeight: '1.4' }}>"{currentSentence}"</h2>
-          {hint && <p style={{ fontSize: '13px', color: '#0288d1', margin: '10px 0 0 0' }}>💡 <b>İpucu:</b> {hint}</p>}
-          {grammarNote && <p style={{ fontSize: '13px', color: '#6a1b9a', margin: '5px 0 0 0' }}>📌 <b>Gramer Odağı:</b> {grammarNote}</p>}
+
+          {/* Cümle Metni (Görseldeki Serif İtalik Stil) */}
+          <div style={{ padding: '10px 0 20px 0' }}>
+            <h2 style={{
+              fontFamily: "'Georgia', 'Times New Roman', serif",
+              fontStyle: 'italic',
+              fontSize: '26px',
+              fontWeight: '700',
+              color: '#111',
+              lineHeight: '1.4',
+              margin: '0 0 10px 0'
+            }}>
+              "{currentSentence || 'Yükleniyor...'}"
+            </h2>
+
+            {hint && (
+              <p style={{ fontSize: '13px', color: '#0369A1', marginTop: '8px', fontWeight: 'bold' }}>
+                💡 İPUCU: {hint}
+              </p>
+            )}
+            {grammarNote && (
+              <p style={{ fontSize: '13px', color: '#7E22CE', marginTop: '4px', fontWeight: 'bold' }}>
+                📌 GRAMER ODAĞI: {grammarNote}
+              </p>
+            )}
+          </div>
+
+          {/* Çeviri Giriş Alanı */}
+          <div style={{ marginTop: '15px' }}>
+            <label style={{
+              display: 'block',
+              fontWeight: 'bold',
+              fontSize: '13px',
+              marginBottom: '8px',
+              letterSpacing: '0.5px'
+            }}>
+              {targetLang.toUpperCase()} ÇEVİRİNİZİ YAZIN:
+            </label>
+
+            <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+              <input
+                type="text"
+                value={userInput}
+                onChange={(e) => setUserInput(e.target.value)}
+                placeholder={`${targetLang} cümlenizi buraya yazın...`}
+                style={{
+                  flex: '1',
+                  minWidth: '280px',
+                  backgroundColor: '#FFF',
+                  border: '2.5px solid #000',
+                  padding: '12px 16px',
+                  fontSize: '15px',
+                  fontFamily: 'inherit',
+                  outline: 'none',
+                  boxShadow: '2px 2px 0px #000'
+                }}
+              />
+
+              <button style={{
+                backgroundColor: '#EA580C',
+                color: '#FFF',
+                border: '2.5px solid #000',
+                padding: '12px 24px',
+                fontWeight: 'bold',
+                fontSize: '14px',
+                cursor: 'pointer',
+                boxShadow: '3px 3px 0px #000',
+                whiteSpace: 'nowrap'
+              }}>
+                KONTROL ET →
+              </button>
+            </div>
+          </div>
         </div>
 
-        <div>
-          <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '8px', fontSize: '14px' }}>
-            {targetLang.toUpperCase()} ÇEVİRİNİZİ YAZIN:
-          </label>
-          <textarea
-            value={userInput}
-            onChange={(e) => setUserInput(e.target.value)}
-            placeholder={`${targetLang} cümlenizi buraya yazın...`}
-            rows={3}
-            style={{ width: '100%', padding: '12px', boxSizing: 'border-box', borderRadius: '6px', border: '1px solid #ccc', fontSize: '15px' }}
-          />
-          <button style={{ marginTop: '12px', background: '#e65100', color: '#fff', border: 'none', padding: '12px 28px', borderRadius: '4px', fontWeight: 'bold', fontSize: '14px', cursor: 'pointer' }}>
-            KONTROL ET →
-          </button>
+        {/* ALT BANNER (Görseldeki Orijinal Footer) */}
+        <div style={{
+          textAlign: 'center',
+          fontSize: '11px',
+          fontWeight: 'bold',
+          letterSpacing: '1px',
+          color: '#444',
+          textTransform: 'uppercase'
+        }}>
+          RECALLFLOW RADICAL MULTILINGUAL AI PRACTICE ENGINE – INFINITE UNIQUE COMBINATIONS
         </div>
+
       </div>
     </div>
   );
