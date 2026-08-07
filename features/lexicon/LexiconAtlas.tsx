@@ -1,0 +1,5 @@
+"use client";
+import { motion } from "framer-motion";
+import { useState } from "react";
+import { lexemes } from "@/lib/content";
+export function LexiconAtlas({onRecall}:{onRecall:(word:string)=>void}){const[active,setActive]=useState(lexemes[0].id);const item=lexemes.find(x=>x.id===active)!;return <section className="atlas" id="atlas"><aside><p className="label">02 — ATLAS</p><h2>Kelimeler<br/><i>tekil</i> değildir.</h2><p>Çeviriyi ezberlemek yerine, bir kelimenin çevresinde bıraktığı basıncı izle.</p></aside><div className="atlas-stage"><div className="atlas-orbit one"/><div className="atlas-orbit two"/><div className="atlas-orbit three"/>{lexemes.map((lexeme,index)=><motion.button key={lexeme.id} className={"lexeme "+lexeme.tone+" l"+index+(active===lexeme.id?" active":"")} onClick={()=>setActive(lexeme.id)} whileHover={{y:-7,rotate:index%2?2:-2}}><b>{lexeme.word}</b><span>{lexeme.translation}</span></motion.button>)}<article className="lexeme-note"><span>BAĞLAM NOTU</span><h3>{item.word}</h3><p>{item.note}</p><button onClick={()=>onRecall(item.word)}>Geri çağır →</button></article></div></section>}
