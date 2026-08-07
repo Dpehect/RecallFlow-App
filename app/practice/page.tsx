@@ -52,7 +52,7 @@ export default function PracticePage() {
         {/* ÜST BAR / KONTROLLER (Retro Brutalist Stil) */}
         <div style={{
           display: 'flex',
-          justify: 'space-between',
+          justifyContent: 'space-between',
           alignItems: 'center',
           flexWrap: 'wrap',
           gap: '12px',
@@ -127,7 +127,7 @@ export default function PracticePage() {
               letterSpacing: '0.5px'
             }}
           >
-            {loading ? 'ÜRETİLİYOR...' : '🔄 YENİ BENZERSİZ CÜMLE ÜRET'}
+            {loading ? 'ÜRETİLİYOR...' : '🔄 YENİ BENZERSIZ CÜMLE ÜRET'}
           </button>
         </div>
 
@@ -142,7 +142,7 @@ export default function PracticePage() {
           {/* Üst Etiketler */}
           <div style={{
             display: 'flex',
-            justify: 'space-between',
+            justifyContent: 'space-between',
             alignItems: 'center',
             marginBottom: '18px',
             borderBottom: '2px dashed #000',
