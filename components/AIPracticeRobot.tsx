@@ -31,6 +31,8 @@ export default function AIPracticeRobot({ onStatsUpdate }: AIPracticeRobotProps)
   const [loading, setLoading] = useState(false);
   const [feedback, setFeedback] = useState<string | null>(null);
   const [remaining, setRemaining] = useState<number>(0);
+  const [history, setHistory] = useState<{ tr: string; hint: string; grammarNote: string }[]>([]);
+  const [showList, setShowList] = useState(false);
 
   const loadNewSentence = async () => {
     setLoading(true);
@@ -63,6 +65,17 @@ export default function AIPracticeRobot({ onStatsUpdate }: AIPracticeRobotProps)
     setRemaining(Math.max(poolSize - used.size - 1, 0));
     setUserInput('');
     setLoading(false);
+    setHistory((h) =>
+      [{ tr: res.tr, hint: res.targetHint || '', grammarNote: res.grammarNote || '' }, ...h].slice(0, 50)
+    );
+  };
+
+  const jumpTo = (item: { tr: string; hint: string; grammarNote: string }) => {
+    setCurrentSentence(item.tr);
+    setHint(item.hint);
+    setGrammarNote(item.grammarNote);
+    setFeedback(null);
+    setShowList(false);
   };
 
   useEffect(() => {
@@ -122,6 +135,14 @@ export default function AIPracticeRobot({ onStatsUpdate }: AIPracticeRobotProps)
           <span className="press-sm flex items-center gap-1.5 border-[2px] border-ink bg-paper-sunken px-2.5 py-1.5 font-mono text-[12px] font-bold">
             {currentLang.flag} {currentLang.labelTr}
           </span>
+
+          <button
+            type="button"
+            onClick={() => setShowList((s) => !s)}
+            className="press-sm cursor-pointer border-[2px] border-ink bg-paper-sunken px-2.5 py-1.5 font-mono text-[12px] font-bold"
+          >
+            {showList ? '🔽 Listeyi Kapat' : `📋 Geçmiş (${history.length})`}
+          </button>
         </div>
 
         <button
@@ -133,6 +154,29 @@ export default function AIPracticeRobot({ onStatsUpdate }: AIPracticeRobotProps)
           {loading ? 'Üretiliyor…' : '🔄 Yeni Cümle Üret'}
         </button>
       </div>
+
+      {showList && (
+        <div className="rise-in mb-5 grid max-h-[420px] gap-2 overflow-y-auto border-[2px] border-ink bg-paper-sunken p-3">
+          {history.length === 0 && (
+            <p className="px-2 py-3 text-center font-mono text-[12px] text-ink-faint">
+              Bu oturumda henüz cümle üretilmedi.
+            </p>
+          )}
+          {history.map((item, i) => (
+            <button
+              key={`${i}-${item.tr}`}
+              type="button"
+              onClick={() => jumpTo(item)}
+              className={[
+                'border-[2px] border-ink bg-paper-raised px-3 py-2 text-left text-[13px] leading-snug hover:bg-gold-tint',
+                item.tr === currentSentence ? 'bg-gold-tint' : '',
+              ].join(' ')}
+            >
+              {item.tr}
+            </button>
+          ))}
+        </div>
+      )}
 
       {/* Sentence card */}
       <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
