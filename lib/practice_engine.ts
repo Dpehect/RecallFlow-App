@@ -41,11 +41,10 @@ export async function fetchNextSentence(req: SentenceRequest): Promise<SentenceR
         }
       }
     } catch (e) {
-      console.warn('LLM API çağrısı başarısız oldu, çevrimdışı matrise geçiliyor...', e);
+      console.warn('LLM API çağrısı başarısız oldu, matrise geçiliyor.', e);
     }
   }
 
-  // Fallback to offline combinatorial matrix
   const trSentence = generateOfflineSentence(req.category, req.level, req.history);
   return {
     tr: trSentence,

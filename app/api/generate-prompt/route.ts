@@ -7,25 +7,27 @@ export async function POST(req: Request) {
     const apiKey = process.env.OPENAI_API_KEY;
     if (!apiKey) {
       return NextResponse.json(
-        { error: 'OPENAI_API_KEY bulunamadı. Lütfen .env.local dosyanıza ekleyin.' },
+        { error: 'OPENAI_API_KEY ortam değişkeni bulunamadı.' },
         { status: 500 }
       );
     }
 
     const systemPrompt = `
-      Sen profesyonel bir dil öğretmenisin. Kullanıcının ${targetLanguage} diline çevirmesi için anlamlı, doğal ve dil bilgisi açısından kusursuz bir Türkçe cümle üreteceksin.
+      Sen profesyonel bir dil öğretmenisin. Kullanıcının ${targetLanguage} diline çevirmesi için tam olarak istenen kategoride ve CEFR zorluk seviyesinde %100 doğal, anlamlı ve benzersiz bir Türkçe cümle üreteceksin.
+
+      Parametreler:
+      - Kategori: ${category}
+      - CEFR Seviyesi: ${level} (A1: Çok basit SVO cümleler; A2: Basit zamanlar ve zaman zarfları; B1: Yan cümleler ve bağlaçlar; B2: Karmaşık yapılar ve iş/akademik terimler; C1: İleri düzey soyut ifadeler ve edebi/teknik anlatım)
+      - Hedef Dil: ${targetLanguage}
 
       Kurallar:
-      1. Kategori: ${category} (Örn: günlük, iş, teknoloji, seyahat, akademik)
-      2. CEFR Zorluk Seviyesi: ${level} (A1, A2, B1, B2, C1)
-      3. Cümle anlamsız veya saçma kelime birleşimlerinden oluşmamalı; gerçek hayatta kullanılan doğal bir cümle olmalıdır.
-      4. Daha önce üretilmiş şu cümleleri veya benzerlerini KESİNLİKLE tekrar etme: ${JSON.stringify(previousSentences?.slice(-30) || [])}
-
-      Yanıtını строго JSON formatında ver:
+      1. Cümle saçma kelime birleşimlerinden OLUŞMAMALI, tamamen mantıklı ve doğal olmalıdır.
+      2. Daha önce üretilmiş şu cümleleri veya benzerlerini KESİNLİKLE TEKRAR ETME: ${JSON.stringify(previousSentences?.slice(-40) || [])}
+      3. Yanıtını strictly JSON formatında ver:
       {
         "tr": "Üretilen Türkçe cümle",
-        "targetHint": "Cümledeki zor kelimeler veya ipuçları",
-        "grammarNote": "Bu seviyeye ait gramer odağı"
+        "targetHint": "Zor kelimeler için ipucu",
+        "grammarNote": "Bu seviyeye ait gramer kuralı"
       }
     `;
 
@@ -39,7 +41,7 @@ export async function POST(req: Request) {
         model: 'gpt-4o-mini',
         messages: [{ role: 'system', content: systemPrompt }],
         response_format: { type: 'json_object' },
-        temperature: 0.85
+        temperature: 0.9
       })
     });
 
@@ -53,6 +55,6 @@ export async function POST(req: Request) {
 
     return NextResponse.json(result);
   } catch (error: any) {
-    return NextResponse.json({ error: error.message || 'Sunucu hatası oluştu.' }, { status: 500 });
+    return NextResponse.json({ error: error.message || 'Sunucu hatası.' }, { status: 500 });
   }
 }

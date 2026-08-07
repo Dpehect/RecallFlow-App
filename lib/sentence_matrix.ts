@@ -3,7 +3,6 @@ export interface WordBank {
   verbs: string[];
   objects: string[];
   timeClauses?: string[];
-  connectives?: string[];
 }
 
 export const CATEGORIES = [
@@ -19,21 +18,21 @@ export const LEVELS = ['A1', 'A2', 'B1', 'B2', 'C1'];
 export const CATEGORY_MATRIX: Record<string, Record<string, WordBank>> = {
   daily: {
     A1: {
-      subjects: ["Ahmet", "Ayşe", "Öğrenci", "Mimar", "Doktor"],
-      objects: ["sabah kahvesini", "yeni taze ekmeği", "gazeteyi", "sütü"],
+      subjects: ["Ahmet", "Ayşe", "Öğrenci", "Mimar"],
+      objects: ["sabah kahvesini", "taze ekmeği", "gazeteyi", "sütü"],
       verbs: ["içiyor.", "alıyor.", "okuyor.", "hazırlıyor."]
     },
     A2: {
       subjects: ["Genç çift", "Komşumuz", "Eski arkadaşım"],
-      timeClauses: ["Her hafta sonu", "Akşamları iş çıkışında", "Sabah erkenden"],
-      objects: ["sahilde yürüyüş yapmayı", "pazardan taze sebze almayı", "parkta dinlenmeyi"],
-      verbs: ["tercih ediyor.", "planlıyor.", "seviyor."]
+      timeClauses: ["Her Hafta sonu", "Akşamları iş çıkışında"],
+      objects: ["sahilde yürüyüş yapmayı", "pazardan taze sebze almayı"],
+      verbs: ["tercih ediyor.", "planlıyor."]
     },
     B1: {
       subjects: ["Şehir merkezinde yaşayan aileler", "Üniversite öğrencileri"],
-      timeClauses: ["Hafta sonu tatili boyunca", "Yoğun geçen bir haftanın ardından"],
+      timeClauses: ["Yoğun geçen bir haftanın ardından"],
       objects: ["toplu taşıma araçlarını kullanmayı", "yerel kütüphanede vakit geçirmeyi"],
-      verbs: ["faydalı buluyor.", "kararlaştırdı.", "alışkanlık haline getirdi."]
+      verbs: ["faydalı buluyor.", "kararlaştırdı."]
     }
   },
   technology: {
@@ -44,28 +43,15 @@ export const CATEGORY_MATRIX: Record<string, Record<string, WordBank>> = {
     },
     A2: {
       subjects: ["Geliştirici ekibi", "Yazılım stajyeri"],
-      timeClauses: ["Proje tesliminden önce", "Öğleden sonra"],
-      objects: ["hataları düzeltmeyi", "kodları incelemeyi", "dokümantasyonu güncellemeyi"],
-      verbs: ["tamamladı.", "sürdürüyor.", "hedefliyor."]
+      timeClauses: ["Proje tesliminden önce"],
+      objects: ["hataları düzeltmeyi", "kodları incelemeyi"],
+      verbs: ["tamamladı.", "sürdürüyor."]
     },
     B1: {
       subjects: ["Sistem mimarları", "Veri analistleri"],
-      timeClauses: ["Siber güvenlik denetiminin ardından", "Sistem güncellemesi sırasında"],
-      objects: ["bulut sunucu altyapısını optimize etmeyi", "veritabanı performansını artırmayı"],
-      verbs: ["başarıyla gerçekleştirdi.", "öncelik haline getirdi."]
-    }
-  },
-  business: {
-    A1: {
-      subjects: ["Müdür", "Müşteri", "Çalışan"],
-      objects: ["yeni raporu", "epostayı", "faturayı"],
-      verbs: ["gönderiyor.", "inceliyor.", "imzalıyor."]
-    },
-    B1: {
-      subjects: ["Pazarlama departmanı", "Şirket yöneticileri"],
-      timeClauses: ["Çeyrek yıl toplantısında", "Bütçe planlaması yaparken"],
-      objects: ["yeni satış stratejilerini uygulamayı", "maliyetleri düşürmeyi"],
-      verbs: ["kararlaştırdı.", "değerlendiriyor."]
+      timeClauses: ["Siber güvenlik denetiminin ardından"],
+      objects: ["bulut sunucu altyapısını optimize etmeyi"],
+      verbs: ["başarıyla gerçekleştirdi."]
     }
   }
 };
@@ -77,12 +63,12 @@ export function generateOfflineSentence(category: string, level: string, history
   let attempts = 0;
   let sentence = "";
 
-  while (attempts < 20) {
+  while (attempts < 30) {
     const subject = levelData.subjects[Math.floor(Math.random() * levelData.subjects.length)];
     const object = levelData.objects[Math.floor(Math.random() * levelData.objects.length)];
     const verb = levelData.verbs[Math.floor(Math.random() * levelData.verbs.length)];
 
-    if (levelData.timeClauses && Math.random() > 0.3) {
+    if (levelData.timeClauses && Math.random() > 0.4) {
       const time = levelData.timeClauses[Math.floor(Math.random() * levelData.timeClauses.length)];
       sentence = `${time}, ${subject.toLowerCase()} ${object} ${verb}`;
     } else {
