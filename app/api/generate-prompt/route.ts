@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { getDifficultyGuide } from '@/lib/grammar_notes';
 
 export async function POST(req: Request) {
   try {
@@ -12,11 +13,9 @@ export async function POST(req: Request) {
       );
     }
 
-    const difficultyGuide = {
-      Kolay: 'A1-A2 seviyesi: Kısa, doğrudan, temel kelimeler ve basit zamanlar (Örn: Özne + Nesne + Fiil).',
-      Orta: 'B1-B2 seviyesi: Orta uzunlukta, zaman zarfları, edatlar ve bağlaçlar içeren cümleler.',
-      Zor: 'C1-C2 seviyesi: Karmaşık yan cümleler, ileri düzey akademik/mesleki kelimeler ve soyut anlatım.'
-    }[difficulty as 'Kolay' | 'Orta' | 'Zor'] || 'A1-A2 seviyesi: Basit ve doğrudan cümleler.';
+    // Difficulty selected by the user (any tab) is forwarded straight into the
+    // sentence-generation prompt so the LLM output matches the chosen level.
+    const difficultyGuide = getDifficultyGuide(difficulty);
 
     const systemPrompt = `
       Sen profesyonel bir dil öğretmenisin. Kullanıcının ${targetLanguage} diline çevirmesi için mantıklı, doğal ve %100 benzersiz bir Türkçe cümle üreteceksin.

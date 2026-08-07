@@ -4,15 +4,18 @@ import React, { useState, useEffect } from 'react';
 import { CATEGORIES, DIFFICULTY_LEVELS } from '@/lib/sentence_matrix';
 import { fetchNextSentence } from '@/lib/practice_engine';
 import { incrementUserProgress, getUserStats, UserStats } from '@/lib/storage';
+import { usePracticeContext } from '@/lib/practice-context';
 
 interface AIPracticeRobotProps {
   onStatsUpdate?: (stats: UserStats) => void;
 }
 
 export default function AIPracticeRobot({ onStatsUpdate }: AIPracticeRobotProps) {
-  const [category, setCategory] = useState('daily');
-  const [difficulty, setDifficulty] = useState('Kolay');
-  const [targetLang, setTargetLang] = useState('German (Almanca)');
+  // category/difficulty/targetLang are shared globally (via context) so the
+  // level chosen here is the same one used by the Kelime, Reading and
+  // Listening tabs, and is what actually gets sent to the prompt engine.
+  const { category, setCategory, difficulty, setDifficulty, targetLang, setTargetLang } =
+    usePracticeContext();
 
   const [currentSentence, setCurrentSentence] = useState<string>('');
   const [hint, setHint] = useState<string>('');
