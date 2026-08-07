@@ -3,49 +3,55 @@
 import React from 'react';
 import { UserStats } from '@/lib/storage';
 
-interface GamificationBannerProps {
-  stats: UserStats;
-}
-
-export default function GamificationBanner({ stats }: GamificationBannerProps) {
-  const goalPercent = Math.min(100, Math.round(((stats.todayCount || 0) / (stats.dailyGoal || 10)) * 100));
+export default function GamificationBanner({ stats }: { stats: UserStats }) {
+  const goalPercent = Math.min(100, Math.round((stats.todayCount / stats.dailyGoal) * 100));
 
   return (
-    <div style={{
-      backgroundColor: '#FAF8F5',
-      border: '3px solid #000',
-      padding: '16px 20px',
-      boxShadow: '4px 4px 0px #000',
-      marginBottom: '20px',
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      flexWrap: 'wrap',
-      gap: '15px'
-    }}>
-      <div>
-        <span style={{ fontSize: '11px', fontWeight: 'bold', color: '#666', textTransform: 'uppercase', display: 'block' }}>GÜNLÜK HEDEF</span>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '4px' }}>
-          <div style={{ width: '120px', height: '10px', backgroundColor: '#E2E8F0', border: '1.5px solid #000', borderRadius: '5px', overflow: 'hidden' }}>
-            <div style={{ width: `${goalPercent}%`, height: '100%', backgroundColor: '#65A30D' }} />
+    <div className="bg-[#FAF8F5] border-2 border-black p-6 shadow-[4px_4px_0px_0px_#121212] text-black space-y-4 font-mono">
+      <div className="flex flex-wrap items-center justify-between gap-4 border-b-2 border-black pb-4">
+        {/* Streak Badge */}
+        <div className="flex items-center space-x-4">
+          <div className="w-14 h-14 bg-[#EA580C] text-white border-2 border-black flex items-center justify-center text-2xl font-black shadow-[2px_2px_0px_0px_#121212]">
+            🔥
           </div>
-          <span style={{ fontSize: '13px', fontWeight: 'bold' }}>%{goalPercent}</span>
+          <div>
+            <div className="flex items-center space-x-2">
+              <span className="font-editorial text-3xl font-black text-black">{stats.streak} GÜN</span>
+              <span className="bg-[#121212] text-white text-[10px] font-bold px-2 py-0.5 border border-black uppercase tracking-wider">
+                AKTİF SERİ
+              </span>
+            </div>
+            <p className="text-xs text-slate-700 font-bold mt-0.5">
+              Her gün en az 1 kelime tekrar et seriyi koru!
+            </p>
+          </div>
+        </div>
+
+        {/* Stats */}
+        <div className="flex items-center space-x-6">
+          <div className="text-right">
+            <span className="text-[10px] font-bold text-slate-600 block uppercase">Tam Öğrenilen</span>
+            <span className="font-editorial text-2xl font-black text-[#65A30D]">{stats.totalMastered} KELİME</span>
+          </div>
+          <div className="text-right border-l-2 border-black pl-6">
+            <span className="text-[10px] font-bold text-slate-600 block uppercase">Toplam Tekrar</span>
+            <span className="font-editorial text-2xl font-black text-black">{stats.totalReviewed}</span>
+          </div>
         </div>
       </div>
 
-      <div style={{ textAlign: 'right' }}>
-        <span style={{ fontSize: '11px', fontWeight: 'bold', color: '#666', textTransform: 'uppercase', display: 'block' }}>TAM ÖĞRENİLEN</span>
-        <span style={{ fontSize: '20px', fontWeight: '900', color: '#65A30D' }}>{stats.totalMastered || 0} KELİME</span>
-      </div>
-
-      <div style={{ textAlign: 'right', borderLeft: '2px solid #000', paddingLeft: '15px' }}>
-        <span style={{ fontSize: '11px', fontWeight: 'bold', color: '#666', textTransform: 'uppercase', display: 'block' }}>TOPLAM TEKRAR</span>
-        <span style={{ fontSize: '20px', fontWeight: '900', color: '#000' }}>{stats.totalReviewed || 0}</span>
-      </div>
-
-      <div style={{ textAlign: 'right', borderLeft: '2px solid #000', paddingLeft: '15px' }}>
-        <span style={{ fontSize: '11px', fontWeight: 'bold', color: '#666', textTransform: 'uppercase', display: 'block' }}>TOPLAM XP / SERİ</span>
-        <span style={{ fontSize: '20px', fontWeight: '900', color: '#EA580C' }}>⚡ {stats.xp || 0} XP | 🔥 {stats.streak || 1} GÜN</span>
+      {/* Goal Bar */}
+      <div className="space-y-1.5">
+        <div className="flex justify-between items-center text-xs font-bold uppercase">
+          <span>🎯 GÜNLÜK HEDEF: <span className="text-[#EA580C] font-black">{stats.todayCount} / {stats.dailyGoal} KELİME</span></span>
+          <span className="font-black">{goalPercent}%</span>
+        </div>
+        <div className="w-full h-4 bg-white border-2 border-black p-0.5">
+          <div
+            className="h-full bg-[#EA580C] border border-black transition-all duration-300"
+            style={{ width: `${goalPercent}%` }}
+          />
+        </div>
       </div>
     </div>
   );
