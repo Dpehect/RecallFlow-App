@@ -2,17 +2,46 @@
 
 import React from 'react';
 import { CATEGORIES, getTotalWordCount, getTotalCombinationCount } from '@/lib/sentence_matrix';
+import { TARGET_LANGUAGES } from '@/lib/languages';
 import { TabId } from '@/components/Header';
 
 interface HomeSectionProps {
   onNavigate: (tab: TabId) => void;
 }
 
-const MODULES: { id: TabId; icon: string; title: string; blurb: string }[] = [
-  { id: 'kelime', icon: '📚', title: '1. Kelime', blurb: 'Kategoriye ve seviyeye göre kelime kartlarıyla antrenman yap.' },
-  { id: 'dilbilgisi', icon: '📌', title: '2. Dil Bilgisi', blurb: 'A1’den C1’e her seviyenin gramer odak noktalarını incele.' },
-  { id: 'reading', icon: '📖', title: '3. Reading', blurb: 'Seviyene uygun, hiç tekrar etmeyen okuma metinleri üret.' },
-  { id: 'listening', icon: '🎧', title: '4. Listening', blurb: 'Sesli okunan cümleleri dinle, sonra metni kontrol et.' },
+const MODULES: { id: TabId; num: string; icon: string; title: string; blurb: string; tint: string }[] = [
+  {
+    id: 'kelime',
+    num: '01',
+    icon: '📚',
+    title: 'Kelime',
+    blurb: 'Kategoriye ve seviyeye göre çevrilebilir kartlarla kelime antrenmanı.',
+    tint: 'bg-rust-tint',
+  },
+  {
+    id: 'dilbilgisi',
+    num: '02',
+    icon: '📌',
+    title: 'Dil Bilgisi',
+    blurb: 'A1’den C1’e her seviyenin gramer odak noktalarını incele.',
+    tint: 'bg-plum-tint',
+  },
+  {
+    id: 'reading',
+    num: '03',
+    icon: '📖',
+    title: 'Reading',
+    blurb: 'Seviyene uygun, hiç tekrar etmeyen okuma metinleri üret.',
+    tint: 'bg-sky-tint',
+  },
+  {
+    id: 'listening',
+    num: '04',
+    icon: '🎧',
+    title: 'Listening',
+    blurb: 'Sesli okunan cümleleri dinle, sonra metni kontrol et.',
+    tint: 'bg-moss-tint',
+  },
 ];
 
 export default function HomeSection({ onNavigate }: HomeSectionProps) {
@@ -20,163 +49,82 @@ export default function HomeSection({ onNavigate }: HomeSectionProps) {
   const totalCombos = getTotalCombinationCount();
 
   return (
-    <div
-      style={{
-        backgroundColor: '#FAF8F5',
-        border: '3px solid #000',
-        boxShadow: '6px 6px 0px #000',
-        marginBottom: '25px',
-        boxSizing: 'border-box',
-        overflow: 'hidden',
-      }}
-    >
-      <div style={{ padding: '32px 28px' }}>
+    <div className="mb-8 overflow-hidden border-[3px] border-ink bg-paper-raised shadow-ink-lg">
+      {/* Hero */}
+      <div className="relative overflow-hidden px-6 py-10 sm:px-9 sm:py-12">
         <div
-          style={{
-            display: 'inline-block',
-            backgroundColor: '#FACC15',
-            border: '2px solid #000',
-            padding: '6px 14px',
-            fontWeight: 'bold',
-            fontSize: '11px',
-            marginBottom: '20px',
-            boxShadow: '2px 2px 0px #000',
-          }}
-        >
-          ✶ 5 KATEGORİ · 3 ZORLUK SEVİYESİ · GERÇEK ZAMANLI AI ÜRETİMİ
+          aria-hidden
+          className="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rotate-12 border-[3px] border-ink/10 sm:h-80 sm:w-80"
+        />
+        <div className="press-sm mb-6 inline-flex items-center gap-2 border-[2px] border-ink bg-gold px-3.5 py-1.5 font-mono text-[11px] font-bold uppercase tracking-wide text-ink">
+          ✶ 5 kategori · 3 zorluk seviyesi · gerçek zamanlı AI üretimi
         </div>
 
-        <h1
-          style={{
-            fontFamily: "'Georgia', 'Times New Roman', serif",
-            fontStyle: 'italic',
-            fontSize: '38px',
-            lineHeight: '1.15',
-            margin: '0 0 10px 0',
-          }}
-        >
-          Dil Öğrenmenin
+        <h1 className="max-w-2xl font-display text-[34px] italic leading-[1.1] sm:text-[46px]">
+          Dil öğrenmenin{' '}
+          <span className="inline-block -rotate-1 bg-gold px-2.5 not-italic font-semibold">
+            karakterli ve sert
+          </span>{' '}
+          yolu.
         </h1>
-        <div
-          style={{
-            display: 'inline-block',
-            backgroundColor: '#FACC15',
-            border: '2px solid #000',
-            padding: '4px 14px',
-            marginBottom: '20px',
-          }}
-        >
-          <span
-            style={{
-              fontFamily: "'Georgia', 'Times New Roman', serif",
-              fontWeight: 900,
-              fontSize: '38px',
-              lineHeight: '1.15',
-            }}
-          >
-            Karakterli &amp; Sert Yolu
-          </span>
-        </div>
 
-        <p style={{ fontSize: '14px', lineHeight: '1.7', maxWidth: '620px', marginBottom: '24px' }}>
+        <p className="mt-5 max-w-xl text-[15px] leading-relaxed text-ink-soft">
           Gereksiz şablon cümleler yok. Kategoriye göre ayrılmış içerikler, seviye başına
           binlerce benzersiz cümle kombinasyonu ve hiçbir cümlenin tekrar etmediği bir
-          AI cümle üretim motoru.
+          AI cümle üretim motoru — beş hedef dilde: {TARGET_LANGUAGES.map((l) => l.labelTr).join(', ')}.
         </p>
 
-        <button
-          type="button"
-          onClick={() => onNavigate('kelime')}
-          style={{
-            backgroundColor: '#65A30D',
-            color: '#FFF',
-            border: '2px solid #000',
-            padding: '12px 22px',
-            fontWeight: 'bold',
-            fontSize: '13px',
-            cursor: 'pointer',
-            boxShadow: '3px 3px 0px #000',
-          }}
-        >
-          1. KELİME MODÜLÜNE GİT →
-        </button>
+        <div className="mt-7 flex flex-wrap items-center gap-3">
+          <button
+            type="button"
+            onClick={() => onNavigate('kelime')}
+            className="press press-md border-[2px] border-ink bg-moss px-6 py-3 font-mono text-[13px] font-bold uppercase tracking-wide text-paper-raised"
+          >
+            01 · Kelime modülüne git →
+          </button>
+          <button
+            type="button"
+            onClick={() => onNavigate('ai-robot')}
+            className="press press-md border-[2px] border-ink bg-paper-raised px-6 py-3 font-mono text-[13px] font-bold uppercase tracking-wide text-ink"
+          >
+            🤖 AI Pratik Robotu'nu dene
+          </button>
+        </div>
       </div>
 
-      <div
-        style={{
-          borderTop: '3px solid #000',
-          padding: '24px 28px 28px 28px',
-          backgroundColor: '#FFF',
-        }}
-      >
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            flexWrap: 'wrap',
-            gap: '10px',
-            marginBottom: '16px',
-          }}
-        >
+      {/* Module grid */}
+      <div className="border-t-[3px] border-ink bg-paper px-6 py-8 sm:px-9">
+        <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
           <div>
-            <span style={{ fontSize: '11px', fontWeight: 'bold', color: '#666' }}>
-              📁 {MODULES.length} MÜFREDAT BÖLÜMÜ
+            <span className="font-mono text-[11px] font-bold uppercase tracking-widest2 text-ink-soft">
+              📁 {MODULES.length} müfredat bölümü
             </span>
-            <h2
-              style={{
-                fontFamily: "'Georgia', 'Times New Roman', serif",
-                fontStyle: 'italic',
-                fontSize: '24px',
-                margin: '4px 0 0 0',
-              }}
-            >
-              Öğrenme Alanını Seç
-            </h2>
+            <h2 className="mt-1 font-display text-[24px] italic">Öğrenme Alanını Seç</h2>
           </div>
-          <span
-            style={{
-              backgroundColor: '#FACC15',
-              border: '2px solid #000',
-              padding: '5px 10px',
-              fontWeight: 'bold',
-              fontSize: '11px',
-              boxShadow: '2px 2px 0px #000',
-            }}
-          >
-            {totalWords}+ KELİME · {totalCombos.toLocaleString('tr-TR')}+ CÜMLE KOMBİNASYONU
+          <span className="press-sm border-[2px] border-ink bg-gold-tint px-3 py-1.5 font-mono text-[11px] font-bold">
+            {totalWords}+ kelime · {totalCombos.toLocaleString('tr-TR')}+ cümle kombinasyonu
           </span>
         </div>
 
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-            gap: '14px',
-          }}
-        >
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
           {MODULES.map((mod) => (
             <button
               key={mod.id}
               type="button"
               onClick={() => onNavigate(mod.id)}
-              style={{
-                textAlign: 'left',
-                backgroundColor: '#FAF8F5',
-                border: '2px solid #000',
-                padding: '16px',
-                cursor: 'pointer',
-                boxShadow: '3px 3px 0px #000',
-              }}
+              className={`card-fold press press-sm flex flex-col items-start gap-2 border-[2px] border-ink ${mod.tint} p-4 text-left`}
             >
-              <div style={{ fontSize: '22px', marginBottom: '8px' }}>{mod.icon}</div>
-              <h3 style={{ margin: '0 0 6px 0', fontSize: '14px', fontWeight: 800 }}>{mod.title}</h3>
-              <p style={{ margin: 0, fontSize: '12px', color: '#444', lineHeight: '1.5' }}>{mod.blurb}</p>
+              <div className="flex w-full items-center justify-between">
+                <span className="text-[22px]">{mod.icon}</span>
+                <span className="font-mono text-[11px] font-bold text-ink-faint">{mod.num}</span>
+              </div>
+              <h3 className="font-display text-[17px] font-semibold leading-tight">{mod.title}</h3>
+              <p className="text-[12.5px] leading-relaxed text-ink-soft">{mod.blurb}</p>
             </button>
           ))}
         </div>
 
-        <p style={{ marginTop: '18px', fontSize: '11px', color: '#666' }}>
+        <p className="mt-6 font-mono text-[11px] text-ink-soft">
           Kategoriler: {CATEGORIES.map((c) => c.name).join(' · ')}
         </p>
       </div>

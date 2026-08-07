@@ -46,40 +46,12 @@ export default function KelimeSection({ onStatsUpdate }: KelimeSectionProps) {
   };
 
   return (
-    <div
-      style={{
-        backgroundColor: '#FAF8F5',
-        border: '3px solid #000',
-        padding: '24px',
-        boxShadow: '6px 6px 0px #000',
-        marginBottom: '25px',
-        boxSizing: 'border-box',
-      }}
-    >
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          flexWrap: 'wrap',
-          gap: '12px',
-          marginBottom: '18px',
-          borderBottom: '2px solid #000',
-          paddingBottom: '14px',
-        }}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-          <div
-            style={{
-              backgroundColor: '#FACC15',
-              border: '2px solid #000',
-              padding: '5px 12px',
-              fontWeight: 'bold',
-              fontSize: '12px',
-              boxShadow: '2px 2px 0px #000',
-            }}
-          >
-            📚 KELİME ANTRENMANI
+    <div className="mb-8 border-[3px] border-ink bg-paper-raised p-5 shadow-ink-lg sm:p-7">
+      {/* Toolbar */}
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-3 border-b-[2px] border-ink pb-4">
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="press-sm border-[2px] border-ink bg-gold px-3 py-1.5 font-mono text-[12px] font-bold">
+            📚 Kelime Antrenmanı
           </div>
 
           <select
@@ -89,15 +61,7 @@ export default function KelimeSection({ onStatsUpdate }: KelimeSectionProps) {
               setIndex(0);
               setRevealed(false);
             }}
-            style={{
-              backgroundColor: '#FFF',
-              border: '2px solid #000',
-              padding: '5px 10px',
-              fontWeight: 'bold',
-              fontSize: '12px',
-              cursor: 'pointer',
-              boxShadow: '2px 2px 0px #000',
-            }}
+            className="press-sm cursor-pointer border-[2px] border-ink bg-paper-raised px-2.5 py-1.5 font-mono text-[12px] font-bold"
           >
             {CATEGORIES.map((cat) => (
               <option key={cat.id} value={cat.id}>
@@ -113,15 +77,7 @@ export default function KelimeSection({ onStatsUpdate }: KelimeSectionProps) {
               setIndex(0);
               setRevealed(false);
             }}
-            style={{
-              backgroundColor: '#FFF',
-              border: '2px solid #000',
-              padding: '5px 10px',
-              fontWeight: 'bold',
-              fontSize: '12px',
-              cursor: 'pointer',
-              boxShadow: '2px 2px 0px #000',
-            }}
+            className="press-sm cursor-pointer border-[2px] border-ink bg-paper-raised px-2.5 py-1.5 font-mono text-[12px] font-bold"
           >
             <option value="Kolay">Zorluk: Kolay (A1-A2)</option>
             <option value="Orta">Zorluk: Orta (B1-B2)</option>
@@ -129,74 +85,60 @@ export default function KelimeSection({ onStatsUpdate }: KelimeSectionProps) {
           </select>
         </div>
 
-        <span style={{ fontSize: '12px', fontWeight: 'bold', color: '#65A30D' }}>
-          ✅ Bilinen: {known}
-        </span>
+        <span className="font-mono text-[12px] font-bold text-moss">✅ Biliyorum: {known}</span>
       </div>
 
-      <div
-        onClick={() => setRevealed((r) => !r)}
-        style={{
-          cursor: 'pointer',
-          textAlign: 'center',
-          padding: '40px 20px',
-          border: '2px dashed #000',
-          marginBottom: '18px',
-          backgroundColor: '#FFF',
-        }}
-      >
-        <p style={{ fontSize: '11px', color: '#666', fontWeight: 'bold', marginBottom: '10px' }}>
-          {revealed ? 'ANLAMI / KULLANIMI' : 'KARTA TIKLAYIN'}
-        </p>
-        <h2
-          style={{
-            fontFamily: "'Georgia', 'Times New Roman', serif",
-            fontSize: '26px',
-            fontWeight: 700,
-            margin: 0,
+      {/* Flip flashcard */}
+      <div className="flip-scene mb-6">
+        <div
+          role="button"
+          tabIndex={0}
+          onClick={() => setRevealed((r) => !r)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') setRevealed((r) => !r);
           }}
+          className={`flip-card relative h-[190px] cursor-pointer sm:h-[210px] ${revealed ? 'is-flipped' : ''}`}
         >
-          {currentWord}
-        </h2>
-        {revealed && (
-          <p style={{ marginTop: '10px', fontSize: '13px', color: '#0369A1', fontWeight: 'bold' }}>
-            Bu kelimeyi hedef dile nasıl çevirirdin? AI Pratik Robotu sekmesinde cümle içinde dene!
-          </p>
-        )}
+          {/* Front */}
+          <div className="flip-face card-fold absolute inset-0 flex flex-col items-center justify-center gap-3 border-[2px] border-dashed border-ink bg-paper-sunken px-6 text-center">
+            <p className="font-mono text-[10.5px] font-bold uppercase tracking-widest2 text-ink-soft">
+              Karta tıklayın
+            </p>
+            <h2 className="font-display text-[28px] font-semibold leading-tight sm:text-[32px]">
+              {currentWord}
+            </h2>
+            <span className="font-mono text-[10px] text-ink-faint">{index % words.length + 1} / {words.length}</span>
+          </div>
+
+          {/* Back */}
+          <div className="flip-face flip-face-back card-fold flex flex-col items-center justify-center gap-3 border-[2px] border-ink bg-gold-tint px-6 text-center">
+            <p className="font-mono text-[10.5px] font-bold uppercase tracking-widest2 text-ink-soft">
+              Anlamı / Kullanımı
+            </p>
+            <h2 className="font-display text-[24px] font-semibold leading-tight sm:text-[28px]">
+              {currentWord}
+            </h2>
+            <p className="max-w-sm text-[12.5px] font-semibold leading-relaxed text-sky">
+              Bu kelimeyi hedef dile nasıl çevirirdin? AI Pratik Robotu sekmesinde cümle içinde dene!
+            </p>
+          </div>
+        </div>
       </div>
 
-      <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+      <div className="flex flex-wrap gap-3">
         <button
           type="button"
           onClick={markKnown}
-          style={{
-            backgroundColor: '#65A30D',
-            color: '#FFF',
-            border: '2px solid #000',
-            padding: '10px 20px',
-            fontWeight: 'bold',
-            fontSize: '12px',
-            cursor: 'pointer',
-            boxShadow: '2px 2px 0px #000',
-          }}
+          className="press press-sm border-[2px] border-ink bg-moss px-5 py-2.5 font-mono text-[12px] font-bold text-paper-raised"
         >
-          ✅ BİLİYORUM
+          ✅ Biliyorum
         </button>
         <button
           type="button"
           onClick={goNext}
-          style={{
-            backgroundColor: '#EA580C',
-            color: '#FFF',
-            border: '2px solid #000',
-            padding: '10px 20px',
-            fontWeight: 'bold',
-            fontSize: '12px',
-            cursor: 'pointer',
-            boxShadow: '2px 2px 0px #000',
-          }}
+          className="press press-sm border-[2px] border-ink bg-rust px-5 py-2.5 font-mono text-[12px] font-bold text-paper-raised"
         >
-          ➡️ SONRAKİ KELİME
+          ➡️ Sonraki Kelime
         </button>
       </div>
     </div>

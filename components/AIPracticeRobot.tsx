@@ -11,6 +11,7 @@ import {
   rotateUsedSentences,
 } from '@/lib/storage';
 import { usePracticeContext } from '@/lib/practice-context';
+import { getLanguageById } from '@/lib/languages';
 
 interface AIPracticeRobotProps {
   onStatsUpdate?: (stats: UserStats) => void;
@@ -20,8 +21,8 @@ export default function AIPracticeRobot({ onStatsUpdate }: AIPracticeRobotProps)
   // category/difficulty/targetLang are shared globally (via context) so the
   // level chosen here is the same one used by the Kelime, Reading and
   // Listening tabs, and is what actually gets sent to the prompt engine.
-  const { category, setCategory, difficulty, setDifficulty, targetLang, setTargetLang } =
-    usePracticeContext();
+  const { category, setCategory, difficulty, setDifficulty, targetLang } = usePracticeContext();
+  const currentLang = getLanguageById(targetLang);
 
   const [currentSentence, setCurrentSentence] = useState<string>('');
   const [hint, setHint] = useState<string>('');
@@ -52,7 +53,7 @@ export default function AIPracticeRobot({ onStatsUpdate }: AIPracticeRobotProps)
       targetLanguage: targetLang,
       history: Array.from(used),
       usedSentences: used,
-      useLLM: true
+      useLLM: true,
     });
 
     setCurrentSentence(res.tr);
@@ -66,6 +67,7 @@ export default function AIPracticeRobot({ onStatsUpdate }: AIPracticeRobotProps)
 
   useEffect(() => {
     loadNewSentence();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [category, difficulty, targetLang]);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -85,201 +87,104 @@ export default function AIPracticeRobot({ onStatsUpdate }: AIPracticeRobotProps)
   };
 
   return (
-    <div style={{
-      backgroundColor: '#FAF8F5',
-      border: '3px solid #000',
-      padding: '24px',
-      boxShadow: '6px 6px 0px #000',
-      marginBottom: '25px',
-      boxSizing: 'border-box'
-    }}>
-      {/* KONTROL VE SEÇİCİ HEADER */}
-      <div style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        flexWrap: 'wrap',
-        gap: '12px',
-        marginBottom: '18px',
-        borderBottom: '2px solid #000',
-        paddingBottom: '14px'
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-          <div style={{
-            backgroundColor: '#FACC15',
-            border: '2px solid #000',
-            padding: '5px 12px',
-            fontWeight: 'bold',
-            fontSize: '12px',
-            boxShadow: '2px 2px 0px #000',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '6px'
-          }}>
-            🤖 <span>AI PRATİK ROBOTU</span>
+    <div className="mb-8 border-[3px] border-ink bg-paper-raised p-5 shadow-ink-lg sm:p-7">
+      {/* Toolbar */}
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-3 border-b-[2px] border-ink pb-4">
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="press-sm flex items-center gap-1.5 border-[2px] border-ink bg-gold px-3 py-1.5 font-mono text-[12px] font-bold">
+            🤖 AI Pratik Robotu
           </div>
 
-          {/* Kategori Seçimi */}
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            style={{
-              backgroundColor: '#FFF',
-              border: '2px solid #000',
-              padding: '5px 10px',
-              fontWeight: 'bold',
-              fontSize: '12px',
-              cursor: 'pointer',
-              boxShadow: '2px 2px 0px #000'
-            }}
+            className="press-sm cursor-pointer border-[2px] border-ink bg-paper-raised px-2.5 py-1.5 font-mono text-[12px] font-bold"
           >
             {CATEGORIES.map((cat) => (
-              <option key={cat.id} value={cat.id}>{cat.name}</option>
+              <option key={cat.id} value={cat.id}>
+                {cat.name}
+              </option>
             ))}
           </select>
 
-          {/* Zorluk Seviyesi Seçimi (Kolay / Orta / Zor) */}
           <select
             value={difficulty}
             onChange={(e) => setDifficulty(e.target.value)}
-            style={{
-              backgroundColor: '#FFF',
-              border: '2px solid #000',
-              padding: '5px 10px',
-              fontWeight: 'bold',
-              fontSize: '12px',
-              cursor: 'pointer',
-              boxShadow: '2px 2px 0px #000'
-            }}
+            className="press-sm cursor-pointer border-[2px] border-ink bg-paper-raised px-2.5 py-1.5 font-mono text-[12px] font-bold"
           >
             {DIFFICULTY_LEVELS.map((lvl) => (
-              <option key={lvl.id} value={lvl.id}>Zorluk: {lvl.name}</option>
+              <option key={lvl.id} value={lvl.id}>
+                Zorluk: {lvl.name}
+              </option>
             ))}
           </select>
+
+          <span className="press-sm flex items-center gap-1.5 border-[2px] border-ink bg-paper-sunken px-2.5 py-1.5 font-mono text-[12px] font-bold">
+            {currentLang.flag} {currentLang.labelTr}
+          </span>
         </div>
 
         <button
           onClick={loadNewSentence}
           disabled={loading}
           type="button"
-          style={{
-            backgroundColor: '#EA580C',
-            color: '#FFF',
-            border: '2px solid #000',
-            padding: '8px 16px',
-            fontWeight: 'bold',
-            fontSize: '12px',
-            cursor: 'pointer',
-            boxShadow: '2px 2px 0px #000',
-            letterSpacing: '0.5px'
-          }}
+          className="press press-sm border-[2px] border-ink bg-rust px-4 py-2 font-mono text-[12px] font-bold uppercase tracking-wide text-paper-raised disabled:opacity-60"
         >
-          {loading ? 'ÜRETİLİYOR...' : '🔄 YENİ CÜMLE ÜRET'}
+          {loading ? 'Üretiliyor…' : '🔄 Yeni Cümle Üret'}
         </button>
       </div>
 
-      {/* CÜMLE KARTI */}
-      <div style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: '12px'
-      }}>
-        <span style={{ color: '#EA580C', fontWeight: 'bold', fontSize: '12px' }}>
-          ÇEVRİLECEK %100 DOĞAL TÜRKÇE CÜMLE ({difficulty.toUpperCase()} MODU):
+      {/* Sentence card */}
+      <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+        <span className="font-mono text-[11.5px] font-bold uppercase tracking-wide text-rust">
+          Çevrilecek %100 doğal Türkçe cümle ({difficulty.toUpperCase()} modu):
         </span>
-        <span style={{
-          backgroundColor: '#65A30D',
-          color: '#FFF',
-          border: '1.5px solid #000',
-          padding: '3px 8px',
-          fontWeight: 'bold',
-          fontSize: '10px',
-          boxShadow: '1.5px 1.5px 0px #000'
-        }}>
-          %100 TEKRARSIZ · HAVUZDA {remaining}+ CÜMLE KALDI
+        <span className="press-sm border-[1.5px] border-ink bg-moss px-2.5 py-1 font-mono text-[10px] font-bold text-paper-raised">
+          %100 tekrarsız · havuzda {remaining}+ cümle kaldı
         </span>
       </div>
 
-      <div style={{ padding: '8px 0 16px 0' }}>
-        <h2 style={{
-          fontFamily: "'Georgia', 'Times New Roman', serif",
-          fontStyle: 'italic',
-          fontSize: '22px',
-          fontWeight: '700',
-          color: '#111',
-          lineHeight: '1.4',
-          margin: '0 0 8px 0'
-        }}>
+      <div key={currentSentence} className="rise-in card-fold border-[2px] border-dashed border-ink bg-paper-sunken px-5 py-6 sm:px-6">
+        <h2 className="font-display text-[22px] italic leading-[1.4] text-ink sm:text-[25px]">
           "{currentSentence || 'Cümle yükleniyor...'}"
         </h2>
 
         {hint && (
-          <p style={{ fontSize: '12px', color: '#0369A1', marginTop: '6px', fontWeight: 'bold' }}>
-            💡 İPUCU: {hint}
-          </p>
+          <p className="mt-3 font-mono text-[12px] font-bold text-sky">💡 İpucu: {hint}</p>
         )}
         {grammarNote && (
-          <p style={{ fontSize: '12px', color: '#7E22CE', marginTop: '4px', fontWeight: 'bold' }}>
-            📌 GRAMER ODAĞI: {grammarNote}
+          <p className="mt-1.5 font-mono text-[12px] font-bold text-plum">
+            📌 Gramer odağı: {grammarNote}
           </p>
         )}
       </div>
 
-      {/* ÇEVİRİ VE KONTROL FORMU */}
-      <form onSubmit={handleSubmit} style={{ marginTop: '10px' }}>
-        <label style={{ display: 'block', fontWeight: 'bold', fontSize: '12px', marginBottom: '6px' }}>
-          {targetLang.toUpperCase()} ÇEVİRİNİZİ YAZIN:
+      {/* Translate & check */}
+      <form onSubmit={handleSubmit} className="mt-6">
+        <label className="mb-2 block font-mono text-[12px] font-bold">
+          {currentLang.flag} {currentLang.labelTr.toUpperCase()} çevirinizi yazın:
         </label>
 
-        <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+        <div className="flex flex-wrap gap-3">
           <input
             type="text"
             value={userInput}
             onChange={(e) => setUserInput(e.target.value)}
-            placeholder={`${targetLang} cümlenizi buraya yazın...`}
-            style={{
-              flex: '1',
-              minWidth: '240px',
-              backgroundColor: '#FFF',
-              border: '2px solid #000',
-              padding: '10px 14px',
-              fontSize: '14px',
-              outline: 'none',
-              boxShadow: '2px 2px 0px #000'
-            }}
+            placeholder={`${currentLang.labelTr} cümlenizi buraya yazın...`}
+            className="press-sm min-w-[240px] flex-1 border-[2px] border-ink bg-paper-raised px-3.5 py-2.5 text-[14px] outline-none"
           />
 
           <button
             type="submit"
-            style={{
-              backgroundColor: '#EA580C',
-              color: '#FFF',
-              border: '2px solid #000',
-              padding: '10px 20px',
-              fontWeight: 'bold',
-              fontSize: '13px',
-              cursor: 'pointer',
-              boxShadow: '2px 2px 0px #000',
-              whiteSpace: 'nowrap'
-            }}
+            className="press press-sm whitespace-nowrap border-[2px] border-ink bg-rust px-6 py-2.5 font-mono text-[13px] font-bold text-paper-raised"
           >
-            KONTROL ET →
+            Kontrol Et →
           </button>
         </div>
       </form>
 
       {feedback && (
-        <div style={{
-          marginTop: '12px',
-          padding: '8px 12px',
-          backgroundColor: '#DCFCE7',
-          border: '1.5px solid #15803D',
-          color: '#166534',
-          fontWeight: 'bold',
-          fontSize: '12px',
-          borderRadius: '4px'
-        }}>
+        <div className="pop-in mt-4 border-[1.5px] border-moss-dark bg-moss-tint px-3.5 py-2.5 font-mono text-[12px] font-bold text-moss-dark">
           {feedback}
         </div>
       )}

@@ -37,40 +37,11 @@ export default function ReadingSection() {
   };
 
   return (
-    <div
-      style={{
-        backgroundColor: '#FAF8F5',
-        border: '3px solid #000',
-        padding: '24px',
-        boxShadow: '6px 6px 0px #000',
-        marginBottom: '25px',
-        boxSizing: 'border-box',
-      }}
-    >
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          flexWrap: 'wrap',
-          gap: '12px',
-          marginBottom: '18px',
-          borderBottom: '2px solid #000',
-          paddingBottom: '14px',
-        }}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-          <div
-            style={{
-              backgroundColor: '#FACC15',
-              border: '2px solid #000',
-              padding: '5px 12px',
-              fontWeight: 'bold',
-              fontSize: '12px',
-              boxShadow: '2px 2px 0px #000',
-            }}
-          >
-            📖 READING
+    <div className="mb-8 border-[3px] border-ink bg-paper-raised p-5 shadow-ink-lg sm:p-7">
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-3 border-b-[2px] border-ink pb-4">
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="press-sm border-[2px] border-ink bg-gold px-3 py-1.5 font-mono text-[12px] font-bold">
+            📖 Reading
           </div>
 
           <select
@@ -79,15 +50,7 @@ export default function ReadingSection() {
               setCategory(e.target.value);
               regenerate(e.target.value, difficulty);
             }}
-            style={{
-              backgroundColor: '#FFF',
-              border: '2px solid #000',
-              padding: '5px 10px',
-              fontWeight: 'bold',
-              fontSize: '12px',
-              cursor: 'pointer',
-              boxShadow: '2px 2px 0px #000',
-            }}
+            className="press-sm cursor-pointer border-[2px] border-ink bg-paper-raised px-2.5 py-1.5 font-mono text-[12px] font-bold"
           >
             {CATEGORIES.map((cat) => (
               <option key={cat.id} value={cat.id}>
@@ -102,15 +65,7 @@ export default function ReadingSection() {
               setDifficulty(e.target.value);
               regenerate(category, e.target.value);
             }}
-            style={{
-              backgroundColor: '#FFF',
-              border: '2px solid #000',
-              padding: '5px 10px',
-              fontWeight: 'bold',
-              fontSize: '12px',
-              cursor: 'pointer',
-              boxShadow: '2px 2px 0px #000',
-            }}
+            className="press-sm cursor-pointer border-[2px] border-ink bg-paper-raised px-2.5 py-1.5 font-mono text-[12px] font-bold"
           >
             {DIFFICULTY_LEVELS.map((lvl) => (
               <option key={lvl.id} value={lvl.id}>
@@ -123,60 +78,33 @@ export default function ReadingSection() {
         <button
           type="button"
           onClick={() => regenerate()}
-          style={{
-            backgroundColor: '#EA580C',
-            color: '#FFF',
-            border: '2px solid #000',
-            padding: '8px 16px',
-            fontWeight: 'bold',
-            fontSize: '12px',
-            cursor: 'pointer',
-            boxShadow: '2px 2px 0px #000',
-          }}
+          className="press press-sm border-[2px] border-ink bg-rust px-4 py-2 font-mono text-[12px] font-bold text-paper-raised"
         >
-          🔄 YENİ METİN
+          🔄 Yeni Metin
         </button>
       </div>
 
-      <div
-        style={{
-          backgroundColor: '#FFF',
-          border: '2px solid #000',
-          padding: '18px',
-          fontFamily: "'Georgia', 'Times New Roman', serif",
-          fontSize: '16px',
-          lineHeight: '1.8',
-        }}
-      >
+      <div className="rise-in border-[2px] border-ink bg-paper-sunken p-5 font-display text-[17px] leading-[1.85] sm:p-7 sm:text-[18px]">
         {passage.join(' ')}
       </div>
 
       <button
         type="button"
         onClick={() => setShowQuestions((s) => !s)}
-        style={{
-          marginTop: '16px',
-          backgroundColor: '#FFF',
-          border: '2px solid #000',
-          padding: '8px 16px',
-          fontWeight: 'bold',
-          fontSize: '12px',
-          cursor: 'pointer',
-          boxShadow: '2px 2px 0px #000',
-        }}
+        className="press press-sm mt-5 border-[2px] border-ink bg-paper-raised px-4 py-2 font-mono text-[12px] font-bold"
       >
         {showQuestions ? '🙈 Anlama Sorularını Gizle' : '🧠 Anlama Sorularını Göster'}
       </button>
 
       {showQuestions && (
-        <ul style={{ marginTop: '14px', paddingLeft: '20px' }}>
-          <li style={{ fontSize: '13px', marginBottom: '6px' }}>
+        <ul className="rise-in mt-4 list-disc space-y-2 pl-5">
+          <li className="text-[13px] leading-relaxed">
             Metindeki ana özneler kimlerdi? Türkçe olarak listele.
           </li>
-          <li style={{ fontSize: '13px', marginBottom: '6px' }}>
+          <li className="text-[13px] leading-relaxed">
             Her cümleyi hedef dile (AI Pratik Robotu sekmesindeki dile) çevirmeyi dene.
           </li>
-          <li style={{ fontSize: '13px' }}>
+          <li className="text-[13px] leading-relaxed">
             Metindeki fiilleri bul ve hangi zamanda çekimlendiklerini belirle.
           </li>
         </ul>

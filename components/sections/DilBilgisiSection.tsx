@@ -9,90 +9,56 @@ export default function DilBilgisiSection() {
   const levels = Object.values(GRAMMAR_LEVELS);
 
   return (
-    <div
-      style={{
-        backgroundColor: '#FAF8F5',
-        border: '3px solid #000',
-        padding: '24px',
-        boxShadow: '6px 6px 0px #000',
-        marginBottom: '25px',
-        boxSizing: 'border-box',
-      }}
-    >
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '8px',
-          marginBottom: '18px',
-          borderBottom: '2px solid #000',
-          paddingBottom: '14px',
-        }}
-      >
-        <div
-          style={{
-            backgroundColor: '#FACC15',
-            border: '2px solid #000',
-            padding: '5px 12px',
-            fontWeight: 'bold',
-            fontSize: '12px',
-            boxShadow: '2px 2px 0px #000',
-          }}
-        >
-          📌 DİL BİLGİSİ
+    <div className="mb-8 border-[3px] border-ink bg-paper-raised p-5 shadow-ink-lg sm:p-7">
+      <div className="mb-6 flex flex-wrap items-center gap-2.5 border-b-[2px] border-ink pb-4">
+        <div className="press-sm border-[2px] border-ink bg-gold px-3 py-1.5 font-mono text-[12px] font-bold">
+          📌 Dil Bilgisi
         </div>
-        <span style={{ fontSize: '12px', color: '#666' }}>
+        <span className="text-[12.5px] text-ink-soft">
           Seviyeni seç, o seviyeye ait gramer odak noktalarını incele.
         </span>
       </div>
 
-      <div style={{ display: 'grid', gap: '14px' }}>
+      <div className="grid gap-4">
         {levels.map((lvl) => {
           const isActive = lvl.id === difficulty;
           return (
-            <div
+            <button
               key={lvl.id}
+              type="button"
               onClick={() => setDifficulty(lvl.id)}
-              style={{
-                cursor: 'pointer',
-                backgroundColor: isActive ? '#FEF3C7' : '#FFF',
-                border: '2px solid #000',
-                padding: '16px',
-                boxShadow: isActive ? '3px 3px 0px #000' : 'none',
-              }}
+              className={[
+                'press press-sm w-full border-[2px] border-ink p-4 text-left transition-colors sm:p-5',
+                isActive ? 'bg-gold-tint' : 'bg-paper-raised hover:bg-paper-sunken',
+              ].join(' ')}
+              style={!isActive ? { boxShadow: 'none' } : undefined}
             >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <h3 style={{ margin: 0, fontSize: '15px', fontWeight: 800 }}>
+              <div className="flex items-center justify-between gap-3">
+                <h3 className="font-display text-[17px] font-semibold">
                   {isActive ? '👉 ' : ''}
                   {lvl.title}
                 </h3>
-                <span
-                  style={{
-                    backgroundColor: '#65A30D',
-                    color: '#FFF',
-                    fontSize: '10px',
-                    fontWeight: 'bold',
-                    padding: '3px 8px',
-                    border: '1.5px solid #000',
-                  }}
-                >
+                <span className="shrink-0 border-[1.5px] border-ink bg-moss px-2 py-1 font-mono text-[10px] font-bold text-paper-raised">
                   CEFR {lvl.cefr}
                 </span>
               </div>
-              <p style={{ fontSize: '12px', margin: '8px 0', color: '#333' }}>{lvl.description}</p>
-              <ul style={{ margin: '8px 0 0 0', paddingLeft: '18px' }}>
+              <p className="mt-2 text-[13px] leading-relaxed text-ink-soft">{lvl.description}</p>
+              <ul className="mt-3 flex flex-wrap gap-2">
                 {lvl.focusPoints.map((point) => (
-                  <li key={point} style={{ fontSize: '12px', color: '#7E22CE', fontWeight: 'bold' }}>
+                  <li
+                    key={point}
+                    className="border-[1.5px] border-plum/40 bg-plum-tint px-2.5 py-1 font-mono text-[11px] font-semibold text-plum"
+                  >
                     {point}
                   </li>
                 ))}
               </ul>
-            </div>
+            </button>
           );
         })}
       </div>
 
-      <p style={{ marginTop: '16px', fontSize: '11px', color: '#666' }}>
+      <p className="mt-6 text-[11.5px] text-ink-soft">
         💡 Seçtiğin seviye tüm sekmelerde (Kelime, Reading, Listening, AI Pratik Robotu) geçerli olur.
       </p>
     </div>
