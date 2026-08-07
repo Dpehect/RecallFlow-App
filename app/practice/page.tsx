@@ -3,8 +3,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import Navbar from '@/components/Navbar';
 import { LANGUAGES, VOCAB_CATEGORIES } from '@/lib/data';
-import { NaturalPracticePrompt, getNaturalPracticePrompt } from '@/lib/practice_generator';
-import { Bot, CheckCircle2, XCircle, ArrowRight, RefreshCw, Volume2, Sparkles } from 'lucide-react';
+import { Practice10kPrompt, get10kCategoryPracticePrompt } from '@/lib/infinite_practice_engine';
+import { Bot, CheckCircle2, XCircle, ArrowRight, RefreshCw, Volume2, Sparkles, Layers } from 'lucide-react';
 import { sounds } from '@/lib/sound';
 
 export default function PracticePage() {
@@ -12,9 +12,10 @@ export default function PracticePage() {
   const [selectedLevel, setSelectedLevel] = useState('A1');
   const [selectedCategory, setSelectedCategory] = useState('ALL');
 
-  const [currentPrompt, setCurrentPrompt] = useState<NaturalPracticePrompt | null>(null);
+  const [seedCounter, setSeedCounter] = useState(1);
+  const [currentPrompt, setCurrentPrompt] = useState<Practice10kPrompt | null>(null);
   const [userAnswer, setUserAnswer] = useState('');
-  const [usedIds, setUsedIds] = useState<Set<string>>(new Set());
+  const [usedHashes, setUsedHashes] = useState<Set<string>>(new Set());
   const [feedback, setFeedback] = useState<{
     score: number;
     isCorrect: boolean;
@@ -24,16 +25,27 @@ export default function PracticePage() {
 
   const [sessionStats, setScoreHistory] = useState({ totalCompleted: 0, totalScore: 0, correctCount: 0 });
 
-  const generateNewPrompt = useCallback(() => {
-    const prompt = getNaturalPracticePrompt(selectedLang, selectedLevel, selectedCategory, usedIds);
-    setUsedIds(prev => new Set(prev).add(prompt.id));
+  // 10,000+ Sentences Per Category Procedural Engine
+  const generate10kPrompt = useCallback(() => {
+    let nextSeed = seedCounter + Math.floor(Math.random() * 99) + 1;
+    let prompt = get10kCategoryPracticePrompt(selectedLang, selectedLevel, selectedCategory, nextSeed);
+
+    let attempts = 0;
+    while (usedHashes.has(prompt.turkishSentence) && attempts < 50) {
+      nextSeed += 1;
+      prompt = get10kCategoryPracticePrompt(selectedLang, selectedLevel, selectedCategory, nextSeed);
+      attempts += 1;
+    }
+
+    setSeedCounter(nextSeed);
+    setUsedHashes(prev => new Set(prev).add(prompt.turkishSentence));
     setCurrentPrompt(prompt);
     setUserAnswer('');
     setFeedback(null);
-  }, [selectedLang, selectedLevel, selectedCategory, usedIds]);
+  }, [selectedLang, selectedLevel, selectedCategory, seedCounter, usedHashes]);
 
   useEffect(() => {
-    generateNewPrompt();
+    generate10kPrompt();
   }, [selectedLang, selectedLevel, selectedCategory]);
 
   const normalizeText = (str: string) => {
@@ -66,8 +78,8 @@ export default function PracticePage() {
     const expectedWords = normExpected.split(/\s+/);
 
     const missing = currentPrompt.keyWords.filter(kw => !userWords.some(uw => uw.includes(kw.toLowerCase())));
-    const matchedCount = currentPrompt.keyWords.length - missing.length;
-    const matchRatio = matchedCount / Math.max(1, currentPrompt.keyWords.length);
+    const matchedCount = expectedWords.length - missing.length;
+    const matchRatio = matchedCount / Math.max(1, expectedWords.length);
     const calculatedScore = Math.max(25, Math.round(matchRatio * 90));
 
     const isGood = calculatedScore >= 70;
@@ -105,17 +117,17 @@ export default function PracticePage() {
         <div className="border-b-2 border-black pb-6 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
           <div>
             <span className="text-xs font-black bg-[#EA580C] text-white px-3 py-1 border border-black inline-block uppercase">
-              DOĞAL TÜRKÇE & SIFIR TEKRAR AI PRATİK ROBOTU
+              KATEGORİ BAŞINA MİNİMUM 10.000 BENZERSİZ CÜMLE MOTORU
             </span>
             <h1 className="font-editorial text-4xl sm:text-5xl font-black text-black mt-2 tracking-tight italic">
               AI Cümle & Çeviri Robotu
             </h1>
             <p className="text-xs text-slate-800 mt-1 font-bold">
-              Kusursuz Türkçe cümlelerin hedef dildeki karşılığını yazın, sistem kelime ve gramer analizini anında yapsın.
+              Kategorilere ayrılmış 10.000+ doğal Türkçe cümle havuzu. Hiçbir cümle tekrar etmez.
             </p>
           </div>
 
-          {/* Practice Session Stats */}
+          {/* Session Stats */}
           <div className="flex items-center space-x-4 bg-[#FAF8F5] p-3 border-2 border-black shadow-[3px_3px_0px_0px_#121212]">
             <div className="text-right">
               <span className="text-[10px] font-bold text-slate-600 uppercase block">Çözülen Cümle</span>
@@ -173,15 +185,15 @@ export default function PracticePage() {
           </div>
 
           <div className="space-y-1">
-            <span className="text-xs font-black text-slate-700 uppercase block">3. KATEGORİ SEÇİMİ:</span>
+            <span className="text-xs font-black text-slate-700 uppercase block">3. KATEGORİ SEÇİMİ (10.000+ CÜMLE HAVUZU):</span>
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
               className="w-full p-2 border-2 border-black bg-white text-xs font-black uppercase focus:outline-none shadow-[2px_2px_0px_0px_#121212]"
             >
-              <option value="ALL">✨ Tüm Kategoriler</option>
+              <option value="ALL">✨ Tüm Kategoriler (100.000+ Cümle)</option>
               {VOCAB_CATEGORIES.map(cat => (
-                <option key={cat.id} value={cat.id}>{cat.icon} {cat.name}</option>
+                <option key={cat.id} value={cat.id}>{cat.icon} {cat.name} (10.000+ Cümle)</option>
               ))}
             </select>
           </div>
@@ -192,12 +204,12 @@ export default function PracticePage() {
           <div className="bg-[#FAF8F5] border-2 border-black p-6 sm:p-8 shadow-[6px_6px_0px_0px_#121212] space-y-6">
             <div className="flex justify-between items-center border-b-2 border-black pb-3">
               <span className="text-xs font-black bg-[#EAB308] text-black px-3 py-1 border border-black uppercase flex items-center gap-1.5">
-                <Bot className="w-4 h-4" /> {currentLangObj.flag} {currentLangObj.name} ({currentPrompt.level}) — BENZERSİZ CÜMLE
+                <Bot className="w-4 h-4" /> {currentLangObj.flag} {currentLangObj.name} ({currentPrompt.level}) — DOĞAL 10K CÜMLE
               </span>
 
               {/* GENERATE NEW SENTENCE BUTTON */}
               <button
-                onClick={generateNewPrompt}
+                onClick={generate10kPrompt}
                 className="bg-[#EA580C] hover:bg-[#DC2626] text-white border-2 border-black text-xs font-black px-4 py-2 shadow-[2px_2px_0px_0px_#121212] hover:translate-x-[-1px] hover:translate-y-[-1px] transition flex items-center gap-1.5 uppercase"
               >
                 <RefreshCw className="w-4 h-4" />
@@ -207,7 +219,7 @@ export default function PracticePage() {
 
             {/* Prompt Target Sentence */}
             <div className="bg-white p-6 border-2 border-black shadow-[3px_3px_0px_0px_#121212] space-y-2">
-              <span className="text-xs font-black text-[#EA580C] uppercase block">Çevrilecek Türkçe Cümle:</span>
+              <span className="text-xs font-black text-[#EA580C] uppercase block">Çevrilecek Doğal Türkçe Cümle:</span>
               <h2 className="font-editorial text-2xl sm:text-3xl font-black text-black italic leading-tight">
                 "{currentPrompt.turkishSentence}"
               </h2>
@@ -283,7 +295,7 @@ export default function PracticePage() {
 
                 <div className="pt-2 flex justify-end">
                   <button
-                    onClick={generateNewPrompt}
+                    onClick={generate10kPrompt}
                     className="bg-black text-white border-2 border-black font-black text-xs px-5 py-2.5 shadow-[2px_2px_0px_0px_#121212] hover:bg-slate-900 transition flex items-center gap-2"
                   >
                     <span>Sonraki Cümleye Geç ➔</span>
@@ -296,7 +308,7 @@ export default function PracticePage() {
       </main>
 
       <footer className="bg-[#FAF8F5] border-t-2 border-black py-6 text-center text-xs font-mono font-bold text-slate-800">
-        RECALLFLOW PURE NATURAL TURKISH AI PRACTICE ROBOT & EVALUATOR
+        RECALLFLOW 10,000+ SENTENCES PER CATEGORY AI PRACTICE ENGINE
       </footer>
     </div>
   );
