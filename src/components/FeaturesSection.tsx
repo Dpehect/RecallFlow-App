@@ -7,78 +7,66 @@ export const FeaturesSection: React.FC = () => {
     <section className="max-w-7xl mx-auto px-6 py-12">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         
-        {/* Card 1: Expert-led learning (Dark) */}
-        <div className="bg-[#18181b] text-white rounded-3xl p-8 flex flex-col justify-between shadow-xl min-h-[420px]">
-          {/* Top Illustration Graphic */}
+        {/* Card 1: Vocab Atlas (Dark Theme) */}
+        <div id="vocab" className="bg-[#18181b] text-white rounded-3xl p-8 flex flex-col justify-between shadow-xl min-h-[420px]">
           <div className="relative h-48 w-full flex items-center justify-center">
             <div className="relative w-36 h-36">
-              {/* Back card */}
               <div className="absolute -top-3 -left-3 w-36 h-36 rounded-2xl bg-slate-800/80 transform -rotate-6"></div>
-              {/* Middle card */}
               <div className="absolute top-0 left-0 w-36 h-36 rounded-2xl bg-blue-600 transform -rotate-3"></div>
-              {/* Front orange/yellow gear emblem card */}
               <div className="absolute top-3 left-3 w-36 h-36 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-lg">
-                <svg className="w-20 h-20 text-amber-900/30" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2a10 10 0 1 0 10 10 A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/>
-                  <path d="M12 6a6 6 0 1 0 6 6 6 6 0 0 0-6-6zm0 10a4 4 0 1 1 4-4 4 4 0 0 1-4 4z"/>
+                <svg className="w-16 h-16 text-slate-900/80" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                 </svg>
               </div>
             </div>
           </div>
 
-          {/* Bottom Text */}
           <div className="space-y-3 mt-6">
-            <h3 className="text-2xl font-bold tracking-tight">Expert-led learning</h3>
+            <h3 className="text-2xl font-bold tracking-tight">Vocab Atlas</h3>
             <p className="text-sm text-slate-400 leading-relaxed">
-              Learn from experienced industry professionals who share practical, real-world insights.
+              Master words with spaced repetition, contextual example sentences, and automated CEFR level tracking.
             </p>
           </div>
         </div>
 
-        {/* Card 2: Flexible study options (Light) */}
-        <div className="bg-[#f1f5f9] text-slate-900 rounded-3xl p-8 flex flex-col justify-between border border-slate-200/60 shadow-sm min-h-[420px]">
-          {/* Top Illustration Graphic */}
+        {/* Card 2: Listening Studio (Light Theme) */}
+        <div id="listening" className="bg-[#f1f5f9] text-slate-900 rounded-3xl p-8 flex flex-col justify-between border border-slate-200/60 shadow-sm min-h-[420px]">
           <div className="relative h-48 w-full flex items-center justify-center">
             <div className="relative flex items-center gap-3">
-              {/* Left Student Floating Avatar */}
               <div className="absolute -left-12 top-0 w-16 h-16 rounded-2xl overflow-hidden border-2 border-white shadow-md">
                 <img
-                  src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=200"
-                  alt="Student 1"
+                  src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200"
+                  alt="Audio Speaker"
                   className="w-full h-full object-cover"
                 />
               </div>
 
-              {/* Fast-forward double arrow icon badge */}
               <div className="bg-gradient-to-r from-orange-400 to-pink-500 p-6 rounded-3xl shadow-md text-white flex items-center justify-center">
                 <svg className="w-16 h-16 fill-current" viewBox="0 0 24 24">
                   <path d="M4 18l8.5-6L4 6v12zm9 0l8.5-6L13 6v12z" />
                 </svg>
               </div>
 
-              {/* Right Student Floating Avatar */}
               <div className="absolute -right-12 bottom-0 w-20 h-20 rounded-2xl overflow-hidden border-2 border-white shadow-md">
                 <img
-                  src="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=200"
-                  alt="Student 2"
+                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200"
+                  alt="Student Listener"
                   className="w-full h-full object-cover"
                 />
               </div>
             </div>
           </div>
 
-          {/* Bottom Text */}
           <div className="space-y-3 mt-6">
-            <h3 className="text-2xl font-bold tracking-tight">Flexible study options</h3>
+            <h3 className="text-2xl font-bold tracking-tight">Listening Studio</h3>
             <p className="text-sm text-slate-600 leading-relaxed">
-              Access courses anytime and anywhere, giving you the freedom to learn at your own pace.
+              Train your ear with native audio clips, dictation exercises, and real-time pronunciation feedback.
             </p>
           </div>
         </div>
 
-        {/* Card 3: Global networking (Purple/Indigo) */}
-        <div className="bg-[#524eee] text-white rounded-3xl p-8 flex flex-col justify-between shadow-xl min-h-[420px]">
-          {/* Top Illustration Graphic - Avatar Grid */}
+        {/* Card 3: Reading Library (Purple/Indigo Theme) */}
+        <div id="reading" className="bg-[#524eee] text-white rounded-3xl p-8 flex flex-col justify-between shadow-xl min-h-[420px]">
           <div className="relative h-48 w-full flex items-center justify-center">
             <div className="grid grid-cols-4 gap-2.5 max-w-[240px]">
               {[
@@ -94,17 +82,16 @@ export const FeaturesSection: React.FC = () => {
                 'https://images.unsplash.com/photo-1521119989659-a83eee488004?w=150',
               ].map((src, idx) => (
                 <div key={idx} className="w-11 h-11 rounded-full overflow-hidden border-2 border-white/80 shadow-sm">
-                  <img src={src} alt="Avatar" className="w-full h-full object-cover" />
+                  <img src={src} alt="Reader" className="w-full h-full object-cover" />
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Bottom Text */}
           <div className="space-y-3 mt-6">
-            <h3 className="text-2xl font-bold tracking-tight">Global networking</h3>
+            <h3 className="text-2xl font-bold tracking-tight">Reading Library</h3>
             <p className="text-sm text-purple-100/90 leading-relaxed">
-              Connect with global professionals, expanding your network and gaining diverse perspectives.
+              Read engaging stories tailored to your level with instant dictionary lookups and interactive comprehension.
             </p>
           </div>
         </div>

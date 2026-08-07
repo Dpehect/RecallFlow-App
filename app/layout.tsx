@@ -2,8 +2,8 @@ import './globals.css';
 import React from 'react';
 
 export const metadata = {
-  title: 'E-Lab - Learn. Grow. Succeed.',
-  description: 'Learn from industry experts and gain the skills to advance your career.',
+  title: 'RecallFlow - Listen. Read. Master.',
+  description: 'Interactive vocabulary, listening labs, and immersive reading stories for rapid language fluency.',
 };
 
 export default function RootLayout({
