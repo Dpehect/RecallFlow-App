@@ -1,21 +1,4 @@
-import '@/styles/globals.css';
-import React from 'react';
-
-export const metadata = {
-  title: 'RecallFlow - Refactored Edition',
-  description: 'Modern, high-performance language learning app architecture',
-};
-
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return (
-    <html lang="tr" className="dark">
-      <body className="min-h-screen bg-[#090D16] text-slate-100 antialiased">
-        {children}
-      </body>
-    </html>
-  );
-}
+import type { Metadata } from 'next';
+import './manifest.css';
+export const metadata: Metadata={title:'RecallFlow / Language has a pulse',description:'A radical study interface for people who refuse to memorize mechanically.'};
+export default function Layout({children}:{children:React.ReactNode}){return <html lang="tr"><body>{children}</body></html>}

@@ -1,65 +1,16 @@
 'use client';
+import {AnimatePresence,motion,useReducedMotion} from 'framer-motion';
+import {useCallback,useEffect,useRef,useState} from 'react';
 
-import React from 'react';
-import { WordGrid } from '@/components/organisms/WordGrid';
-import { useVocabularyStore } from '@/store/useVocabularyStore';
-import { CEFRLevel } from '@/types/vocabulary';
+type Mode='signal'|'orbit'|'chamber';
+const words=[['MERAK','curiosity','neugier','curiosité'],['EŞİK','threshold','schwelle','seuil'],['HAFIZA','memory','gedächtnis','mémoire'],['SES','voice','stimme','voix'],['SAPMA','deviation','abweichung','écart'],['AKIŞ','flow','fluss','flux']];
+const stations=[{id:'01',name:'Yakın Okuma',copy:'Bir metni hızla tüketmek değil; direncini, ritmini, alt metnini duymak.'},{id:'02',name:'Ses Karanlığı',copy:'Ekranı kapat. Kulak, metnin henüz fark etmediğin tarafıdır.'},{id:'03',name:'Geri Çağırma',copy:'İpucu yok. Çoktan seçmeli yok. Sadece sen ve kelimenin bıraktığı iz.'}];
 
-const LEVELS: (CEFRLevel | 'ALL')[] = ['ALL', 'A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
+function usePointerField(enabled:boolean){const canvas=useRef<HTMLCanvasElement>(null);const pointer=useRef({x:-999,y:-999});useEffect(()=>{if(!enabled)return;const el=canvas.current;if(!el)return;const ctx=el.getContext('2d');if(!ctx)return;let frame=0;let size={w:0,h:0};const nodes=Array.from({length:48},(_,i)=>({x:Math.random(),y:Math.random(),vx:(Math.random()-.5)*.00034,vy:(Math.random()-.5)*.00034,seed:i}));const resize=()=>{const r=el.getBoundingClientRect();const dpr=Math.min(devicePixelRatio,2);el.width=r.width*dpr;el.height=r.height*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);size={w:r.width,h:r.height}};const draw=()=>{ctx.clearRect(0,0,size.w,size.h);for(const n of nodes){n.x+=n.vx;n.y+=n.vy;if(n.x<0||n.x>1)n.vx*=-1;if(n.y<0||n.y>1)n.vy*=-1;const x=n.x*size.w,y=n.y*size.h;const d=Math.hypot(x-pointer.current.x,y-pointer.current.y);const heat=Math.max(0,1-d/230);ctx.fillStyle=`rgba(255,78,39,${.24+heat*.7})`;ctx.beginPath();ctx.arc(x,y,1.2+heat*3,0,Math.PI*2);ctx.fill();for(const m of nodes){if(m.seed<=n.seed)continue;const mx=m.x*size.w,my=m.y*size.h;const md=Math.hypot(x-mx,y-my);if(md<118){ctx.strokeStyle=`rgba(244,239,227,${.05+heat*.14})`;ctx.lineWidth=.5;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(mx,my);ctx.stroke()}}}frame=requestAnimationFrame(draw)};resize();draw();const move=(e:PointerEvent)=>{const r=el.getBoundingClientRect();pointer.current={x:e.clientX-r.left,y:e.clientY-r.top}};window.addEventListener('resize',resize);el.addEventListener('pointermove',move);return()=>{cancelAnimationFrame(frame);window.removeEventListener('resize',resize);el.removeEventListener('pointermove',move)}} ,[enabled]);return canvas}
 
-export default function HomePage() {
-  const { searchQuery, setSearchQuery, selectedLevel, setLevel } = useVocabularyStore();
-
-  return (
-    <main className="min-h-screen bg-[#090D16] text-slate-100 antialiased selection:bg-indigo-500 selection:text-white">
-      <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
-        <div className="absolute -top-40 -left-40 h-96 w-96 rounded-full bg-indigo-600/10 blur-[128px]" />
-        <div className="absolute top-1/3 -right-40 h-96 w-96 rounded-full bg-cyan-600/10 blur-[128px]" />
-      </div>
-
-      <div className="relative z-10 mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        <header className="flex flex-col gap-4 border-b border-slate-800/80 pb-6 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <h1 className="text-2xl font-black tracking-tight text-white sm:text-3xl">
-              Recall<span className="text-indigo-500">Flow</span>
-            </h1>
-            <p className="mt-1 text-xs text-slate-400 sm:text-sm">
-              Bağlamsal hafıza ve modern kart sistemi ile dil hakimiyeti.
-            </p>
-          </div>
-
-          <div className="w-full sm:w-72">
-            <input
-              type="text"
-              placeholder="Kelime veya anlam ara..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full rounded-lg border border-slate-800 bg-slate-900/80 px-3.5 py-2 text-sm text-slate-200 placeholder-slate-500 backdrop-blur-md transition-all focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
-            />
-          </div>
-        </header>
-
-        <section className="my-6 flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
-          <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 mr-2">Seviye:</span>
-          {LEVELS.map((lvl) => (
-            <button
-              key={lvl}
-              onClick={() => setLevel(lvl)}
-              className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-all ${
-                selectedLevel === lvl
-                  ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30'
-                  : 'bg-slate-900/60 text-slate-400 hover:bg-slate-800 hover:text-slate-200 border border-slate-800/60'
-              }`}
-            >
-              {lvl}
-            </button>
-          ))}
-        </section>
-
-        <section className="mt-4">
-          <WordGrid />
-        </section>
-      </div>
-    </main>
-  );
-}
+function Marquee(){const line=Array.from({length:3},(_,i)=><span key={i}>DİL BİR ARAYÜZ DEĞİL, BİR ORGANIZMADIR — </span>);return <div className="marquee" aria-hidden><div>{line}</div><div>{line}</div></div>}
+function SignalField({active}:{active:boolean}){const ref=usePointerField(active);return <section className="signal-section" aria-labelledby="signal-title"><canvas ref={ref} aria-hidden/><div className="signal-copy"><p className="index">[ 01 / SİNYAL ]</p><h2 id="signal-title">Öğrenme,<br/><i>temas</i> ister.</h2><p>Pasif izleme yok. Her kelime sistemde bir gerilim yaratır; yaklaş, dağıt, yeniden kur.</p></div><div className="signal-legend"><span><b/> aktif iz</span><span><b/> bağlanabilir düğüm</span></div></section>}
+function Orbit({onSelect}:{onSelect:(word:string)=>void}){const reduced=useReducedMotion();return <section className="orbit-section" aria-labelledby="orbit-title"><div className="orbit-intro"><p className="index">[ 02 / YÖRÜNGE ]</p><h2 id="orbit-title">Kelimeyi<br/>merkeze alma.</h2><p>Onu başka kelimelerle çarpıştır. Anlam, tek başına değil; sürtünmede kalır.</p></div><div className="orbit-stage">{words.map((row,i)=><motion.button key={row[0]} className={`orbiter orb-${i}`} onClick={()=>onSelect(row[0])} initial={{opacity:0,scale:.7}} whileInView={{opacity:1,scale:1}} viewport={{once:true}} animate={reduced?undefined:{rotate:i%2?360:-360}} transition={{rotate:{duration:26+i*4,repeat:Infinity,ease:'linear'},opacity:{delay:i*.06}}}><span>{row[0]}</span><small>{row.slice(1).join(' / ')}</small></motion.button>)}<div className="orbit-core"><b>↯</b><span>bağlam<br/>makinesi</span></div></div></section>}
+function Chamber({onStart}:{onStart:()=>void}){const[station,setStation]=useState(0);return <section className="chamber" aria-labelledby="chamber-title"><div className="chamber-top"><p className="index">[ 03 / ODA ]</p><p>Bir sonraki oturumun taslağı. Süre değil, dikkat ölçülür.</p></div><div className="chamber-body"><div className="station-list" role="tablist" aria-label="Çalışma istasyonları">{stations.map((item,i)=><button key={item.id} role="tab" aria-selected={station===i} onClick={()=>setStation(i)}><span>{item.id}</span><b>{item.name}</b><i>↗</i></button>)}</div><AnimatePresence mode="wait"><motion.article key={station} className="station-detail" initial={{opacity:0,x:20}} animate={{opacity:1,x:0}} exit={{opacity:0,x:-15}}><span>SEÇİLİ İSTASYON</span><h2>{stations[station].name}</h2><p>{stations[station].copy}</p><button className="rupture" onClick={onStart}>Oturumu kır →</button></motion.article></AnimatePresence></div></section>}
+function StartOverlay({close,word}:{close:()=>void;word:string}){const[input,setInput]=useState('');return <motion.div className="overlay" initial={{clipPath:'inset(100% 0 0 0)'}} animate={{clipPath:'inset(0 0 0 0)'}} exit={{clipPath:'inset(0 0 100% 0)'}}><button className="close" onClick={close}>× KAPAT</button><p className="index">İLK KIRILMA</p><h2>{word}</h2><p>Bu kelimeyi İngilizce, Almanca veya Fransızca çağır. Harf kusursuzluğu değil, niyet aranıyor.</p><label htmlFor="recall">Cevabın</label><input id="recall" value={input} onChange={e=>setInput(e.target.value)} autoFocus/><button className="rupture" onClick={close}>İzi kaydet →</button></motion.div>}
+export default function Home(){const[mode,setMode]=useState<Mode>('signal');const[open,setOpen]=useState(false);const[word,setWord]=useState('MERAK');const choose=useCallback((next:string)=>{setWord(next);setMode('orbit');document.getElementById('orbit')?.scrollIntoView({behavior:'smooth'})},[]);return <main><header className="mast"><a href="#top" className="mark">RF<span>◼</span></a><p>RECALLFLOW / 001</p><button onClick={()=>setOpen(true)}>KIRILMAYA BAŞLA ↗</button></header><section className="hero" id="top"><div className="hero-noise"/><p className="index">İSTANBUL → HER DİL / 2026</p><h1>DİLİ<br/><em>EZBERLEME.</em><br/>ONA<br/>DİREN.</h1><div className="hero-foot"><p>RecallFlow, dil öğrenimini rahatlatıcı bir kontrol paneli olmaktan çıkarır. Zihnin kapısını tıklatmaz; menteşesinden söker.</p><button className="scroll-cue" onClick={()=>{setMode('signal');document.getElementById('signal')?.scrollIntoView({behavior:'smooth'})}}>AŞAĞI İN <span>↓</span></button></div></section><Marquee/><div id="signal"><SignalField active={mode==='signal'}/></div><div id="orbit"><Orbit onSelect={choose}/></div><Chamber onStart={()=>setOpen(true)}/><footer><p>RECALLFLOW</p><p>MEMORY IS NOT A DATABASE.</p><button onClick={()=>setOpen(true)}>BAŞLA ↗</button></footer><AnimatePresence>{open&&<StartOverlay word={word} close={()=>setOpen(false)}/>}</AnimatePresence></main>}

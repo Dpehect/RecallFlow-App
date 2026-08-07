@@ -1,8 +1,14 @@
-# RecallFlow - Refactored Architecture
+# RecallFlow / Zero
 
-Modern, type-safe, and modular Next.js 14 refactor package for RecallFlow.
+Radical, interaction-first language learning landing page.
 
-## Deployment Notes
-1. Extract all contents of this zip directly into your project root directory (replacing old files).
-2. Ensure any legacy `app/` or `components/RecallFlowApp.tsx` outside `src/` are removed from GitHub.
-3. Push to GitHub and deploy on Vercel.
+## Architecture
+
+- `app/page.tsx`: compositional page shell and section orchestration
+- `usePointerField`: requestAnimationFrame canvas loop isolated from React rendering
+- `SignalField`, `Orbit`, `Chamber`: independently stateful visual systems
+- CSS custom properties and containment-oriented layout; no UI-kit or Tailwind layer
+
+## Commands
+
+`npm install` · `npm run build` · `npm run typecheck`
