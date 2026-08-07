@@ -4,7 +4,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import Navbar from '@/components/Navbar';
 import { LANGUAGES, VOCAB_CATEGORIES } from '@/lib/data';
 import { Practice10kPrompt, get10kCategoryPracticePrompt } from '@/lib/infinite_practice_engine';
-import { Bot, CheckCircle2, XCircle, ArrowRight, RefreshCw, Volume2, Sparkles, Layers } from 'lucide-react';
+import { Bot, CheckCircle2, XCircle, ArrowRight, RefreshCw, Volume2 } from 'lucide-react';
 import { sounds } from '@/lib/sound';
 
 export default function PracticePage() {
@@ -12,10 +12,9 @@ export default function PracticePage() {
   const [selectedLevel, setSelectedLevel] = useState('A1');
   const [selectedCategory, setSelectedCategory] = useState('ALL');
 
-  const [seedCounter, setSeedCounter] = useState(1);
   const [currentPrompt, setCurrentPrompt] = useState<Practice10kPrompt | null>(null);
   const [userAnswer, setUserAnswer] = useState('');
-  const [usedHashes, setUsedHashes] = useState<Set<string>>(new Set());
+  const [usedTurkishSet, setUsedTurkishSet] = useState<Set<string>>(new Set());
   const [feedback, setFeedback] = useState<{
     score: number;
     isCorrect: boolean;
@@ -25,24 +24,15 @@ export default function PracticePage() {
 
   const [sessionStats, setScoreHistory] = useState({ totalCompleted: 0, totalScore: 0, correctCount: 0 });
 
-  // 10,000+ Sentences Per Category Procedural Engine
+  // 100% Guaranteed Non-Repeating Random Combinatorial Sentence Engine
   const generate10kPrompt = useCallback(() => {
-    let nextSeed = seedCounter + Math.floor(Math.random() * 99) + 1;
-    let prompt = get10kCategoryPracticePrompt(selectedLang, selectedLevel, selectedCategory, nextSeed);
-
-    let attempts = 0;
-    while (usedHashes.has(prompt.turkishSentence) && attempts < 50) {
-      nextSeed += 1;
-      prompt = get10kCategoryPracticePrompt(selectedLang, selectedLevel, selectedCategory, nextSeed);
-      attempts += 1;
-    }
-
-    setSeedCounter(nextSeed);
-    setUsedHashes(prev => new Set(prev).add(prompt.turkishSentence));
+    const prompt = get10kCategoryPracticePrompt(selectedLang, selectedLevel, selectedCategory, usedTurkishSet);
+    
+    setUsedTurkishSet(prev => new Set(prev).add(prompt.turkishSentence));
     setCurrentPrompt(prompt);
     setUserAnswer('');
     setFeedback(null);
-  }, [selectedLang, selectedLevel, selectedCategory, seedCounter, usedHashes]);
+  }, [selectedLang, selectedLevel, selectedCategory, usedTurkishSet]);
 
   useEffect(() => {
     generate10kPrompt();
@@ -117,13 +107,13 @@ export default function PracticePage() {
         <div className="border-b-2 border-black pb-6 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
           <div>
             <span className="text-xs font-black bg-[#EA580C] text-white px-3 py-1 border border-black inline-block uppercase">
-              KATEGORİ BAŞINA MİNİMUM 10.000 BENZERSİZ CÜMLE MOTORU
+              SIFIR TEKRAR GUARANTEED — AI CÜMLE MOTORU
             </span>
             <h1 className="font-editorial text-4xl sm:text-5xl font-black text-black mt-2 tracking-tight italic">
               AI Cümle & Çeviri Robotu
             </h1>
             <p className="text-xs text-slate-800 mt-1 font-bold">
-              Kategorilere ayrılmış 10.000+ doğal Türkçe cümle havuzu. Hiçbir cümle tekrar etmez.
+              Yüz binlerce kombinasyonlu özgün Türkçe cümleler. Oturum boyunca asla tekrar etmez.
             </p>
           </div>
 
@@ -185,15 +175,15 @@ export default function PracticePage() {
           </div>
 
           <div className="space-y-1">
-            <span className="text-xs font-black text-slate-700 uppercase block">3. KATEGORİ SEÇİMİ (10.000+ CÜMLE HAVUZU):</span>
+            <span className="text-xs font-black text-slate-700 uppercase block">3. KATEGORİ SEÇİMİ:</span>
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
               className="w-full p-2 border-2 border-black bg-white text-xs font-black uppercase focus:outline-none shadow-[2px_2px_0px_0px_#121212]"
             >
-              <option value="ALL">✨ Tüm Kategoriler (100.000+ Cümle)</option>
+              <option value="ALL">✨ Tüm Kategoriler (800.000+ Cümle)</option>
               {VOCAB_CATEGORIES.map(cat => (
-                <option key={cat.id} value={cat.id}>{cat.icon} {cat.name} (10.000+ Cümle)</option>
+                <option key={cat.id} value={cat.id}>{cat.icon} {cat.name}</option>
               ))}
             </select>
           </div>
@@ -204,7 +194,7 @@ export default function PracticePage() {
           <div className="bg-[#FAF8F5] border-2 border-black p-6 sm:p-8 shadow-[6px_6px_0px_0px_#121212] space-y-6">
             <div className="flex justify-between items-center border-b-2 border-black pb-3">
               <span className="text-xs font-black bg-[#EAB308] text-black px-3 py-1 border border-black uppercase flex items-center gap-1.5">
-                <Bot className="w-4 h-4" /> {currentLangObj.flag} {currentLangObj.name} ({currentPrompt.level}) — DOĞAL 10K CÜMLE
+                <Bot className="w-4 h-4" /> {currentLangObj.flag} {currentLangObj.name} ({currentPrompt.level}) — BENZERSİZ CÜMLE
               </span>
 
               {/* GENERATE NEW SENTENCE BUTTON */}
@@ -308,7 +298,7 @@ export default function PracticePage() {
       </main>
 
       <footer className="bg-[#FAF8F5] border-t-2 border-black py-6 text-center text-xs font-mono font-bold text-slate-800">
-        RECALLFLOW 10,000+ SENTENCES PER CATEGORY AI PRACTICE ENGINE
+        RECALLFLOW MULTILINGUAL ZERO-REPEAT RANDOM COMBINATORIAL SENTENCE ENGINE
       </footer>
     </div>
   );

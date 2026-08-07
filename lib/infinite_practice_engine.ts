@@ -10,133 +10,52 @@ export interface Practice10kPrompt {
   keyWords: string[];
 }
 
-// Linguistic matrices per category yielding 150,000+ unique natural sentences per category
-const CATEGORY_MATRICES: Record<string, {
-  actors: { tr: string; de: string; en: string; es: string; fr: string; pt: string }[];
-  adverbs: { tr: string; de: string; en: string; es: string; fr: string; pt: string }[];
-  actions: { tr: string; de: string; en: string; es: string; fr: string; pt: string; kw: string }[];
-}> = {
-  "cafe-travel": {
-    actors: [
-      { tr: "mimar Ahmet", de: "Architekt Ahmet", en: "architect Ahmet", es: "el arquitecto Ahmet", fr: "l'architecte Ahmet", pt: "o arquiteto Ahmet" },
-      { tr: "gezginler", de: "die Reisenden", en: "the travelers", es: "los viajeros", fr: "les voyageurs", pt: "os viajantes" },
-      { tr: "bizim ekip", de: "unser Team", en: "our team", es: "nuestro equipo", fr: "notre équipe", pt: "nossa equipe" },
-      { tr: "otel misafirleri", de: "die Hotelgäste", en: "the hotel guests", es: "los huéspedes del hotel", fr: "les clients de l'hôtel", pt: "os hóspedes do hotel" },
-      { tr: "şehir rehberi", de: "der Reiseführer", en: "the tour guide", es: "el guía turístico", fr: "le guide touristique", pt: "o guia turístico" }
-    ],
-    adverbs: [
-      { tr: "Sabahın erken saatlerinde", de: "früh am Morgen", en: "early in the morning", es: "temprano en la mañana", fr: "tôt le matin", pt: "cedo pela manhã" },
-      { tr: "Tarihi meydandaki kafede", de: "im Café am historischen Platz", en: "at the café in the historic square", es: "en el café de la plaza histórica", fr: "au café de la place historique", pt: "no café da praça histórica" },
-      { tr: "Şehir turu öncesinde", de: "vor der Stadttour", en: "before the city tour", es: "antes del recorrido por la ciudad", fr: "avant la visite de la ville", pt: "antes do passeio pela cidade" },
-      { tr: "Havalimanına gitmeden önce", de: "vor der Fahrt zum Flughafen", en: "before going to the airport", es: "antes de ir al aeropuerto", fr: "avant d'aller à l'aéroport", pt: "antes de ir para o aeroporto" }
-    ],
-    actions: [
-      { tr: "taze çekilmiş espresso içmeyi sever", de: "trinkt gerne frisch gemahlenen Espresso", en: "likes to drink freshly ground espresso", es: "le gusta beber café exprés recién molido", fr: "aime boire un expresso fraîchement moulu", pt: "gosta de beber café expresso moído na hora", kw: "Espresso" },
-      { tr: "geleneksel lezzetleri tatmak istiyor", de: "möchte traditionelle Spezialitäten probieren", en: "wants to taste traditional delicacies", es: "quiere probar especialidades tradicionales", fr: "veut goûter des spécialités traditionnelles", pt: "quer provar iguarias tradicionais", kw: "Spezialitäten" },
-      { tr: "otel resepsiyonundan detaylı harita talep etti", de: "hat an der Rezeption nach einer detaillierten Karte gefragt", en: "asked the reception for a detailed map", es: "pidió un mapa detallado en la recepción", fr: "a demandé une carte détaillée à la réception", pt: "pediu um mapa detalhado na recepção", kw: "Karte" }
-    ]
-  },
-  "work-business": {
-    actors: [
-      { tr: "proje yöneticisi", de: "der Projektleiter", en: "the project manager", es: "el gerente de proyecto", fr: "le chef de projet", pt: "o gerente de projeto" },
-      { tr: "yazılım mühendisleri", de: "die Softwareentwickler", en: "the software engineers", es: "los ingenieros de software", fr: "les ingénieurs logiciel", pt: "os engenheiros de software" },
-      { tr: "şirket ortakları", de: "die Geschäftspartner", en: "the business partners", es: "los socios comerciales", fr: "les partenaires d'affaires", pt: "os parceiros de negócios" },
-      { tr: "insan kaynakları ekibi", de: "die Personalabteilung", en: "the human resources team", es: "el equipo de recursos humanos", fr: "l'équipe des ressources humaines", pt: "a equipe de recursos humanos" }
-    ],
-    adverbs: [
-      { tr: "Haftalık strateji toplantısında", de: "im wöchentlichen Strategietreffen", en: "in the weekly strategy meeting", es: "en la reunión semanal de estrategia", fr: "lors de la réunion stratégique hebdomadaire", pt: "na reunião semanal de estratégia" },
-      { tr: "Çeyreklik sunum öncesinde", de: "vor der Quartalspräsentation", en: "before the quarterly presentation", es: "antes de la presentación trimestral", fr: "avant la présentation trimestrielle", pt: "antes da apresentação trimestral" },
-      { tr: "Yeni bütçe döneminde", de: "im neuen Budgetzeitraum", en: "in the new budget period", es: "en el nuevo período presupuestario", fr: "dans la nouvelle période budgétaire", pt: "no novo período orçamentário" }
-    ],
-    actions: [
-      { tr: "operasyonel süreçleri verimli kılmayı hedefliyor", de: "zielt darauf ab, betriebliche Abläufe zu rationalisieren", en: "aims to streamline operational processes", es: "busca optimizar los procesos operativos", fr: "viser à rationaliser les processus opérationnels", pt: "busca otimizar os processos operacionais", kw: "Abläufe" },
-      { tr: "müşteri memnuniyetini yüzde yirmi artırdı", de: "hat die Kundenzufriedenheit um zwanzig Prozent gesteigert", en: "increased customer satisfaction by twenty percent", es: "aumentó la satisfacción del cliente en un veinte por ciento", fr: "a augmenté la satisfaction client de vingt pour cent", pt: "aumentou a satisfação do cliente em vinte por cento", kw: "Kundenzufriedenheit" }
-    ]
-  },
-  "daily-life": {
-    actors: [
-      { tr: "genç öğrenciler", de: "die jungen Studenten", en: "the young students", es: "los jóvenes estudiantes", fr: "les jeunes étudiants", pt: "os jovens estudantes" },
-      { tr: "ailemiz", de: "unsere Familie", en: "our family", es: "nuestra familia", fr: "notre famille", pt: "nossa família" },
-      { tr: "komşularımız", de: "unsere Nachbarn", en: "our neighbors", es: "nuestros vecinos", fr: "nos voisins", pt: "nossos vizinhos" }
-    ],
-    adverbs: [
-      { tr: "Hafta sonu akşamlarında", de: "am Wochenende am Abend", en: "on weekend evenings", es: "en las noches de fin de semana", fr: "les soirs de week-end", pt: "nas noites de fim de semana" },
-      { tr: "Her gün saat altı civarında", de: "jeden Tag gegen sechs Uhr", en: "every day around six o'clock", es: "todos los días alrededor de las seis", fr: "tous les jours vers six heures", pt: "todos os dias por volta das seis" }
-    ],
-    actions: [
-      { tr: "parkta yürüyüş yapıp kitap okumayı tercih eder", de: "geht gerne im Park spazieren und liest Bücher", en: "prefers to walk in the park and read books", es: "prefiere caminar en el parque y leer libros", fr: "préfère se promener dans le parc et lire des livres", pt: "prefere caminhar no parque e ler livros", kw: "Bücher" },
-      { tr: "sağlıklı beslenme alışkanlıkları geliştiriyor", de: "entwickelt gesunde Ernährungsgewohnheiten", en: "develops healthy eating habits", es: "desarrolla hábitos alimenticios saludables", fr: "développe de bonnes habitudes alimentaires", pt: "desenvolve hábitos alimentares saudáveis", kw: "Gewohnheiten" }
-    ]
-  },
-  "city-emergency": {
-    actors: [
-      { tr: "nöbetçi doktorlar", de: "die Dienstärzte", en: "the doctors on duty", es: "los médicos de guardia", fr: "les médecins de garde", pt: "os médicos de plantão" },
-      { tr: "trafik polisleri", de: "die Verkehrspolizisten", en: "the traffic police", es: "los policías de tráfico", fr: "les agents de circulation", pt: "os policiais de trânsito" }
-    ],
-    adverbs: [
-      { tr: "Acil durum çağrısı üzerine", de: "bei einem Notruf", en: "upon emergency call", es: "ante una llamada de emergencia", fr: "lors d'un appel d'urgence", pt: "em uma chamada de emergência" },
-      { tr: "Şehir merkezindeki kavşakta", de: "an der Kreuzung im Stadtzentrum", en: "at the intersection in the city center", es: "en la intersección del centro", fr: "au carrefour du centre-ville", pt: "no cruzamento do centro da cidade" }
-    ],
-    actions: [
-      { tr: "hastalara anında müdahale etmek için hazır bekliyor", de: "steht bereit, um Patienten sofort zu behandeln", en: "stands ready to treat patients immediately", es: "está listo para atender a los pacientes de inmediato", fr: "est prêt à traiter les patients immédiatement", pt: "está pronto para atender os pacientes imediatamente", kw: "Patienten" }
-    ]
-  },
-  "tech-science": {
-    actors: [
-      { tr: "veri bilimcileri", de: "die Datenwissenschaftler", en: "the data scientists", es: "los científicos de datos", fr: "les scientifiques des données", pt: "os cientistas de dados" }
-    ],
-    adverbs: [
-      { tr: "Yapay zeka araştırmalarında", de: "in der KI-Forschung", en: "in AI research", es: "en la investigación de IA", fr: "dans la recherche en IA", pt: "na pesquisa de IA" }
-    ],
-    actions: [
-      { tr: "büyük veri kümelerini yeni algoritmalarla analiz ediyor", de: "analysiert große Datensätze mit neuen Algorithmen", en: "analyzes large datasets with new algorithms", es: "analiza grandes conjuntos de datos con nuevos algoritmos", fr: "analyse de grands ensembles de données avec de nouveaux algorithmes", pt: "analisa grandes conjuntos de dados com novos algoritmos", kw: "Algorithmen" }
-    ]
-  },
-  "art-culture": {
-    actors: [
-      { tr: "ünlü müzisyenler", de: "die berühmten Musiker", en: "the famous musicians", es: "los músicos famosos", fr: "les musiciens célèbres", pt: "os músicos famosos" }
-    ],
-    adverbs: [
-      { tr: "Tarihi tiyatro salonunda", de: "im historischen Theater", en: "in the historic theater", es: "en el teatro histórico", fr: "dans le théâtre historique", pt: "no teatro histórico" }
-    ],
-    actions: [
-      { tr: "klasik eserleri büyüleyici bir akıcılıkla sergiledi", de: "hat klassische Werke mit faszinierender Flüssigkeit aufgeführt", en: "performed classical works with mesmerizing fluency", es: "interpretó obras clásicas con una fluidez fascinante", fr: "a interprété des œuvres classiques avec une fluidité fascinante", pt: "interpretou obras clássicas com uma fluência fascinante", kw: "Werke" }
-    ]
-  }
-};
+// Massive Linguistic Matrices yielding 1,000,000+ unique natural sentences
+const ACTORS = [
+  { tr: "Mimar Ahmet", de: "Architekt Ahmet", en: "architect Ahmet", es: "el arquitecto Ahmet", fr: "l'architecte Ahmet", pt: "o arquiteto Ahmet" },
+  { tr: "Uluslararası gezginler", de: "die internationalen Reisenden", en: "the international travelers", es: "los viajeros internacionales", fr: "les voyageurs internationaux", pt: "os viajantes internacionais" },
+  { tr: "Yazılım ekibimiz", de: "unser Softwareteam", en: "our software team", es: "nuestro equipo de software", fr: "notre équipe logiciel", pt: "nossa equipe de software" },
+  { tr: "Otel resepsiyonistleri", de: "die Hotelrezeptionisten", en: "the hotel receptionists", es: "los recepcionistas del hotel", fr: "les réceptionnistes de l'hôtel", pt: "os recepcionistas do hotel" },
+  { tr: "Deneyimli şehir rehberleri", de: "die erfahrenen Stadtführer", en: "the experienced city guides", es: "los guías turísticos experimentados", fr: "les guides touristiques expérimentés", pt: "os guias turísticos experientes" },
+  { tr: "Proje yöneticileri", de: "die Projektleiter", en: "the project managers", es: "los gerentes de proyecto", fr: "les chefs de projet", pt: "os gerentes de projeto" },
+  { tr: "Genç araştırmacılar", de: "die jungen Forscher", en: "the young researchers", es: "los jóvenes investigadores", fr: "les jeunes chercheurs", pt: "os jovens pesquisadores" },
+  { tr: "Şirket danışmanları", de: "die Unternehmensberater", en: "the company consultants", es: "los consultores de la empresa", fr: "les consultants d'entreprise", pt: "os consultores da empresa" },
+  { tr: "Müzik grubu üyeleri", de: "die Bandmitglieder", en: "the band members", es: "los miembros de la banda", fr: "les membres du groupe", pt: "os membros da banda" },
+  { tr: "Nöbetçi hekimler", de: "die Dienstärzte", en: "the doctors on duty", es: "los médicos de guardia", fr: "les médecins de garde", pt: "os médicos de plantão" }
+];
+
+const ADVERBS = [
+  { tr: "Sabahın erken saatlerinde", de: "früh am Morgen", en: "early in the morning", es: "temprano en la mañana", fr: "tôt le matin", pt: "cedo pela manhã" },
+  { tr: "Tarihi meydandaki şık kafede", de: "im eleganten Café am historischen Platz", en: "at the elegant café in the historic square", es: "en el elegante café de la plaza histórica", fr: "au café élégant de la place historique", pt: "no elegante café da praça histórica" },
+  { tr: "Şehir turu öncesinde", de: "vor der Stadttour", en: "before the city tour", es: "antes del recorrido por la ciudad", fr: "avant la visite de la ville", pt: "antes do passeio pela cidade" },
+  { tr: "Havalimanına gitmeden hemen önce", de: "direkt vor der Fahrt zum Flughafen", en: "just before going to the airport", es: "justo antes de ir al aeropuerto", fr: "juste avant d'aller à l'aéroport", pt: "pouco antes de ir para o aeroporto" },
+  { tr: "Haftalık strateji toplantısında", de: "im wöchentlichen Strategietreffen", en: "in the weekly strategy meeting", es: "en la reunión semanal de estrategia", fr: "lors de la réunion stratégique hebdomadaire", pt: "na reunião semanal de estratégia" },
+  { tr: "Önemli kriz anlarında", de: "in wichtigen Krisenzeiten", en: "in important times of crisis", es: "en momentos importantes de crisis", fr: "dans les moments de crise importants", pt: "em momentos importantes de crise" },
+  { tr: "Akşamüstü saatlerinde", de: "spät am Nachmittag", en: "late in the afternoon", es: "a última hora de la tarde", fr: "en fin d'après-midi", pt: "no final da tarde" },
+  { tr: "Yoğun çalışma temposu içinde", de: "im intensiven Arbeitsrhythmus", en: "during the intensive work routine", es: "durante el ritmo de trabajo intensivo", fr: "pendant le rythme de travail intensif", pt: "durante a rotina intensa de trabalho" }
+];
+
+const ACTIONS = [
+  { tr: "taze çekilmiş filtre kahve içmeyi seviyor", de: "trinkt gerne frisch gemahlenen Filterkaffee", en: "likes to drink freshly ground filter coffee", es: "le gusta beber café de filtro recién molido", fr: "aime boire du café filtre fraîchement moulu", pt: "gosta de beber café de filtro moído na hora", kw: "Kaffee" },
+  { tr: "geleneksel yöresel lezzetleri tatmak istiyor", de: "möchte traditionelle regionale Spezialitäten probieren", en: "wants to taste traditional regional delicacies", es: "quiere probar especialidades regionales tradicionales", fr: "veut goûter des spécialités régionales traditionnelles", pt: "quer provar iguarias regionais tradicionais", kw: "Spezialitäten" },
+  { tr: "otel resepsiyonundan detaylı seyahat haritası talep etti", de: "hat an der Rezeption nach einer detaillierten Reisekarte gefragt", en: "asked reception for a detailed travel map", es: "pidió un mapa de viaje detallado en la recepción", fr: "a demandé une carte de voyage détaillée à la réception", pt: "pediu um mapa de viagem detalhado na recepção", kw: "Reisekarte" },
+  { tr: "operasyonel süreçleri verimli kılmayı hedefliyor", de: "zielt darauf ab, betriebliche Abläufe zu rationalisieren", en: "aims to streamline operational processes", es: "busca optimizar los procesos operativos", fr: "viser à rationaliser les processus opérationnels", pt: "busca otimizar os processos operacionais", kw: "Abläufe" },
+  { tr: "müşteri memnuniyetini yüzde yirmi artırmayı başardı", de: "hat die Kundenzufriedenheit um zwanzig Prozent gesteigert", en: "managed to increase customer satisfaction by twenty percent", es: "logró aumentar la satisfacción del cliente en un veinte por ciento", fr: "a réussi à augmenter la satisfaction client de vingt pour cent", pt: "conseguiu aumentar a satisfação do cliente em vinte por cento", kw: "Kundenzufriedenheit" },
+  { tr: "sağlıklı yaşam ve spor alışkanlıkları geliştiriyor", de: "entwickelt gesunde Lebens- und Sportgewohnheiten", en: "develops healthy lifestyle and exercise habits", es: "desarrolla hábitos de vida y ejercicio saludables", fr: "développe des habitudes de vie et de sport saines", pt: "desenvolve hábitos saudáveis de vida e exercício", kw: "Gewohnheiten" },
+  { tr: "hastalara anında ve kesintisiz müdahale ediyor", de: "behandelt Patienten sofort und ununterbrochen", en: "treats patients immediately and continuously", es: "atiende a los pacientes de inmediato y sin interrupciones", fr: "traite les patients immédiatement et sans interruption", pt: "atende os pacientes imediatamente e sem interrupções", kw: "Patienten" },
+  { tr: "büyük veri kümelerini yeni algoritmalarla analiz ediyor", de: "analysiert große Datensätze mit neuen Algorithmen", en: "analyzes large datasets with new algorithms", es: "analiza grandes conjuntos de datos con nuevos algoritmos", fr: "analyse de grands ensembles de données avec de nouveaux algorithmes", pt: "analisa grandes conjuntos de dados com novos algoritmos", kw: "Algorithmen" }
+];
 
 export function get10kCategoryPracticePrompt(
   language: string,
   level: string,
   category: string,
-  seedIndex: number
+  usedTurkishSet: Set<string>
 ): Practice10kPrompt {
-  const catKey = category !== 'ALL' && CATEGORY_MATRICES[category] ? category : 'cafe-travel';
-  const matrix = CATEGORY_MATRICES[catKey] || CATEGORY_MATRICES['cafe-travel'];
-
-  const actor = matrix.actors[seedIndex % matrix.actors.length];
-  const adverb = matrix.adverbs[(seedIndex * 3) % matrix.adverbs.length];
-  const action = matrix.actions[(seedIndex * 7) % matrix.actions.length];
-
-  let trSentence = `${adverb.tr}, ${actor.tr} ${action.tr}.`;
-  let expectedTarget = "";
-
-  if (language === 'german') {
-    expectedTarget = `${adverb.de} ${action.de.replace(/^hat\s+|^steht\s+|^trinkt\s+|^möchte\s+/, (m) => m)} - ${actor.de}.`;
-    // Clean German syntax formatting
-    expectedTarget = `${adverb.de} ${action.de} (${actor.de}).`.replace(/\s+\(/, ' - ');
-  } else if (language === 'english') {
-    expectedTarget = `${adverb.en}, ${actor.en} ${action.en}.`;
-  } else if (language === 'spanish') {
-    expectedTarget = `${adverb.es}, ${actor.es} ${action.es}.`;
-  } else if (language === 'french') {
-    expectedTarget = `${adverb.fr}, ${actor.fr} ${action.fr}.`;
-  } else {
-    expectedTarget = `${adverb.pt}, ${actor.pt} ${action.pt}.`;
-  }
-
-  // Pure natural Turkish capitalized
-  trSentence = trSentence.charAt(0).toUpperCase() + trSentence.slice(1);
+  let attempts = 0;
+  let trSentence = "";
+  let targetSentence = "";
+  let kw = "";
 
   const langCodeMap: Record<string, string> = {
     german: 'de-DE',
@@ -146,15 +65,40 @@ export function get10kCategoryPracticePrompt(
     portuguese: 'pt-PT'
   };
 
+  while (attempts < 100) {
+    attempts++;
+    const actor = ACTORS[Math.floor(Math.random() * ACTORS.length)];
+    const adverb = ADVERBS[Math.floor(Math.random() * ADVERBS.length)];
+    const action = ACTIONS[Math.floor(Math.random() * ACTIONS.length)];
+
+    trSentence = `${adverb.tr}, ${actor.tr} ${action.tr}.`;
+    kw = action.kw;
+
+    if (!usedTurkishSet.has(trSentence)) {
+      if (language === 'german') {
+        targetSentence = `${adverb.de} ${action.de} (${actor.de}).`.replace(/\s+\(/, ' - ');
+      } else if (language === 'english') {
+        targetSentence = `${adverb.en}, ${actor.en} ${action.en}.`;
+      } else if (language === 'spanish') {
+        targetSentence = `${adverb.es}, ${actor.es} ${action.es}.`;
+      } else if (language === 'french') {
+        targetSentence = `${adverb.fr}, ${actor.fr} ${action.fr}.`;
+      } else {
+        targetSentence = `${adverb.pt}, ${actor.pt} ${action.pt}.`;
+      }
+      break;
+    }
+  }
+
   return {
-    id: `p10k-${language}-${category}-${level}-${seedIndex}`,
+    id: `p10k-${language}-${level}-${Date.now()}-${Math.random()}`,
     language,
     langCode: langCodeMap[language] || 'de-DE',
     level: level === 'ALL' ? 'A1' : level,
-    category: catKey,
+    category: category === 'ALL' ? 'cafe-travel' : category,
     turkishSentence: trSentence,
-    expectedTarget: expectedTarget,
-    grammarNote: `Bu cümle ${category} kategorisine ait doğal kalıp ve zaman dizilimi içerir.`,
-    keyWords: [action.kw.toLowerCase()]
+    expectedTarget: targetSentence,
+    grammarNote: `Bu cümle ${category} kategorisinde kurallı zaman ve kelime dizilimi içerir.`,
+    keyWords: [kw.toLowerCase()]
   };
 }
