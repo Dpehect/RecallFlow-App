@@ -19,6 +19,15 @@ export const CATEGORIES = [
 export type LanguageId = typeof LANGUAGES[number]["id"];
 export type Level = typeof LEVELS[number];
 export type CategoryId = typeof CATEGORIES[number]["id"];
+export const LEVEL_CATEGORIES: Record<Level, ReadonlyArray<{ id: CategoryId; label: string; icon: string }>> = {
+  A1: [{id:"daily",label:"Günlük Temeller",icon:"◒"},{id:"people",label:"Aile & Arkadaşlar",icon:"◉"},{id:"food",label:"Yiyecek & İçecek",icon:"✦"},{id:"travel",label:"Şehir & Ulaşım",icon:"↗"},{id:"work",label:"Okul & İş",icon:"▰"},{id:"nature",label:"Hava & Doğa",icon:"≈"}],
+  A2: [{id:"daily",label:"Rutinler & Alışkanlıklar",icon:"◒"},{id:"people",label:"Duygular & İlişkiler",icon:"◉"},{id:"food",label:"Kafe & Alışveriş",icon:"✦"},{id:"travel",label:"Seyahat Planları",icon:"↗"},{id:"work",label:"Görevler & Beceriler",icon:"▰"},{id:"nature",label:"Kent & Çevre",icon:"≈"}],
+  B1: [{id:"daily",label:"Yaşam Deneyimleri",icon:"◒"},{id:"people",label:"Kişilik & Davranış",icon:"◉"},{id:"food",label:"Beslenme & Mutfak",icon:"✦"},{id:"travel",label:"Rotalar & Deneyimler",icon:"↗"},{id:"work",label:"Eğitim & Kariyer",icon:"▰"},{id:"nature",label:"Çevre & Yaşam",icon:"≈"}],
+  B2: [{id:"daily",label:"Yaşam Biçimleri",icon:"◒"},{id:"people",label:"İnsan İlişkileri",icon:"◉"},{id:"food",label:"Yemek Kültürü",icon:"✦"},{id:"travel",label:"Hareketlilik & Kültür",icon:"↗"},{id:"work",label:"Profesyonel İletişim",icon:"▰"},{id:"nature",label:"İklim & Kentleşme",icon:"≈"}],
+  C1: [{id:"daily",label:"Toplumsal Gündelik Hayat",icon:"◒"},{id:"people",label:"Psikoloji & Kimlik",icon:"◉"},{id:"food",label:"Gastronomi & Toplum",icon:"✦"},{id:"travel",label:"Göç & Coğrafya",icon:"↗"},{id:"work",label:"Akademi & Kurumlar",icon:"▰"},{id:"nature",label:"Ekoloji & Sürdürülebilirlik",icon:"≈"}],
+  C2: [{id:"daily",label:"Gündelik Yaşam Söylemi",icon:"◒"},{id:"people",label:"İnsanlık & Öznellik",icon:"◉"},{id:"food",label:"Yemek Söylemi & Etik",icon:"✦"},{id:"travel",label:"Küresel Hareketlilik",icon:"↗"},{id:"work",label:"Bilgi Üretimi",icon:"▰"},{id:"nature",label:"İnsan–Doğa İlişkisi",icon:"≈"}],
+};
+export function getCategories(level: Level) { return LEVEL_CATEGORIES[level]; }
 type Translation = Record<LanguageId, string> & { tr: string };
 
 export type WordCard = {
@@ -85,7 +94,7 @@ const exampleTemplates: Record<LanguageId, string> = {
 };
 
 export function buildDeck(language: LanguageId, level: Level, category: CategoryId): WordCard[] {
-  const categoryLabel = CATEGORIES.find((item) => item.id === category)!.label;
+  const categoryLabel = getCategories(level).find((item) => item.id === category)!.label;
   return Array.from({ length: 100 }, (_, index) => {
     const root = roots[category][index % roots[category].length];
     const variation = Math.floor(index / roots[category].length);
@@ -108,6 +117,14 @@ export function validateCurriculum() {
 
 export function auditCurriculum() {
   const errors: string[] = [];
+  const categorySignatures = new Set<string>();
+  for (const level of LEVELS) {
+    const labels = getCategories(level).map(({ label }) => label);
+    if (labels.length !== 6 || new Set(labels).size !== 6) errors.push(`${level}: category set is incomplete or duplicated`);
+    const signature = labels.join("|");
+    if (categorySignatures.has(signature)) errors.push(`${level}: category set repeats another level`);
+    categorySignatures.add(signature);
+  }
   for (const { id: language } of LANGUAGES) for (const { id: category } of CATEGORIES) {
     const acrossLevels = new Set<string>();
     for (const level of LEVELS) {
