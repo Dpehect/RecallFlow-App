@@ -9,3 +9,6 @@
 - LocalStorage tabanlı öğrenildi takibi
 - 10'luk sayfalama ile kontrollü DOM boyutu
 - Sahte varyantları ve seviyeler arası tekrarları reddeden içerik denetimi
+- 5 dil × 6 seviye × 6 kategori × 10 gerçek lemma: toplam 1.800 kart
+- Flashcard, şıklı test, şıksız test, cümle üretimi ve 1000+ karakter okuma laboratuvarı
+- Her kategori metninde destedeki bütün kelimeleri zorunlu tutan otomatik kapsam testi

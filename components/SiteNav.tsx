@@ -3,7 +3,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 
-const links = [{ href: "/learn", label: "Çalış" }, { href: "/vocabulary", label: "Kelimeler" }, { href: "/progress", label: "İlerleme" }, { href: "/method", label: "Metot" }];
+const links = [{ href: "/learn", label: "Çalış" }, { href: "/practice", label: "Laboratuvar" }, { href: "/vocabulary", label: "Kelimeler" }, { href: "/progress", label: "İlerleme" }, { href: "/method", label: "Metot" }];
 export function SiteNav() {
   const pathname = usePathname();
   const [open,setOpen]=useState(false);
