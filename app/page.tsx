@@ -1,18 +1,5 @@
-'use client';
-
-import React from 'react';
-import { Navbar } from '@/components/Navbar';
-import { VocabHero } from '@/components/vocab/VocabHero';
-import { VocabFilterBar } from '@/components/vocab/VocabFilterBar';
-import { VocabGrid } from '@/components/vocab/VocabGrid';
-
-export default function HomePage() {
-  return (
-    <main className="min-h-screen bg-[#eef4fb]">
-      <Navbar />
-      <VocabHero />
-      <VocabFilterBar />
-      <VocabGrid />
-    </main>
-  );
-}
+"use client";import{useState}from"react";
+type Story={tag:string;time:string;date:string;title:string;word:string;theme:string};
+const stories:Story[]=[{tag:"İngilizce · A1",time:"6 dk",date:"08 Ağu",title:"Bir Şehri Kelimelerle Okumak",word:"wander",theme:"sunset"},{tag:"Fransızca · A2",time:"8 dk",date:"08 Ağu",title:"Kafede Duyacağın 12 Gerçek Cümle",word:"bonjour",theme:"orb"},{tag:"Almanca · B1",time:"12 dk",date:"07 Ağu",title:"Bir Kelime Ne Zaman Kalıcı Olur?",word:"erinnern",theme:"fluid"},{tag:"İngilizce · B2",time:"7 dk",date:"06 Ağu",title:"Düşünmeden Konuşmanın Ritmi",word:"rhythm",theme:"blocks"},{tag:"Fransızca · B1",time:"9 dk",date:"05 Ağu",title:"Dinleme Korkusunu Bırakmak",word:"écouter",theme:"ring"}];
+function Artwork({theme,word}:{theme:string;word:string}){return <div className={"art "+theme}><i/><i/><i/><b>{word}</b></div>}
+export default function Page(){const[category,setCategory]=useState("Tümü");const[active,setActive]=useState<Story|null>(null);const filtered=category==="Tümü"?stories:stories.filter(s=>s.tag.startsWith(category));return <main><header><a className="brand" href="#">R<span>◆</span>Flow</a><nav><button className="selected">Ana Sayfa</button><button>Okuma</button><button>Kelime Atlası</button><button>Hakkında</button></nav><button className="contact">Çalışmaya başla</button></header><section className="intro"><p>LANGUAGE JOURNAL / 2026</p><h1>Dili, her gün<br/><i>biraz daha yakından</i> oku.</h1><div className="filters">{["Tümü","İngilizce","Almanca","Fransızca"].map(x=><button key={x} className={category===x?"active":""} onClick={()=>setCategory(x)}>{x}</button>)}</div></section><section className="rail">{filtered.map((story,index)=><article key={story.title} className={"story s"+index}><Artwork theme={story.theme} word={story.word}/><div className="meta"><span>{story.tag}</span><span>◷ {story.time}</span><time>{story.date}</time></div><h2>{story.title}</h2><button onClick={()=>setActive(story)}>Okumaya başla ↗</button></article>)}</section><section className="feature"><article><Artwork theme="fluid" word="memory"/><div><div className="meta"><span>DERİN OKUMA</span><span>◷ 12 dk</span></div><h2>Yeni bir dilde düşünmek gerçekten ne demek?</h2><p>Kelimeleri çevirmekten vazgeçtiğinde, anlamın nasıl değiştiğini keşfet.</p><button onClick={()=>setActive(stories[2])}>Yazıyı aç</button></div></article><aside><article><Artwork theme="ring" word="hören"/><h3>Kulağın kelimeyi zihinden önce tanır mı?</h3><button onClick={()=>setActive(stories[4])}>Dinle ↗</button></article><article><Artwork theme="blocks" word="flow"/><h3>Günde 10 dakikalık geri çağırma ritüeli</h3><button onClick={()=>setActive(stories[0])}>Pratik yap ↗</button></article></aside></section><footer><b>R◆Flow</b><span>READ · LISTEN · RECALL</span><span>İSTANBUL / 2026</span></footer>{active&&<div className="reader" role="dialog" aria-modal="true"><button className="close" onClick={()=>setActive(null)}>KAPAT ×</button><div className="reader-art"><Artwork theme={active.theme} word={active.word}/></div><article><div className="meta"><span>{active.tag}</span><span>◷ {active.time}</span></div><h2>{active.title}</h2><p>Bir dili öğrenmek, cevapları hızla bulmak değildir. Bazen bir kelimenin sesinde beklemek, onu farklı bir cümlede yeniden görmek ve cevabı görmeden önce hatırlamaya çalışmaktır.</p><label htmlFor="note">Bu metinden kalan kelime</label><input id="note" placeholder="buraya yaz..." autoFocus/><button onClick={()=>setActive(null)}>Günlüğe kaydet →</button></article></div>}</main>}
