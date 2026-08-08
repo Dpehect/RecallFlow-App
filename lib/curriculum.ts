@@ -70,33 +70,30 @@ function row(values: string[]): Translation {
   return { en, de, fr, es, pt, tr };
 }
 
-const contexts: Record<LanguageId, string[]> = {
-  en: ["this", "my", "new", "first", "every"], de: ["dieses", "mein", "neu", "erstes", "jedes"],
-  fr: ["ce", "mon", "nouveau", "premier", "chaque"], es: ["este", "mi", "nuevo", "primer", "cada"],
-  pt: ["este", "meu", "novo", "primeiro", "cada"],
+const frames: Record<Level, Record<LanguageId | "tr", string[]>> = {
+  A1: { en:["{word}","say: {word}","hear: {word}","read: {word}","write: {word}"],de:["{word}","sagen: {word}","hören: {word}","lesen: {word}","schreiben: {word}"],fr:["{word}","dire : {word}","écouter : {word}","lire : {word}","écrire : {word}"],es:["{word}","decir: {word}","oír: {word}","leer: {word}","escribir: {word}"],pt:["{word}","dizer: {word}","ouvir: {word}","ler: {word}","escrever: {word}"],tr:["{word}","söyle: {word}","duy: {word}","oku: {word}","yaz: {word}"] },
+  A2: { en:["{word} in daily life","using {word}","topic: {word}","with {word}","without {word}"],de:["{word} im Alltag","{word} verwenden","Thema: {word}","mit {word}","ohne {word}"],fr:["{word} au quotidien","utiliser : {word}","thème : {word}","avec : {word}","sans : {word}"],es:["{word} en la vida diaria","usar: {word}","tema: {word}","con: {word}","sin: {word}"],pt:["{word} no dia a dia","usar: {word}","tema: {word}","com: {word}","sem: {word}"],tr:["günlük hayatta {word}","{word} kullanımı","konu: {word}","{word} ile","{word} olmadan"] },
+  B1: { en:["context: {word}","example of {word}","situation: {word}","connection: {word}","contrast: {word}"],de:["Kontext: {word}","Beispiel für {word}","Situation: {word}","Zusammenhang: {word}","Kontrast: {word}"],fr:["contexte : {word}","exemple : {word}","situation : {word}","lien : {word}","contraste : {word}"],es:["contexto: {word}","ejemplo: {word}","situación: {word}","conexión: {word}","contraste: {word}"],pt:["contexto: {word}","exemplo: {word}","situação: {word}","ligação: {word}","contraste: {word}"],tr:["bağlam: {word}","{word} örneği","durum: {word}","bağlantı: {word}","karşıtlık: {word}"] },
+  B2: { en:["precise use: {word}","subtle meaning: {word}","abstract use: {word}","formal context: {word}","figurative use: {word}"],de:["präziser Gebrauch: {word}","feine Bedeutung: {word}","abstrakter Gebrauch: {word}","formeller Kontext: {word}","bildlicher Gebrauch: {word}"],fr:["usage précis : {word}","sens subtil : {word}","usage abstrait : {word}","contexte formel : {word}","sens figuré : {word}"],es:["uso preciso: {word}","sentido sutil: {word}","uso abstracto: {word}","contexto formal: {word}","sentido figurado: {word}"],pt:["uso preciso: {word}","sentido subtil: {word}","uso abstrato: {word}","contexto formal: {word}","sentido figurado: {word}"],tr:["kesin kullanım: {word}","ince anlam: {word}","soyut kullanım: {word}","resmî bağlam: {word}","mecaz kullanım: {word}"] },
+  C1: { en:["nuanced use: {word}","underlying idea: {word}","critical view: {word}","cultural layer: {word}","semantic range: {word}"],de:["nuancierter Gebrauch: {word}","Grundidee: {word}","kritische Sicht: {word}","kulturelle Ebene: {word}","Bedeutungsspektrum: {word}"],fr:["usage nuancé : {word}","idée sous-jacente : {word}","regard critique : {word}","dimension culturelle : {word}","champ sémantique : {word}"],es:["uso matizado: {word}","idea subyacente: {word}","visión crítica: {word}","dimensión cultural: {word}","campo semántico: {word}"],pt:["uso matizado: {word}","ideia subjacente: {word}","visão crítica: {word}","dimensão cultural: {word}","campo semântico: {word}"],tr:["nüanslı kullanım: {word}","alt fikir: {word}","eleştirel bakış: {word}","kültürel katman: {word}","anlam alanı: {word}"] },
+  C2: { en:["critical reading: {word}","conceptual frame: {word}","discursive use: {word}","ambiguous layer: {word}","advanced analysis: {word}"],de:["kritische Lesart: {word}","Begriffsrahmen: {word}","diskursiver Gebrauch: {word}","mehrdeutige Ebene: {word}","vertiefte Analyse: {word}"],fr:["lecture critique : {word}","cadre conceptuel : {word}","usage discursif : {word}","niveau ambigu : {word}","analyse approfondie : {word}"],es:["lectura crítica: {word}","marco conceptual: {word}","uso discursivo: {word}","nivel ambiguo: {word}","análisis avanzado: {word}"],pt:["leitura crítica: {word}","quadro conceptual: {word}","uso discursivo: {word}","camada ambígua: {word}","análise avançada: {word}"],tr:["eleştirel okuma: {word}","kavramsal çerçeve: {word}","söylemsel kullanım: {word}","belirsiz katman: {word}","ileri analiz: {word}"] },
 };
-const contextTr = ["bu", "benim", "yeni", "ilk", "her"];
-const lead: Record<LanguageId, string[]> = {
-  en: ["I notice", "I remember", "We discuss", "I describe", "I choose", "I compare"],
-  de: ["Ich bemerke", "Ich erinnere mich an", "Wir besprechen", "Ich beschreibe", "Ich wähle", "Ich vergleiche"],
-  fr: ["Je remarque", "Je me souviens de", "Nous discutons", "Je décris", "Je choisis", "Je compare"],
-  es: ["Noto", "Recuerdo", "Hablamos de", "Describo", "Elijo", "Comparo"],
-  pt: ["Noto", "Lembro-me de", "Falamos de", "Descrevo", "Escolho", "Comparo"],
+const exampleTemplates: Record<LanguageId, string> = {
+  en: "I use “{term}” in a sentence.", de: "Ich verwende „{term}“ in einem Satz.",
+  fr: "J’utilise « {term} » dans une phrase.", es: "Uso «{term}» en una frase.",
+  pt: "Uso «{term}» numa frase.",
 };
-const leadTr = ["Fark ediyorum", "Hatırlıyorum", "Konuşuyoruz", "Betimliyorum", "Seçiyorum", "Karşılaştırıyorum"];
 
 export function buildDeck(language: LanguageId, level: Level, category: CategoryId): WordCard[] {
   const categoryLabel = CATEGORIES.find((item) => item.id === category)!.label;
-  const levelIndex = LEVELS.indexOf(level);
   return Array.from({ length: 100 }, (_, index) => {
     const root = roots[category][index % roots[category].length];
     const variation = Math.floor(index / roots[category].length);
-    const term = `${contexts[language][variation]} ${root[language]}`;
-    const turkish = `${contextTr[variation]} ${root.tr}`;
-    const verb = lead[language][levelIndex];
+    const term = frames[level][language][variation].replace("{word}", root[language]);
+    const turkish = frames[level].tr[variation].replace("{word}", root.tr);
     return {
       id: `${language}-${level}-${category}-${index}`, language, level, category, categoryLabel, index, term, turkish,
-      example: `${verb} ${term}.`, exampleTr: `${leadTr[levelIndex]}: ${turkish}.`,
+      example: exampleTemplates[language].replace("{term}", term), exampleTr: `“${turkish}” ifadesini bir cümlede kullanıyorum.`,
     };
   });
 }
@@ -106,5 +103,20 @@ export function normalizeAnswer(value: string) {
 }
 
 export function validateCurriculum() {
-  return LANGUAGES.every(({ id }) => LEVELS.every((level) => CATEGORIES.every(({ id: category }) => buildDeck(id, level, category).length === 100)));
+  return auditCurriculum().length === 0;
+}
+
+export function auditCurriculum() {
+  const errors: string[] = [];
+  for (const { id: language } of LANGUAGES) for (const { id: category } of CATEGORIES) {
+    const acrossLevels = new Set<string>();
+    for (const level of LEVELS) {
+      const deck = buildDeck(language, level, category);
+      if (deck.length !== 100) errors.push(`${language}/${level}/${category}: count ${deck.length}`);
+      const terms = deck.map(({ term }) => normalizeAnswer(term));
+      if (new Set(terms).size !== 100) errors.push(`${language}/${level}/${category}: duplicate terms`);
+      for (const term of terms) { if (acrossLevels.has(term)) errors.push(`${language}/${category}: repeated across levels: ${term}`); acrossLevels.add(term); }
+    }
+  }
+  return errors;
 }
